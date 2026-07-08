@@ -1,0 +1,7 @@
+# 기본적으로 모든 파일/폴더 제외
+/*
+
+# 아래 항목만 git에 포함
+!/.gitignore
+!/CLAUDE.md
+!/docs/
