@@ -491,13 +491,6 @@
             <a href="#downloadFile">downloadFile</a>
           </div>
         </div>
-        <div class="section-gap"></div>
-        <div class="nav-group">
-          <button type="button" class="nav-title">뷰어 UI<span class="nav-arrow">▼</span></button>
-          <div class="nav-links">
-            <a href="#hideMyClassUi">hide/showMyClassUi</a>
-          </div>
-        </div>
       </nav>
 
       <main class="content">
@@ -652,22 +645,6 @@
           </div>
         </div>
 
-        <h2 id="historyBack">historyBack</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.historyBack()</code>
-            <span class="tag tag-nav">네비게이션</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              직전에 열었던 씬(scene)으로 돌아갑니다. 자료실·팝업 모듈의 닫기
-              버튼에 사용합니다.
-            </p>
-            <pre><span class="c">// 닫기 버튼 클릭 시</span>
-<span class="n">ob.viewer.api.</span><span class="f">historyBack</span><span class="p">();</span></pre>
-          </div>
-        </div>
-
         <!-- ===== 페이지 정보 ===== -->
         <h2 id="getPageNum">getPageNum</h2>
         <div class="api-card">
@@ -734,6 +711,22 @@
         <hr class="divider" />
 
         <!-- ===== 네비게이션 ===== -->
+        <h2 id="historyBack">historyBack</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.historyBack()</code>
+            <span class="tag tag-nav">네비게이션</span>
+          </div>
+          <div class="api-card-body">
+            <p>
+              직전에 열었던 씬(scene)으로 돌아갑니다. 자료실·팝업 모듈의 닫기
+              버튼에 사용합니다.
+            </p>
+            <pre><span class="c">// 닫기 버튼 클릭 시</span>
+<span class="n">ob.viewer.api.</span><span class="f">historyBack</span><span class="p">();</span></pre>
+          </div>
+        </div>
+
         <h2 id="openUrl">openUrl</h2>
         <div class="api-card">
           <div class="api-card-header">
@@ -918,28 +911,6 @@
 
         <hr class="divider" />
 
-        <!-- ===== 뷰어 UI ===== -->
-        <h2 id="hideMyClassUi">hideMyClassUi / showMyClassUi</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.hideMyClassUi()</code>
-            <span class="tag tag-nav">뷰어 UI</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              뷰어의 내수업하기 UI를 숨깁니다. 전체화면 콘텐츠 등 UI 충돌이
-              필요한 경우에 사용합니다.
-            </p>
-            <pre><span class="c">// 콘텐츠 진입 시 UI 숨기기</span>
-<span class="n">ob.viewer.api.</span><span class="f">hideMyClassUi</span><span class="p">();</span>
-
-<span class="c">// 콘텐츠 종료 시 UI 복원</span>
-<span class="n">ob.viewer.api.</span><span class="f">showMyClassUi</span><span class="p">();</span></pre>
-          </div>
-        </div>
-
-        <hr class="divider" />
-
         <!-- 전체 API 요약 -->
         <h2 id="summary">전체 API 목록</h2>
         <div class="params">
@@ -980,11 +951,6 @@
               <td>마지막 페이지로 이동</td>
             </tr>
             <tr>
-              <td><code>historyBack()</code></td>
-              <td><span class="tag tag-nav">네비게이션</span></td>
-              <td>이전 씬으로 복귀</td>
-            </tr>
-            <tr>
               <td><code>getPageNum()</code></td>
               <td><span class="tag tag-page">페이지</span></td>
               <td>현재 페이지 번호 반환</td>
@@ -1005,6 +971,11 @@
               <td>전체 페이지 수 반환</td>
             </tr>
             <tr>
+              <td><code>historyBack()</code></td>
+              <td><span class="tag tag-nav">네비게이션</span></td>
+              <td>이전 씬으로 복귀</td>
+            </tr>
+            <tr>
               <td><code>openUrl(url, target, opts)</code></td>
               <td><span class="tag tag-nav">네비게이션</span></td>
               <td>씬 URL 이동 / 창 열기</td>
@@ -1023,16 +994,6 @@
               <td><code>downloadFile(path)</code></td>
               <td><span class="tag tag-sys">시스템</span></td>
               <td>파일 다운로드</td>
-            </tr>
-            <tr>
-              <td><code>hideMyClassUi()</code></td>
-              <td><span class="tag tag-nav">뷰어 UI</span></td>
-              <td>내수업하기 UI 숨기기</td>
-            </tr>
-            <tr>
-              <td><code>showMyClassUi()</code></td>
-              <td><span class="tag tag-nav">뷰어 UI</span></td>
-              <td>내수업하기 UI 표시</td>
             </tr>
           </table>
         </div>
