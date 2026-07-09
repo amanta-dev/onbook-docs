@@ -28,6 +28,8 @@
         --tag-page-text: #5b21b6;
         --tag-info: #fce7f3;
         --tag-info-text: #9d174d;
+        --header-h: 84px;
+        --footer-h: 0px;
       }
 
       * {
@@ -51,6 +53,9 @@
         align-items: center;
         gap: 20px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
       }
       .header-text {
         flex: 1;
@@ -66,6 +71,35 @@
         color: rgba(255, 255, 255, 0.75);
         margin: 0;
       }
+      .menu-toggle {
+        display: none;
+        width: 38px;
+        height: 38px;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .backdrop {
+        position: fixed;
+        inset: var(--header-h) 0 0 0;
+        background: rgba(15, 23, 42, 0.4);
+        z-index: 85;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+      body.menu-open .backdrop {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
       .header .meta {
         font-size: 11px;
         font-weight: 600;
@@ -89,10 +123,10 @@
         flex-shrink: 0;
         background: var(--surface);
         border-right: 1px solid var(--border);
-        padding: 24px 0;
+        padding: 12px 0;
         position: sticky;
-        top: 0;
-        height: 100vh;
+        top: var(--header-h);
+        height: calc(100vh - var(--header-h) - var(--footer-h));
         overflow-y: auto;
       }
       .sidebar .nav-title {
@@ -137,6 +171,7 @@
 
       .content {
         flex: 1;
+        min-width: 0;
         padding: 40px 48px;
         max-width: 900px;
       }
@@ -148,6 +183,7 @@
         margin: 48px 0 16px;
         padding-top: 16px;
         border-top: 1px solid var(--border);
+        scroll-margin-top: calc(var(--header-h) + 8px);
       }
       h2:first-child {
         margin-top: 0;
@@ -337,9 +373,33 @@
         margin: 8px 0 24px;
       }
 
+      .footer {
+        border-top: 1px solid var(--border);
+        padding: 10px 48px;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        background: var(--surface);
+        position: sticky;
+        bottom: 0;
+        z-index: 100;
+      }
+
       @media (max-width: 768px) {
+        .menu-toggle {
+          display: inline-flex;
+        }
         .sidebar {
-          display: none;
+          position: fixed;
+          left: 0;
+          top: var(--header-h);
+          height: calc(100vh - var(--header-h) - var(--footer-h));
+          z-index: 90;
+          transform: translateX(-100%);
+          transition: transform 0.2s ease;
+        }
+        body.menu-open .sidebar {
+          transform: translateX(0);
+          box-shadow: 2px 0 12px rgba(15, 23, 42, 0.15);
         }
         .content {
           padding: 24px 20px;
@@ -349,17 +409,22 @@
           flex-wrap: wrap;
           gap: 10px;
         }
+        .header .meta {
+          display: none;
+        }
       }
     </style>
   </head>
   <body>
     <div class="header">
+      <button type="button" class="menu-toggle" aria-label="목차 열기" aria-expanded="false">☰</button>
       <div class="header-text">
         <h1>ob.viewer.api — 콘텐츠 개발 가이드</h1>
         <p>OnBook 뷰어가 콘텐츠 iframe에 제공하는 공개 API 레퍼런스</p>
       </div>
       <div class="meta">onbook_viewer &nbsp;·&nbsp; 콘텐츠 개발사용</div>
     </div>
+    <div class="backdrop"></div>
 
     <div class="layout">
       <nav class="sidebar">
@@ -931,7 +996,50 @@
       </main>
     </div>
 
+    <div class="footer">ob.viewer.api — 콘텐츠 개발 가이드 · 콘텐츠 개발사용</div>
+
     <script>
+      // ─── 고정 헤더·푸터 높이를 CSS 변수(--header-h, --footer-h)에 반영 ───
+      const headerEl = document.querySelector(".header");
+      const footerEl = document.querySelector(".footer");
+      function setBarHeights() {
+        if (headerEl) {
+          document.documentElement.style.setProperty("--header-h", headerEl.offsetHeight + "px");
+        }
+        if (footerEl) {
+          // 가로 스크롤바가 있으면 그 높이만큼 사이드바가 밀려 올라가므로 footer 높이에 합산해 보정
+          const hScrollbar = Math.max(0, window.innerHeight - document.documentElement.clientHeight);
+          document.documentElement.style.setProperty("--footer-h", footerEl.offsetHeight + hScrollbar + "px");
+        }
+      }
+      window.addEventListener("resize", setBarHeights);
+      setBarHeights();
+
+      // ─── 좁은 화면: 햄버거 메뉴로 사이드바 열고 닫기 ───
+      const menuToggle = document.querySelector(".menu-toggle");
+      const backdrop = document.querySelector(".backdrop");
+
+      function closeMenu() {
+        document.body.classList.remove("menu-open");
+        if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
+      }
+
+      if (menuToggle) {
+        menuToggle.addEventListener("click", () => {
+          const open = document.body.classList.toggle("menu-open");
+          menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+      }
+      if (backdrop) {
+        backdrop.addEventListener("click", closeMenu);
+      }
+      document.querySelectorAll(".sidebar a").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 768) closeMenu();
+      });
+
       const headings = Array.from(document.querySelectorAll("h2[id]"));
       const navLinks = document.querySelectorAll('.sidebar a[href^="#"]');
       let clicking = false;
@@ -955,10 +1063,18 @@
         if (active) setActive(active.id);
       }
 
-      // 클릭 시 즉시 active 적용
+      // 클릭 시 즉시 active 적용 + 세로로만 스크롤 (가로 스크롤 위치 유지)
       navLinks.forEach((a) => {
-        a.addEventListener("click", () => {
+        a.addEventListener("click", (e) => {
           const id = a.getAttribute("href").slice(1);
+          const target = document.getElementById(id);
+          if (target) {
+            e.preventDefault();
+            const headerH = headerEl ? headerEl.offsetHeight : 0;
+            const y = target.getBoundingClientRect().top + window.scrollY - headerH - 8;
+            window.scrollTo(window.scrollX, y);
+            history.replaceState(null, "", "#" + id);
+          }
           setActive(id);
           clicking = true;
           setTimeout(() => {

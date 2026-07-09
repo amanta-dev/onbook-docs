@@ -23,6 +23,8 @@
         --red-bg: #fef2f2;
         --red-border: #fecaca;
         --red-text: #b91c1c;
+        --header-h: 84px;
+        --footer-h: 42px;
       }
 
       * {
@@ -46,6 +48,9 @@
         align-items: center;
         gap: 20px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
       }
       .header-text {
         flex: 1;
@@ -61,6 +66,35 @@
         color: rgba(255, 255, 255, 0.75);
         margin: 0;
       }
+      .menu-toggle {
+        display: none;
+        width: 38px;
+        height: 38px;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .backdrop {
+        position: fixed;
+        inset: var(--header-h) 0 0 0;
+        background: rgba(15, 23, 42, 0.4);
+        z-index: 85;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+      body.menu-open .backdrop {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
       .header .meta {
         font-size: 11px;
         font-weight: 600;
@@ -84,10 +118,10 @@
         flex-shrink: 0;
         background: var(--surface);
         border-right: 1px solid var(--border);
-        padding: 24px 0;
+        padding: 12px 0;
         position: sticky;
-        top: 0;
-        height: 100vh;
+        top: var(--header-h);
+        height: calc(100vh - var(--header-h) - var(--footer-h));
         overflow-y: auto;
       }
       .sidebar .nav-title {
@@ -136,6 +170,7 @@
 
       section {
         margin-bottom: 56px;
+        scroll-margin-top: calc(var(--header-h) + 16px);
       }
       section > h2 {
         font-size: 21px;
@@ -261,6 +296,11 @@
         font-weight: 600;
         white-space: nowrap;
       }
+      /* 긴 경로·URL은 줄바꿈 허용 (가로 스크롤 방지) */
+      .kbd.path {
+        white-space: normal;
+        word-break: break-all;
+      }
 
       .step-list li {
         margin-bottom: 8px;
@@ -290,14 +330,31 @@
 
       .footer {
         border-top: 1px solid var(--border);
-        padding: 20px 48px;
+        padding: 10px 48px;
         font-size: 12.5px;
         color: var(--text-muted);
+        background: var(--surface);
+        position: sticky;
+        bottom: 0;
+        z-index: 100;
       }
 
       @media (max-width: 760px) {
+        .menu-toggle {
+          display: inline-flex;
+        }
         .sidebar {
-          display: none;
+          position: fixed;
+          left: 0;
+          top: var(--header-h);
+          height: calc(100vh - var(--header-h) - var(--footer-h));
+          z-index: 90;
+          transform: translateX(-100%);
+          transition: transform 0.2s ease;
+        }
+        body.menu-open .sidebar {
+          transform: translateX(0);
+          box-shadow: 2px 0 12px rgba(15, 23, 42, 0.15);
         }
         .content {
           padding: 28px 20px 72px;
@@ -305,17 +362,22 @@
         .header {
           padding: 16px 20px;
         }
+        .header .meta {
+          display: none;
+        }
       }
     </style>
   </head>
   <body>
     <div class="header">
+      <button type="button" class="menu-toggle" aria-label="목차 열기" aria-expanded="false">☰</button>
       <div class="header-text">
         <h1>OnBook 뷰어 사용자 가이드</h1>
         <p>OnBook 뷰어의 기본 사용법 안내 — 뷰어 사용자 테스트용</p>
       </div>
       <span class="meta">User Guide v1.0</span>
     </div>
+    <div class="backdrop"></div>
 
     <div class="layout">
       <nav class="sidebar">
@@ -370,7 +432,7 @@
                   <ol class="step-list" style="margin-bottom: 0">
                     <li>
                       배포본 위치를 엽니다:<br />
-                      <span class="kbd">\\NAS2\0003_file_public\2025_Amanta Viewer\04_프로그램 관련\프로토개발\04_start\</span>
+                      <span class="kbd path">\\NAS2\0003_file_public\2025_Amanta Viewer\04_프로그램 관련\프로토개발\04_start\</span>
                     </li>
                     <li>두 개의 교과서 폴더(<span class="kbd">Book_1</span>, <span class="kbd">Book_2</span>) 중 테스트할 폴더를 내 PC로 복사합니다.</li>
                     <li>복사한 폴더 안의 <span class="kbd">Start.exe</span>를 실행합니다.</li>
@@ -381,7 +443,7 @@
                 <td class="feature-name">웹 버전</td>
                 <td>
                   브라우저(Chrome/Edge 권장)로 아래 주소에 접속합니다.<br />
-                  <a href="http://ecolove.amanta.net/cjh/ob_web/onbook/main/index.html" target="_blank" rel="noopener"><span class="kbd">http://ecolove.amanta.net/cjh/ob_web/onbook/main/index.html</span></a>
+                  <a href="http://ecolove.amanta.net/cjh/ob_web/onbook/main/index.html" target="_blank" rel="noopener"><span class="kbd path">http://ecolove.amanta.net/cjh/ob_web/onbook/main/index.html</span></a>
                 </td>
               </tr>
             </tbody>
@@ -750,6 +812,58 @@
 
     <script>
       (function () {
+        // ─── 고정 헤더·푸터 높이를 CSS 변수(--header-h, --footer-h)에 반영 ───
+        var header = document.querySelector(".header");
+        var footer = document.querySelector(".footer");
+        function setBarHeights() {
+          if (header) {
+            document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+          }
+          if (footer) {
+            // 가로 스크롤바가 있으면 그 높이만큼 사이드바가 밀려 올라가므로 footer 높이에 합산해 보정
+            var hScrollbar = Math.max(0, window.innerHeight - document.documentElement.clientHeight);
+            document.documentElement.style.setProperty("--footer-h", footer.offsetHeight + hScrollbar + "px");
+          }
+        }
+        window.addEventListener("resize", setBarHeights);
+        setBarHeights();
+
+        // ─── 좁은 화면: 햄버거 메뉴로 사이드바 열고 닫기 ───
+        var menuToggle = document.querySelector(".menu-toggle");
+        var backdrop = document.querySelector(".backdrop");
+
+        function closeMenu() {
+          document.body.classList.remove("menu-open");
+          if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
+        }
+
+        if (menuToggle) {
+          menuToggle.addEventListener("click", function () {
+            var open = document.body.classList.toggle("menu-open");
+            menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
+          });
+        }
+        if (backdrop) {
+          backdrop.addEventListener("click", closeMenu);
+        }
+        document.querySelectorAll("a[href^='#']").forEach(function (link) {
+          link.addEventListener("click", function (e) {
+            // 세로로만 스크롤 (가로 스크롤 위치 유지)
+            var href = link.getAttribute("href") || "";
+            var target = href.charAt(0) === "#" ? document.getElementById(href.slice(1)) : null;
+            if (target) {
+              e.preventDefault();
+              var headerH = header ? header.offsetHeight : 0;
+              window.scrollTo(window.scrollX, target.getBoundingClientRect().top + window.scrollY - headerH - 16);
+              history.replaceState(null, "", href);
+            }
+            closeMenu();
+          });
+        });
+        window.addEventListener("resize", function () {
+          if (window.innerWidth > 760) closeMenu();
+        });
+
         var links = Array.prototype.slice.call(document.querySelectorAll(".sidebar a[href^='#']"));
         var sections = links
           .map(function (link) {
