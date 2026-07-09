@@ -125,6 +125,13 @@
         overflow-y: auto;
       }
       .sidebar .nav-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background: none;
+        border: none;
+        font-family: inherit;
         font-size: 10.5px;
         font-weight: 700;
         color: var(--text-muted);
@@ -132,10 +139,26 @@
         letter-spacing: 0.1em;
         padding: 18px 16px 5px;
         border-top: 1px solid var(--border);
+        cursor: pointer;
+        text-align: left;
       }
-      .sidebar .nav-title:first-child {
+      .sidebar .nav-group:first-child .nav-title {
         border-top: none;
-        padding-top: 4px;
+        padding-top: 8px;
+      }
+      .sidebar .nav-title:hover {
+        color: var(--primary-dark);
+      }
+      .sidebar .nav-arrow {
+        font-size: 9px;
+        line-height: 1;
+        transition: transform 0.15s ease;
+      }
+      .sidebar .nav-group.collapsed .nav-arrow {
+        transform: rotate(-90deg);
+      }
+      .sidebar .nav-group.collapsed .nav-links {
+        display: none;
       }
       .sidebar a {
         display: block;
@@ -381,22 +404,34 @@
 
     <div class="layout">
       <nav class="sidebar">
-        <div class="nav-title">시작하기</div>
-        <a href="#intro">개요</a>
-        <a href="#launch">뷰어 실행</a>
-        <div class="nav-title">화면별 안내</div>
-        <a href="#main">메인 화면</a>
-        <div class="nav-divider"></div>
-        <a href="#ebook">ebook 뷰어</a>
-        <a href="#contents">contents 뷰어</a>
-        <a href="#myclass">myclass 뷰어</a>
-        <div class="nav-divider"></div>
-        <a href="#drawing">그리기 도구</a>
-        <a href="#toolkit">활동 도우미</a>
-        <div class="nav-divider"></div>
-        <a href="#tips">알아두면 좋은 기능</a>
-        <div class="nav-title">테스트 참여</div>
-        <a href="#feedback">피드백 보내기</a>
+        <div class="nav-group">
+          <button type="button" class="nav-title">시작하기<span class="nav-arrow">▼</span></button>
+          <div class="nav-links">
+            <a href="#intro">개요</a>
+            <a href="#launch">뷰어 실행</a>
+          </div>
+        </div>
+        <div class="nav-group">
+          <button type="button" class="nav-title">화면별 안내<span class="nav-arrow">▼</span></button>
+          <div class="nav-links">
+            <a href="#main">메인 화면</a>
+            <div class="nav-divider"></div>
+            <a href="#ebook">ebook 뷰어</a>
+            <a href="#contents">contents 뷰어</a>
+            <a href="#myclass">myclass 뷰어</a>
+            <div class="nav-divider"></div>
+            <a href="#drawing">그리기 도구</a>
+            <a href="#toolkit">활동 도우미</a>
+            <div class="nav-divider"></div>
+            <a href="#tips">알아두면 좋은 기능</a>
+          </div>
+        </div>
+        <div class="nav-group">
+          <button type="button" class="nav-title">테스트 참여<span class="nav-arrow">▼</span></button>
+          <div class="nav-links">
+            <a href="#feedback">피드백 보내기</a>
+          </div>
+        </div>
       </nav>
 
       <main class="content">
@@ -862,6 +897,16 @@
         });
         window.addEventListener("resize", function () {
           if (window.innerWidth > 760) closeMenu();
+        });
+
+        // ─── 사이드바 카테고리 펼침/닫힘 (페이지 진입 시 항상 펼침) ───
+        document.querySelectorAll(".sidebar .nav-group").forEach(function (group) {
+          var btn = group.querySelector(".nav-title");
+          if (btn) {
+            btn.addEventListener("click", function () {
+              group.classList.toggle("collapsed");
+            });
+          }
         });
 
         var links = Array.prototype.slice.call(document.querySelectorAll(".sidebar a[href^='#']"));
