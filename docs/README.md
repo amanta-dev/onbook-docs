@@ -11,6 +11,7 @@ OnBook 뷰어 관련 가이드 문서 모음입니다.
 | 사용자 가이드(내부) | [ob-viewer-user-guide.html](ob-viewer-user-guide.html) | https://amanta-dev.github.io/onbook-docs/ob-viewer-user-guide.html |
 | 단원 다운로드 테스트 가이드 | [ob-lesson-download-test.html](ob-lesson-download-test.html) | https://amanta-dev.github.io/onbook-docs/ob-lesson-download-test.html |
 | API 가이드 (onbook.api) | [ob-viewer-api-guide.html](ob-viewer-api-guide.html) | https://amanta-dev.github.io/onbook-docs/ob-viewer-api-guide.html |
+| 패키저 가이드 | [ob-packager-dev-guide.html](ob-packager-dev-guide.html) | https://amanta-dev.github.io/onbook-docs/ob-packager-dev-guide.html |
 
 - 게시 루트: https://amanta-dev.github.io/onbook-docs/
 - 저장소: https://github.com/amanta-dev/onbook-docs
