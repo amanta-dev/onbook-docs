@@ -8,5 +8,6 @@
 | `OnBook 뷰어`   | 한국어 문서에서의 뷰어 명칭                                          |
 | `OnBook viewer` | 영문 문서에서의 뷰어 명칭                                            |
 | `onbook_viewer` | 폴더명·파일명·패키지명 등 코드상 식별자는 소문자 스네이크케이스 사용 |
+| `onbook-docs`   | 예외: Git 저장소명은 GitHub 관례에 따라 소문자 케밥케이스 사용        |
 
 > ❌ `onbook 뷰어`, `ONBOOK 뷰어`, `onBook 뷰어` — 잘못된 표기
