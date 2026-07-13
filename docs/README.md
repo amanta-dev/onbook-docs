@@ -8,7 +8,7 @@ OnBook 뷰어 관련 가이드 문서 모음입니다.
 
 | 문서 | 파일 | 웹 주소 |
 | --- | --- | --- |
-| 내부 사용자 가이드 | [ob-viewer-user-guide.html](ob-viewer-user-guide.html) | https://amanta-dev.github.io/onbook-docs/ob-viewer-user-guide.html |
+| 사용자 가이드(내부) | [ob-viewer-user-guide.html](ob-viewer-user-guide.html) | https://amanta-dev.github.io/onbook-docs/ob-viewer-user-guide.html |
 | 단원 다운로드 테스트 가이드 | [ob-lesson-download-test.html](ob-lesson-download-test.html) | https://amanta-dev.github.io/onbook-docs/ob-lesson-download-test.html |
 | API 가이드 (onbook.api) | [ob-viewer-api-guide.html](ob-viewer-api-guide.html) | https://amanta-dev.github.io/onbook-docs/ob-viewer-api-guide.html |
 
