@@ -3,5 +3,4 @@
 
 # 아래 항목만 git에 포함
 !/.gitignore
-!/CLAUDE.md
 !/docs/
