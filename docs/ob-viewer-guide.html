@@ -1,0 +1,1409 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OnBook 뷰어 가이드</title>
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1e40af;
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --border: #e2e8f0;
+        --text: #1e293b;
+        --text-muted: #64748b;
+        --code-bg: #f1f5f9;
+        --code-border: #cbd5e1;
+        --green: #16a34a;
+        --green-bg: #f0fdf4;
+        --blue-bg: #eff6ff;
+        --yellow-bg: #fefce8;
+        --yellow-border: #fde047;
+        --tag-viewer: #dbeafe;
+        --tag-viewer-text: #1e40af;
+        --header-h: 84px;
+        --footer-h: 0px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+        color: #fff;
+        padding: 10px 48px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .header-text {
+        flex: 1;
+      }
+      .header h1 {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 2px;
+      }
+      .header p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.75);
+        margin: 0;
+      }
+      .menu-toggle {
+        display: none;
+        width: 38px;
+        height: 38px;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .backdrop {
+        position: fixed;
+        inset: var(--header-h) 0 0 0;
+        background: rgba(15, 23, 42, 0.4);
+        z-index: 85;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+      }
+      body.menu-open .backdrop {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .header .meta {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        padding: 4px 12px;
+        white-space: nowrap;
+      }
+
+      .layout {
+        display: flex;
+        min-height: calc(100vh - 120px);
+      }
+
+      .sidebar {
+        width: 230px;
+        flex-shrink: 0;
+        background: var(--surface);
+        border-right: 1px solid var(--border);
+        padding: 12px 0;
+        position: sticky;
+        top: var(--header-h);
+        height: calc(100vh - var(--header-h) - var(--footer-h));
+        overflow-y: auto;
+      }
+      .sidebar .nav-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 18px 16px 5px;
+        margin-top: 0;
+        border-top: 1px solid var(--border);
+        cursor: pointer;
+        text-align: left;
+      }
+      .sidebar .nav-group:first-child .nav-title {
+        border-top: none;
+        padding-top: 8px;
+      }
+      .sidebar .nav-title:hover {
+        color: var(--primary-dark);
+      }
+      .sidebar .nav-arrow {
+        font-size: 9px;
+        line-height: 1;
+        transition: transform 0.15s ease;
+      }
+      .sidebar .nav-group.collapsed .nav-arrow {
+        transform: rotate(-90deg);
+      }
+      .sidebar .nav-group.collapsed .nav-links {
+        display: none;
+      }
+      .sidebar a {
+        display: block;
+        padding: 7px 16px 7px 20px;
+        font-size: 13.5px;
+        color: var(--text);
+        text-decoration: none;
+        border-left: 3px solid transparent;
+        transition:
+          background 0.12s,
+          color 0.12s;
+      }
+      .sidebar a:hover {
+        color: var(--primary);
+        background: var(--blue-bg);
+        border-left-color: #bfdbfe;
+      }
+      .sidebar a.active {
+        color: var(--primary);
+        background: var(--blue-bg);
+        border-left-color: var(--primary);
+        font-weight: 700;
+      }
+      .sidebar .section-gap {
+        height: 12px;
+      }
+
+      .content {
+        flex: 1;
+        min-width: 0;
+        padding: 40px 48px;
+        max-width: 900px;
+      }
+
+      h2 {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text);
+        margin: 48px 0 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        scroll-margin-top: calc(var(--header-h) + 8px);
+      }
+      h2:first-child {
+        margin-top: 0;
+        border-top: none;
+      }
+      h3 {
+        font-size: 15px;
+        font-weight: 700;
+        margin: 28px 0 10px;
+      }
+
+      p {
+        font-size: 14px;
+        color: var(--text);
+        margin-bottom: 12px;
+      }
+
+      .notice {
+        background: var(--yellow-bg);
+        border: 1px solid var(--yellow-border);
+        border-radius: 8px;
+        padding: 14px 18px;
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+
+      .info-box {
+        background: var(--blue-bg);
+        border: 1px solid #bfdbfe;
+        border-radius: 8px;
+        padding: 14px 18px;
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+      .info-box a {
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .tag {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .tag-viewer {
+        background: var(--tag-viewer);
+        color: var(--tag-viewer-text);
+      }
+
+      /* 표 */
+      .params {
+        margin: 10px 0;
+      }
+      .params table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+      .params th {
+        text-align: left;
+        padding: 6px 10px;
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+      .params td {
+        padding: 6px 10px;
+        border: 1px solid var(--border);
+        vertical-align: top;
+      }
+      .params td code {
+        font-size: 11px;
+        background: var(--code-bg);
+        padding: 1px 5px;
+        border-radius: 3px;
+      }
+      .params td a {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      /* 코드 블록 */
+      pre {
+        background: #1e293b;
+        color: #e2e8f0;
+        border-radius: 8px;
+        padding: 16px 18px;
+        font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+        font-size: 13px;
+        line-height: 1.7;
+        overflow-x: auto;
+        margin: 12px 0 16px;
+      }
+      pre .c {
+        color: #64748b;
+      }
+      pre .k {
+        color: #93c5fd;
+      }
+      pre .s {
+        color: #86efac;
+      }
+      pre .f {
+        color: #fde68a;
+      }
+      pre .n {
+        color: #e2e8f0;
+      }
+      pre .p {
+        color: #94a3b8;
+      }
+      pre .g {
+        color: #86efac;
+        font-weight: 700;
+      }
+      pre .m {
+        color: #94a3b8;
+      }
+
+      code {
+        font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+        font-size: 13px;
+      }
+      p code,
+      li code,
+      td code {
+        background: var(--code-bg);
+        border: 1px solid var(--code-border);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+      p a,
+      li a {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      ul,
+      ol {
+        padding-left: 20px;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      li {
+        margin-bottom: 4px;
+      }
+
+      /* 체크리스트 */
+      ul.checklist {
+        list-style: none;
+        padding-left: 4px;
+      }
+      ul.checklist li {
+        padding-left: 26px;
+        position: relative;
+        margin-bottom: 8px;
+      }
+      ul.checklist li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        top: 1px;
+        width: 18px;
+        height: 18px;
+        border: 1.5px solid var(--green);
+        border-radius: 4px;
+        color: var(--green);
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 17px;
+        text-align: center;
+        background: var(--green-bg);
+      }
+
+      /* 스크린샷 자리 */
+      .shot {
+        margin: 14px 0 20px;
+        text-align: center;
+      }
+      .shot img {
+        max-width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
+        cursor: zoom-in;
+      }
+
+      /* 본문 인라인 아이콘 (원본 크기 유지) */
+      .icon-inline {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 2px;
+        border-radius: 3px;
+      }
+
+      /* 이미지 원본 보기 (라이트박스) */
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 300;
+        background: rgba(15, 23, 42, 0.88);
+        display: none;
+        overflow: auto;
+        padding: 32px;
+        cursor: zoom-out;
+      }
+      .lightbox.open {
+        display: flex;
+      }
+      .lightbox img {
+        display: block;
+        margin: auto;
+        border-radius: 8px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      }
+      .shot .shot-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 130px;
+        background: var(--code-bg);
+        border: 2px dashed var(--code-border);
+        border-radius: 10px;
+        color: var(--text-muted);
+        font-size: 13px;
+      }
+      .shot .shot-placeholder .shot-file {
+        font-family: "JetBrains Mono", Consolas, monospace;
+        font-size: 11.5px;
+        color: #94a3b8;
+      }
+      .shot figcaption {
+        font-size: 12px;
+        color: var(--text-muted);
+        text-align: center;
+        margin-top: 6px;
+      }
+
+      /* 스크린샷 가로 배치 */
+      .shot-row {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 16px;
+        margin: 14px 0 20px;
+      }
+      .shot-row .shot {
+        margin: 0;
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: max-content;
+      }
+      .shot-row .shot img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      /* 구분선 */
+      .divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 8px 0 24px;
+      }
+
+      .footer {
+        border-top: 1px solid var(--border);
+        padding: 10px 48px;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        background: var(--surface);
+        position: sticky;
+        bottom: 0;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: inline-flex;
+        }
+        .sidebar {
+          position: fixed;
+          left: 0;
+          top: var(--header-h);
+          height: calc(100vh - var(--header-h) - var(--footer-h));
+          z-index: 90;
+          transform: translateX(-100%);
+          transition: transform 0.2s ease;
+        }
+        body.menu-open .sidebar {
+          transform: translateX(0);
+          box-shadow: 2px 0 12px rgba(15, 23, 42, 0.15);
+        }
+        .content {
+          padding: 24px 20px;
+        }
+        .header {
+          padding: 10px 20px;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        .header .meta {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <button
+        type="button"
+        class="menu-toggle"
+        aria-label="목차 열기"
+        aria-expanded="false"
+      >
+        ☰
+      </button>
+      <div class="header-text">
+        <h1>OnBook 뷰어 가이드</h1>
+        <p>
+          콘텐츠 개발사를 위한 뷰어 안내 — 폴더 구조 · 뷰어 설정 · 라이브러리
+          활용 · 배치 · 설치본
+        </p>
+      </div>
+      <div class="meta">뷰어 v1.0.0 &nbsp;·&nbsp; 콘텐츠 개발사용</div>
+    </div>
+    <div class="backdrop"></div>
+
+    <div class="layout">
+      <nav class="sidebar">
+        <div class="nav-group">
+          <button type="button" class="nav-title">
+            시작하기<span class="nav-arrow">▼</span>
+          </button>
+          <div class="nav-links">
+            <a href="#vw-intro">개요</a>
+            <a href="#vw-structure">뷰어 폴더 구조</a>
+            <a href="#vw-screens">뷰어 주요 화면</a>
+          </div>
+        </div>
+        <div class="section-gap"></div>
+        <div class="nav-group">
+          <button type="button" class="nav-title">
+            콘텐츠 개발<span class="nav-arrow">▼</span>
+          </button>
+          <div class="nav-links">
+            <a href="#vw-rules">콘텐츠 개발 규칙</a>
+          </div>
+        </div>
+        <div class="section-gap"></div>
+        <div class="nav-group">
+          <button type="button" class="nav-title">
+            커스터마이징<span class="nav-arrow">▼</span>
+          </button>
+          <div class="nav-links">
+            <a href="#vw-settings">뷰어 설정 (settings.json)</a>
+            <a href="#vw-main">메인 화면</a>
+            <a href="#vw-modules">뷰어 모듈</a>
+          </div>
+        </div>
+        <div class="section-gap"></div>
+        <div class="nav-group">
+          <button type="button" class="nav-title">
+            패키징·배치<span class="nav-arrow">▼</span>
+          </button>
+          <div class="nav-links">
+            <a href="#vw-deploy">패키징과 배치</a>
+            <a href="#vw-web">웹 버전으로 사용하기</a>
+            <a href="#vw-install">설치본 구성</a>
+          </div>
+        </div>
+      </nav>
+
+      <main class="content">
+        <h2 id="vw-intro">개요</h2>
+        <p>
+          <span class="tag tag-viewer">viewer</span>
+          <strong>OnBook 뷰어</strong>는 교과서(ebook)·콘텐츠·내 수업하기를
+          제공하는 Windows 데스크톱 뷰어입니다. 같은 구성을 웹 서버에 올려 웹
+          버전으로도 사용할 수 있습니다.
+        </p>
+        <p>
+          이 문서는 콘텐츠 개발사가 OnBook 뷰어를 구성하고 활용하는 데 필요한
+          내용을 안내합니다.
+        </p>
+        <h3>이 문서에서 다루는 내용</h3>
+        <ul>
+          <li>
+            <a href="#vw-structure">OnBook 뷰어의 폴더 구조</a>
+          </li>
+          <li>
+            <a href="#vw-settings">각 뷰어의 UI·부가 기능 설정 방법</a> —
+            <code>settings.json</code>
+          </li>
+          <li>
+            <a href="#vw-rules"
+              >개발사 제작 페이지에서 뷰어 필수 라이브러리
+              (<code>onbook.api.min.js</code>)를 활용하는 방법</a
+            >
+            — 함수 상세는
+            <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html">API 가이드</a> 참고
+          </li>
+          <li>
+            <a href="#vw-deploy">패키징 산출물을 뷰어에 배치하는 방법</a> —
+            간단 안내, 자세한 절차는 패키저 가이드 참고
+          </li>
+          <li>
+            <a href="#vw-install">설치본 구성·설정 방법</a>
+          </li>
+        </ul>
+        <h3>관련 문서</h3>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 220px">문서</th>
+              <th>언제 보나요</th>
+            </tr>
+            <tr>
+              <td>
+                <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html">OnBook 뷰어 API 가이드</a>
+              </td>
+              <td>
+                콘텐츠 HTML에서 페이지 이동 등 뷰어 기능을 사용할 때
+                (onbook.api 함수 목록)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a target="_blank" rel="noopener" href="ob-ebook-packager-guide.html">ebook 패키저 가이드</a>
+              </td>
+              <td>교과서 ZIP을 만들 때</td>
+            </tr>
+            <tr>
+              <td>
+                <a target="_blank" rel="noopener" href="ob-contents-packager-guide.html"
+                  >contents 패키저 가이드</a
+                >
+              </td>
+              <td>단원별 HTML 콘텐츠 ZIP을 만들 때</td>
+            </tr>
+          </table>
+        </div>
+
+        <h2 id="vw-structure">뷰어 폴더 구조</h2>
+        <p>
+          뷰어는 교과서 폴더 단위로 배포됩니다. 콘텐츠 개발사가 다루는 작업
+          영역은 다음과 같습니다.
+        </p>
+        <pre><span class="n">(교과서 폴더)/</span>   <span class="c">← 폴더명 규칙은 <a href="#vw-install" style="color:#93c5fd">설치본 구성</a> 참고</span>
+<span class="p">└─</span> <span class="f">platform/</span>
+   <span class="p">├─</span> <span class="f">onbook/</span>
+   <span class="p">│  ├─</span> <span class="g">ebook/</span>          <span class="c">← 교과서 배치</span>
+   <span class="p">│  ├─</span> <span class="g">contents/</span>       <span class="c">← 콘텐츠 배치</span>
+   <span class="p">│  ├─</span> <span class="g">download/</span>       <span class="c">← 단원 다운로드 자료</span>
+   <span class="p">│  ├─</span> <span class="g">main/</span>           <span class="c">← 메인 화면 (개발사 제작·커스텀)</span>
+   <span class="p">│  ├─</span> <span class="g">modules/</span>        <span class="c">← 뷰어 모듈 (개발사 페이지 + 필수 모듈)</span>
+   <span class="p">│  └─</span> <span class="m">…</span>
+   <span class="p">├─</span> <span class="f">scene/</span>
+   <span class="p">│  ├─</span> <span class="g">ebook/settings.json</span>     <span class="c">← ebook 뷰어 설정</span>
+   <span class="p">│  ├─</span> <span class="g">contents/settings.json</span>  <span class="c">← contents 뷰어 설정</span>
+   <span class="p">│  ├─</span> <span class="g">myclass/settings.json</span>   <span class="c">← myclass 뷰어 설정</span>
+   <span class="p">│  └─</span> <span class="m">… (뷰어 화면 앱 — 수정 금지)</span>
+   <span class="p">└─</span> <span class="m">… (실행 엔진 — 수정 금지)</span></pre>
+        <div class="notice">
+          초록으로 표시된 작업 영역 외의 파일·폴더(뷰어 화면 앱 내부, 실행 엔진
+          등)는 뷰어 동작에 필요한 구성 요소이므로 가급적 수정하지 말아 주세요.
+        </div>
+        <h3>책(권) 단위 폴더 규칙</h3>
+        <p>
+          <code>ebook/</code>과 <code>contents/</code>는 같은 책(권) 단위
+          폴더를 사용합니다 — <code>unit01</code>: 책 1,
+          <code>unit02</code>: 책 2 (수학 익힘책처럼 2권으로 구성되는 경우).
+        </p>
+        <ul>
+          <li>교과서: <code>platform/onbook/ebook/unit01/</code></li>
+          <li>
+            콘텐츠: <code>platform/onbook/contents/unit01/lesson01/</code>
+            (책 폴더 아래 단원 폴더)
+          </li>
+        </ul>
+
+        <h2 id="vw-screens">뷰어 주요 화면</h2>
+        <p>
+          제작한 교과서·콘텐츠가 뷰어에서 어떻게 표시되는지 화면별로
+          소개합니다.
+        </p>
+        <h3>메인 화면</h3>
+        <figure class="shot">
+          <div class="shot-placeholder">
+            <span>📷 스크린샷 준비 중</span>
+            <span class="shot-file">images/viewer/viewer-main.png</span>
+          </div>
+          <figcaption>메인 화면 — 주 메뉴 3개</figcaption>
+        </figure>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 160px">주 메뉴</th>
+              <th>이동하는 화면</th>
+            </tr>
+            <tr>
+              <td><strong>교과서</strong></td>
+              <td>
+                ebook 뷰어 — ebook 패키저로 만든 교과서가 표시됩니다.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>콘텐츠</strong></td>
+              <td>
+                contents 뷰어 — contents 패키저로 만든 단원별 콘텐츠가
+                표시됩니다.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>내 수업하기</strong></td>
+              <td>
+                myclass 뷰어 — 교과서·콘텐츠 페이지를 골라 수업을 구성하는
+                화면입니다.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <h3>ebook 뷰어 (교과서)</h3>
+        <p>
+          교과서 페이지를 넘기며 보는 화면입니다. 페이지 이동·썸네일 목록·그리기
+          도구를 제공합니다.
+        </p>
+        <figure class="shot">
+          <div class="shot-placeholder">
+            <span>📷 스크린샷 준비 중</span>
+            <span class="shot-file">images/viewer/viewer-ebook.png</span>
+          </div>
+          <figcaption>ebook 뷰어 — 교과서 페이지</figcaption>
+        </figure>
+        <p>
+          교과서 페이지에 배치한 <strong>버튼을 누르면 연결된 HTML
+          콘텐츠</strong>가 열립니다. 교과서(ebook 패키저)와 콘텐츠(HTML)가
+          만나는 지점이므로, 배치 후 버튼 연결이 정상 동작하는지 꼭
+          확인해 주세요.
+        </p>
+        <figure class="shot">
+          <div class="shot-placeholder">
+            <span>📷 스크린샷 준비 중</span>
+            <span class="shot-file"
+              >images/viewer/viewer-ebook-content-link.png</span
+            >
+          </div>
+          <figcaption>교과서 버튼으로 콘텐츠를 연 화면</figcaption>
+        </figure>
+        <h3>contents 뷰어 (콘텐츠)</h3>
+        <p>
+          단원별 콘텐츠를 페이지 순서대로 보는 화면입니다. 페이지 순서와
+          썸네일은 contents 패키저에서 정한 목록을 그대로 따릅니다.
+        </p>
+        <figure class="shot">
+          <div class="shot-placeholder">
+            <span>📷 스크린샷 준비 중</span>
+            <span class="shot-file">images/viewer/viewer-contents.png</span>
+          </div>
+          <figcaption>contents 뷰어 — 단원 콘텐츠 페이지</figcaption>
+        </figure>
+        <h3>myclass 뷰어 (내 수업하기)</h3>
+        <p>
+          교과서·콘텐츠 페이지를 골라 나만의 수업을 구성하는 화면입니다. 별도
+          제작물 없이 배치된 교과서·콘텐츠를 재사용하며, 수업 목록은
+          <a href="#vw-settings">뷰어 설정</a>의 <code>myclass.lessons</code>로
+          정의합니다.
+        </p>
+        <figure class="shot">
+          <div class="shot-placeholder">
+            <span>📷 스크린샷 준비 중</span>
+            <span class="shot-file">images/viewer/viewer-myclass.png</span>
+          </div>
+          <figcaption>myclass 뷰어 — 수업 구성 화면</figcaption>
+        </figure>
+
+        <h2 id="vw-rules">콘텐츠 개발 규칙</h2>
+        <p>
+          뷰어에서 정상 동작하는 HTML 콘텐츠를 만들기 위해 다음 규칙을 지켜
+          주세요.
+        </p>
+        <h3>onbook.api 로드</h3>
+        <p>
+          콘텐츠에서 뷰어 기능(페이지 이동 등)을 쓰려면
+          <code>onbook.api.min.js</code>를 로드합니다. 파일은 콘텐츠 폴더 안
+          <code>common/js/ob/</code>에 두고, 각 페이지에서 상대 경로로
+          로드합니다.
+        </p>
+        <pre><span class="c">&lt;!-- 콘텐츠 HTML의 &lt;head&gt; 또는 &lt;body&gt; 하단 --&gt;</span>
+<span class="p">&lt;</span><span class="k">script</span> <span class="n">src=</span><span class="s">"../../common/js/ob/onbook.api.min.js"</span><span class="p">&gt;&lt;/</span><span class="k">script</span><span class="p">&gt;</span></pre>
+        <div class="info-box">
+          제공 함수 목록과 사용 방법은
+          <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#setup">API 가이드 — 사용 방법</a> ·
+          <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#summary">전체 API 목록</a>을
+          참고하세요.
+        </div>
+        <h3>페이지 이동 규칙</h3>
+        <p>
+          페이지 이동·링크는 onbook.api 함수(<a
+            target="_blank" rel="noopener" href="ob-viewer-api-guide.html#goPage"
+            >goPage</a
+          >
+          등)를 사용하고, <code>window.location.href</code>를 직접 변경하는
+          방식은 가급적 사용하지 말아 주세요. 뷰어의 페이지 이력·이동과 어긋날
+          수 있습니다.
+        </p>
+        <p>콘텐츠나 외부 페이지에서 뷰어 화면으로 되돌아올 때는:</p>
+        <pre><span class="n">window</span><span class="p">.</span><span class="n">ob</span><span class="p">.</span><span class="n">viewer</span><span class="p">.</span><span class="n">api</span><span class="p">.</span><span class="f">historyBack</span><span class="p">();</span></pre>
+        <h3>화면·뷰포트 전제</h3>
+        <p>
+          뷰어는 화면 확대·축소(핀치 줌)를 사용하지 않습니다. 콘텐츠는 확대
+          없이 한 화면에 온전히 표시되도록 제작해 주세요.
+        </p>
+        <h3>페이지 파일명 관례</h3>
+        <p>콘텐츠 페이지 파일명은 다음 형식을 따릅니다.</p>
+        <pre><span class="n">e</span><span class="s">{책}</span><span class="n">_</span><span class="s">{단원}</span><span class="n">_</span><span class="s">{차시}</span><span class="n">_</span><span class="s">{코너}</span><span class="n">_</span><span class="s">{탭}</span><span class="n">.html</span>   <span class="c">예: e5_01_02_01_01.html</span></pre>
+        <p>
+          뷰어가 파일명에서 단원·차시 정보를 읽으므로, 이 관례를 지켜
+          주세요.
+        </p>
+        <h3>개발 체크리스트</h3>
+        <ul class="checklist">
+          <li>
+            <code>common/js/ob/onbook.api.min.js</code>를 각 페이지에서 상대
+            경로로 로드했다.
+          </li>
+          <li>
+            페이지 이동·복귀에 onbook.api를 사용했다
+            (<code>window.location.href</code> 직접 변경 없음).
+          </li>
+          <li>확대 없이 한 화면에 온전히 표시된다.</li>
+          <li>페이지 파일명이 명명 관례를 따른다.</li>
+        </ul>
+
+        <h2 id="vw-settings">뷰어 설정 (settings.json)</h2>
+        <p>
+          각 뷰어의 메뉴 구성·기능·모듈 연결은
+          <strong>뷰어별 <code>settings.json</code></strong>으로 커스터마이징할
+          수 있습니다. 뷰어를 교과 특성에 맞게 조정하는 기본 파일입니다.
+        </p>
+        <ul>
+          <li><code>platform/scene/ebook/settings.json</code> — ebook 뷰어</li>
+          <li>
+            <code>platform/scene/contents/settings.json</code> — contents 뷰어
+          </li>
+          <li>
+            <code>platform/scene/myclass/settings.json</code> — myclass 뷰어
+          </li>
+        </ul>
+        <h3>공통 설정 항목</h3>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 190px">항목</th>
+              <th>설명</th>
+            </tr>
+            <tr>
+              <td><code>viewerType</code></td>
+              <td>뷰어 종류. <strong>수정하지 마세요.</strong></td>
+            </tr>
+            <tr>
+              <td><code>menu.items</code></td>
+              <td>
+                하단 메뉴에 표시할 항목과 순서. <code>"---"</code>는 구분선.
+              </td>
+            </tr>
+            <tr>
+              <td><code>menu.features</code></td>
+              <td>
+                이 뷰어가 지원하는 기능 전체 목록.
+                <code>items</code>에 넣을 수 있는 항목의 참고 목록입니다.
+              </td>
+            </tr>
+            <tr>
+              <td><code>quickMenu.items</code></td>
+              <td>퀵 메뉴바 구성 (ebook 뷰어).</td>
+            </tr>
+            <tr>
+              <td><code>rightMenu</code></td>
+              <td>오른쪽 메뉴의 위(<code>top</code>)·아래(<code>bottom</code>) 배치.</td>
+            </tr>
+            <tr>
+              <td><code>page</code></td>
+              <td>
+                페이지 표시 — <code>double</code>(양면 여부),
+                <code>arrow</code>(이동 화살표 표시·세로 위치) 등.
+              </td>
+            </tr>
+            <tr>
+              <td><code>modules.main.url</code></td>
+              <td>홈(메인 화면) 경로.</td>
+            </tr>
+            <tr>
+              <td><code>modules.library</code></td>
+              <td>자료실 경로와 열기 방식(<code>target</code>·<code>maximize</code>).</td>
+            </tr>
+            <tr>
+              <td><code>modules.toolkit.items</code></td>
+              <td>
+                활동 도우미 도구 목록. 도구별
+                <code>label</code>·<code>icon</code>·<code>url</code>·<code>target</code>·<code>maximize</code>를
+                지정해 추가·제거할 수 있습니다.
+              </td>
+            </tr>
+            <tr>
+              <td><code>myData</code></td>
+              <td>내 자료함에 표시할 항목(메모·북마크·하이라이트 등).</td>
+            </tr>
+            <tr>
+              <td><code>print</code></td>
+              <td>
+                인쇄 옵션 — <code>silent</code>(대화상자 없이 현재 페이지 인쇄),
+                <code>previewEnabled</code>(미리보기).
+              </td>
+            </tr>
+            <tr>
+              <td><code>draggableMenu</code> / <code>bottomMenu</code></td>
+              <td>
+                메뉴 드래그 이동 허용, 하단 메뉴 사용 여부
+                (<code>fixedSettingHelp</code>: 설정·도움말을 항상 맨 끝에 고정).
+              </td>
+            </tr>
+          </table>
+        </div>
+        <h3>myclass 전용 설정 — 수업 구성</h3>
+        <p>
+          myclass 뷰어의 <strong>수업 목록은 <code>myclass.lessons</code></strong
+          >에 정의합니다. 단원(<code>lessons</code>) → 차시(<code>sessions</code>)
+          → 섹션(<code>sections</code>) → 코너(<code>corners</code>) 구조이고, 각
+          코너가 콘텐츠 페이지 하나에 연결됩니다.
+        </p>
+        <pre><span class="s">"myclass"</span><span class="p">: {</span>
+  <span class="s">"lockContentLink"</span><span class="p">:</span> <span class="k">false</span><span class="p">,</span>          <span class="c">← 콘텐츠 페이지 이동 차단 여부</span>
+  <span class="s">"uiType"</span><span class="p">:</span> <span class="s">"top-only"</span><span class="p">,</span>            <span class="c">← 메뉴 표시 (top-only | all)</span>
+  <span class="s">"lessons"</span><span class="p">: [{</span>
+    <span class="s">"name"</span><span class="p">:</span> <span class="s">"Lesson 1"</span><span class="p">,</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Lesson 1 Where Are You From?"</span><span class="p">,</span>
+    <span class="s">"sessions"</span><span class="p">: [{</span>
+      <span class="s">"name"</span><span class="p">:</span> <span class="s">"첫째 시간"</span><span class="p">,</span>
+      <span class="s">"sections"</span><span class="p">: [{</span>
+        <span class="s">"name"</span><span class="p">:</span> <span class="s">"도입"</span><span class="p">,</span>
+        <span class="s">"corners"</span><span class="p">: [{</span>
+          <span class="s">"title"</span><span class="p">:</span> <span class="s">"단원 열기"</span><span class="p">,</span>
+          <span class="s">"pageCount"</span><span class="p">:</span> <span class="n">8</span><span class="p">,</span>       <span class="c">← 교과서 쪽수 표시</span>
+          <span class="s">"contentUrl"</span><span class="p">:</span> <span class="s">"../../onbook/contents/unit01/lesson01&amp;pageName=e5_01_01_01_01.html"</span>
+        <span class="p">}]</span>
+      <span class="p">}]</span>
+    <span class="p">}]</span>
+  <span class="p">}]</span>
+<span class="p">}</span></pre>
+        <p>
+          myclass에는 안내 문구를 바꾸는 <code>messageCustom</code> 항목도
+          있습니다.
+        </p>
+        <div class="notice">
+          <code>settings.json</code>은 JSON 문법(쉼표·따옴표)이 어긋나면 뷰어가
+          정상 동작하지 않습니다. 편집 후 뷰어를 다시 실행해 확인해 주세요.
+        </div>
+
+        <h2 id="vw-main">메인 화면</h2>
+        <p>
+          <code>platform/onbook/main/</code>은 뷰어 실행 시 처음 표시되는
+          <strong>메인 화면</strong>으로, 콘텐츠 개발사가 직접 제작·커스터마이징
+          하는 영역입니다. 기본 제공 구성은 <code>index.html</code> +
+          <code>js/index.js</code>(링크 설정) + <code>css/</code>·<code>images/</code>입니다.
+        </p>
+        <h3>기능 연결 방법</h3>
+        <p>
+          메인 화면에서 각 기능은 다음 방식으로 연결합니다. 기본 제공
+          <code>js/index.js</code>의 링크 설정(<code>LINK_CONFIG</code>)을
+          수정하면 대상 교과서·콘텐츠에 맞게 바꿀 수 있습니다.
+        </p>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 170px">기능</th>
+              <th>연결 방법</th>
+            </tr>
+            <tr>
+              <td>교과서 열기 (ebook)</td>
+              <td>
+                <code>scene/ebook/index.html?contentUrl=(교과서 경로)&amp;page=(쪽)</code>
+              </td>
+            </tr>
+            <tr>
+              <td>콘텐츠 열기 (contents)</td>
+              <td>
+                <code>scene/contents/index.html?contentUrl=(단원 경로)&amp;page=(순번)</code>
+              </td>
+            </tr>
+            <tr>
+              <td>내 수업하기 (myclass)</td>
+              <td>
+                <code>scene/myclass/index.html?lesson=(단원)&amp;session=(차시)</code>
+              </td>
+            </tr>
+            <tr>
+              <td>진도 보기</td>
+              <td>
+                <code>window.OPEN_PROGRESS_VIEW()</code> 호출 — progress 모듈이
+                제공하는 함수입니다.
+              </td>
+            </tr>
+            <tr>
+              <td>자료실</td>
+              <td><code>../modules/library/index.html</code>로 이동.</td>
+            </tr>
+            <tr>
+              <td>개발사 제작 HTML 새 창</td>
+              <td>
+                <code>window.ob.viewer.api.openUrl(url, 창이름, 옵션)</code> —
+                <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#openUrl">API 가이드 — openUrl</a>
+                참고.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="notice">
+          메인 화면 <code>index.html</code>이 로드하는
+          <strong>진도 보기(progress)·단원 다운로드(updateLesson) 모듈의
+          css/js 참조는 유지</strong>해 주세요. 제거하면 해당 기능이 동작하지
+          않습니다.
+        </div>
+
+        <h2 id="vw-modules">뷰어 모듈</h2>
+        <p>
+          <code>platform/onbook/modules/</code>는 메인 화면과 각 뷰어에서
+          사용하는 부가 페이지 모음입니다. <strong>필수 모듈</strong>과
+          <strong>개발사 제작 영역</strong>으로 나뉩니다.
+        </p>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 170px">폴더</th>
+              <th>구분</th>
+              <th>설명</th>
+            </tr>
+            <tr>
+              <td><code>progress/</code></td>
+              <td><strong>필수 — 삭제 금지</strong></td>
+              <td>진도 보기. 메인 화면이 직접 사용합니다.</td>
+            </tr>
+            <tr>
+              <td><code>updateLesson/</code></td>
+              <td><strong>필수 — 삭제 금지</strong></td>
+              <td>단원 다운로드. 메인 화면이 직접 사용합니다.</td>
+            </tr>
+            <tr>
+              <td><code>library/</code></td>
+              <td>개발사 제작</td>
+              <td>자료실 — 교과 자료를 모아 보여주는 페이지.</td>
+            </tr>
+            <tr>
+              <td><code>toolkit/</code></td>
+              <td>개발사 제작</td>
+              <td>
+                활동 도우미 — 칠판·타이머·모둠 점수판·발표 도우미 등 수업 도구
+                페이지.
+              </td>
+            </tr>
+            <tr>
+              <td><code>apps/</code></td>
+              <td>개발사 제작</td>
+              <td>기타 페이지 — 사전·게임·사용 설명서 등 자유 구성.</td>
+            </tr>
+            <tr>
+              <td><code>common/</code></td>
+              <td>공용</td>
+              <td>모듈들이 함께 쓰는 리소스(스크립트·폰트·오디오 등).</td>
+            </tr>
+          </table>
+        </div>
+        <h3>모듈 연결 경로 규칙</h3>
+        <ul>
+          <li>
+            메인 화면에서: <code>../modules/…</code> — 예:
+            <code>../modules/library/index.html</code>
+          </li>
+          <li>
+            뷰어 설정(<a href="#vw-settings">settings.json</a>)에서:
+            <code>../../onbook/modules/…</code> — 예:
+            <code>../../onbook/modules/toolkit/timer.html</code>
+          </li>
+        </ul>
+
+        <h2 id="vw-deploy">패키징과 배치</h2>
+        <h3>패키징</h3>
+        <p>
+          완성한 제작물은 패키저로 ZIP을 만듭니다. 절차는 각 패키저 가이드를
+          참고하세요.
+        </p>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 160px">제작물</th>
+              <th>사용 도구</th>
+            </tr>
+            <tr>
+              <td>교과서</td>
+              <td>
+                <a target="_blank" rel="noopener" href="ob-ebook-packager-guide.html">ebook 패키저 가이드</a>
+              </td>
+            </tr>
+            <tr>
+              <td>단원별 HTML 콘텐츠</td>
+              <td>
+                <a target="_blank" rel="noopener" href="ob-contents-packager-guide.html"
+                  >contents 패키저 가이드</a
+                >
+              </td>
+            </tr>
+          </table>
+        </div>
+        <h3>교과서(ebook) 배치</h3>
+        <p>
+          교과서 ZIP의 압축을 풀어 내용물이 책 폴더(<code>unitXX/</code>) 바로
+          아래에 오도록 배치합니다.
+        </p>
+        <pre><span class="n">platform/onbook/ebook/unit01/</span>
+<span class="p">├─</span> <span class="f">book.xml</span>
+<span class="p">├─</span> <span class="f">toc.xml</span>
+<span class="p">├─</span> <span class="n">book_tab/</span>
+<span class="p">└─</span> <span class="n">web/</span>   <span class="c">← 페이지 HTML · css · js · page_data · page_images · page_thumbnails</span></pre>
+        <h3>콘텐츠(contents) 배치</h3>
+        <p>
+          콘텐츠 ZIP의 압축을 풀어 내용물이 단원 폴더(<code>lessonXX/</code>)
+          바로 아래에 오도록 배치합니다. 자세한 내용은
+          <a target="_blank" rel="noopener" href="ob-contents-packager-guide.html#ct-deploy"
+            >contents 패키저 가이드 — 뷰어 배치</a
+          >를 참고하세요.
+        </p>
+        <pre><span class="n">platform/onbook/contents/unit01/lesson01/</span>
+<span class="p">├─</span> <span class="f">toc.xml</span>
+<span class="p">└─</span> <span class="n">web/</span>   <span class="c">← toc.xhtml · page_thumbnails · 원본 파일들</span></pre>
+        <h3>단원 다운로드 자료 (download/)</h3>
+        <p>
+          <code>platform/onbook/download/</code>는 뷰어의 단원 다운로드 기능이
+          사용하는 자료 폴더입니다. 구성 방법은 별도 안내를 따릅니다.
+        </p>
+        <h3>배치 후 확인</h3>
+        <p>
+          배치를 마치면 뷰어를 실행해 메인 화면에서
+          <strong>교과서 / 콘텐츠</strong>로 들어가 실제 표시를 확인합니다.
+        </p>
+        <div class="notice">
+          목록에 나타나지 않으면 <strong>압축 해제 시 폴더가 한 겹 더 생기지
+          않았는지</strong> 확인해 주세요. <code>toc.xml</code>이
+          <code>unit01/</code>(교과서) 또는 <code>lesson01/</code>(콘텐츠) 바로
+          아래에 있어야 합니다.
+        </div>
+
+        <h2 id="vw-web">웹 버전으로 사용하기</h2>
+        <p>
+          PC에서 배치·확인을 마친 뷰어는 웹 서버에 올려 브라우저로도 사용할 수
+          있습니다. <code>platform/</code> 안의 <code>onbook/</code>과
+          <code>scene/</code> <strong>두 폴더만</strong> 웹 서버에 나란히
+          업로드합니다.
+        </p>
+        <pre><span class="n">(웹 루트)/</span>
+<span class="p">├─</span> <span class="f">onbook/</span>   <span class="c">← 교과서·콘텐츠 포함</span>
+<span class="p">└─</span> <span class="f">scene/</span></pre>
+        <p>브라우저 진입 주소는 다음과 같습니다.</p>
+        <pre><span class="n">https://(웹 루트)/</span><span class="f">onbook/main/index.html</span></pre>
+        <p>
+          접속하면 PC 버전과 동일한 메인 화면이 표시됩니다. 교과서·콘텐츠
+          표시를 같은 방법으로 확인하세요.
+        </p>
+        <figure class="shot">
+          <div class="shot-placeholder">
+            <span>📷 스크린샷 준비 중</span>
+            <span class="shot-file">images/viewer/viewer-web-browser.png</span>
+          </div>
+          <figcaption>브라우저에서 연 OnBook 뷰어 메인 화면</figcaption>
+        </figure>
+
+        <h2 id="vw-install">설치본 구성</h2>
+        <p>
+          USB 등 설치 매체로 배포할 때는 배포 루트에 설치 런처(<code>Start.exe</code>)와
+          설치 정보 파일이 함께 들어가며, 다음 항목을 개발사(출판사)가
+          정합니다.
+        </p>
+        <h3>설치 정보 (start.ini)</h3>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 160px">항목</th>
+              <th>설명</th>
+            </tr>
+            <tr>
+              <td><code>TITLE</code></td>
+              <td>
+                교과서 이름. <strong>배포 루트의 교과서 폴더명과 반드시
+                동일</strong>해야 합니다. 설치·실행 창 제목으로도 사용됩니다.
+              </td>
+            </tr>
+            <tr>
+              <td><code>P_CODE</code></td>
+              <td>제품(출판사) 코드. 예: <code>AMT1</code></td>
+            </tr>
+            <tr>
+              <td><code>SUBJECT_CODE</code></td>
+              <td>
+                과목 코드 — <code>{학교급}{과목}{학년}{저자구분}</code> 형식.
+                예: <code>EEN5A</code> (초등·영어·5학년·A)
+              </td>
+            </tr>
+            <tr>
+              <td><code>EDITION</code></td>
+              <td>교과서 판. 예: <code>2022개정</code></td>
+            </tr>
+            <tr>
+              <td><code>INSTALL_DIR</code></td>
+              <td>기본 설치 경로 (사용자가 설치 시 변경 가능). 예: <code>C:\OnBook</code></td>
+            </tr>
+            <tr>
+              <td><code>REQUIRED_SPACE</code></td>
+              <td>설치에 필요한 최소 디스크 공간 (바이트).</td>
+            </tr>
+            <tr>
+              <td><code>DIRECT_RUN_MSG</code></td>
+              <td>설치하지 않고 직접 실행할 때 표시할 안내 문구.</td>
+            </tr>
+          </table>
+        </div>
+        <p>설치 시 다음 경로로 복사됩니다.</p>
+        <pre><span class="n">{INSTALL_DIR}</span><span class="p">\</span><span class="f">{P_CODE}_{SUBJECT_CODE}_{EDITION}</span><span class="p">\</span><span class="f">{TITLE}</span><span class="p">\</span>   <span class="c">예: C:\OnBook\AMT1_EEN5A_2022개정\초등학교 영어 지도서 5 전자책등\</span></pre>
+        <div class="notice">
+          <code>start.ini</code>와 <code>autorun.inf</code>는 반드시
+          <strong>EUC-KR 인코딩</strong>으로 저장해 주세요. UTF-8로 저장하면
+          한글이 깨집니다.
+        </div>
+        <h3>교체할 수 있는 요소</h3>
+        <ul>
+          <li>
+            <code>autorun.inf</code> — <code>label</code>을 교과서명으로 지정.
+          </li>
+          <li>
+            <code>images/</code> — 설치 화면 이미지(배경·버튼 비트맵). 버튼
+            위치는 <code>start.ini</code>의 <code>[LAYOUT]</code>으로 조정.
+          </li>
+          <li>
+            <code>platform/boot/icon.png</code> — 설치본 관리 목록에 표시되는
+            교과서 아이콘.
+          </li>
+        </ul>
+      </main>
+    </div>
+
+    <div class="footer">
+      <span>OnBook 뷰어 가이드 · 콘텐츠 개발사용 · 뷰어 v1.0.0 · 문서 v1.0</span>
+      <span>by Amanta</span>
+    </div>
+
+    <script>
+      // ─── 고정 헤더·푸터 높이를 CSS 변수(--header-h, --footer-h)에 반영 ───
+      const headerEl = document.querySelector(".header");
+      const footerEl = document.querySelector(".footer");
+      function setBarHeights() {
+        if (headerEl) {
+          document.documentElement.style.setProperty(
+            "--header-h",
+            headerEl.offsetHeight + "px",
+          );
+        }
+        if (footerEl) {
+          // 가로 스크롤바가 있으면 그 높이만큼 사이드바가 밀려 올라가므로 footer 높이에 합산해 보정
+          const hScrollbar = Math.max(
+            0,
+            window.innerHeight - document.documentElement.clientHeight,
+          );
+          document.documentElement.style.setProperty(
+            "--footer-h",
+            footerEl.offsetHeight + hScrollbar + "px",
+          );
+        }
+      }
+      window.addEventListener("resize", setBarHeights);
+      setBarHeights();
+
+      // ─── 좁은 화면: 햄버거 메뉴로 사이드바 열고 닫기 ───
+      const menuToggle = document.querySelector(".menu-toggle");
+      const backdrop = document.querySelector(".backdrop");
+
+      function closeMenu() {
+        document.body.classList.remove("menu-open");
+        if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
+      }
+
+      if (menuToggle) {
+        menuToggle.addEventListener("click", () => {
+          const open = document.body.classList.toggle("menu-open");
+          menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+      }
+      if (backdrop) {
+        backdrop.addEventListener("click", closeMenu);
+      }
+      document.querySelectorAll(".sidebar a").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 768) closeMenu();
+      });
+
+      // ─── 사이드바 카테고리 펼침/닫힘 (페이지 진입 시 항상 펼침) ───
+      document.querySelectorAll(".sidebar .nav-group").forEach((group) => {
+        const btn = group.querySelector(".nav-title");
+        if (btn) {
+          btn.addEventListener("click", () => {
+            group.classList.toggle("collapsed");
+          });
+        }
+      });
+
+      const headings = Array.from(document.querySelectorAll("h2[id]"));
+      const navLinks = document.querySelectorAll('.sidebar a[href^="#"]');
+      let clicking = false;
+
+      function setActive(id) {
+        navLinks.forEach((a) => a.classList.remove("active"));
+        const link = document.querySelector(`.sidebar a[href="#${id}"]`);
+        if (link) link.classList.add("active");
+      }
+
+      function updateActiveByScroll() {
+        if (clicking) return;
+        const threshold = window.scrollY + window.innerHeight * 0.25;
+        // 스크롤 위치를 지난 헤딩 중 가장 마지막 것을 active로
+        let active = headings[0];
+        for (const h of headings) {
+          if (h.getBoundingClientRect().top + window.scrollY <= threshold) {
+            active = h;
+          }
+        }
+        if (active) setActive(active.id);
+      }
+
+      // 클릭 시 즉시 active 적용 + 세로로만 스크롤 (가로 스크롤 위치 유지)
+      navLinks.forEach((a) => {
+        a.addEventListener("click", (e) => {
+          const id = a.getAttribute("href").slice(1);
+          const target = document.getElementById(id);
+          if (target) {
+            e.preventDefault();
+            const headerH = headerEl ? headerEl.offsetHeight : 0;
+            const y =
+              target.getBoundingClientRect().top + window.scrollY - headerH - 8;
+            window.scrollTo(window.scrollX, y);
+            history.replaceState(null, "", "#" + id);
+          }
+          setActive(id);
+          clicking = true;
+          setTimeout(() => {
+            clicking = false;
+          }, 800);
+        });
+      });
+
+      window.addEventListener("scroll", updateActiveByScroll, {
+        passive: true,
+      });
+      updateActiveByScroll();
+
+      // ─── 이미지 클릭 시 원본 크기로 보기 (라이트박스) ───
+      const lightbox = document.createElement("div");
+      lightbox.className = "lightbox";
+      const lightboxImg = document.createElement("img");
+      lightbox.appendChild(lightboxImg);
+      document.body.appendChild(lightbox);
+
+      function closeLightbox() {
+        lightbox.classList.remove("open");
+        lightboxImg.src = "";
+        document.body.style.overflow = "";
+      }
+
+      lightbox.addEventListener("click", closeLightbox);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && lightbox.classList.contains("open"))
+          closeLightbox();
+      });
+
+      document.querySelectorAll(".shot img").forEach((img) => {
+        img.addEventListener("click", () => {
+          lightboxImg.src = img.src;
+          lightboxImg.alt = img.alt || "";
+          lightbox.classList.add("open");
+          document.body.style.overflow = "hidden";
+        });
+      });
+    </script>
+  </body>
+</html>
