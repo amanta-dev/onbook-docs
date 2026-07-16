@@ -43,7 +43,7 @@
       .header {
         background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
         color: #fff;
-        padding: 20px 48px;
+        padding: 10px 48px;
         display: flex;
         align-items: center;
         gap: 20px;
@@ -450,6 +450,11 @@
         position: sticky;
         bottom: 0;
         z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
       }
 
       @media (max-width: 760px) {
@@ -473,7 +478,7 @@
           padding: 28px 20px 72px;
         }
         .header {
-          padding: 16px 20px;
+          padding: 10px 20px;
         }
         .header .meta {
           display: none;
@@ -950,7 +955,7 @@
       </main>
     </div>
 
-    <div class="footer">OnBook 단원 다운로드 테스트 가이드 · v1.0</div>
+    <div class="footer"><span>OnBook 단원 다운로드 테스트 가이드 · v1.0</span><span>by Amanta</span></div>
 
     <script>
       (function () {

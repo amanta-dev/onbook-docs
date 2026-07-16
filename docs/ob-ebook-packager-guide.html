@@ -42,7 +42,7 @@
       .header {
         background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
         color: #fff;
-        padding: 20px 48px;
+        padding: 10px 48px;
         display: flex;
         align-items: center;
         gap: 20px;
@@ -462,6 +462,11 @@
         position: sticky;
         bottom: 0;
         z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
       }
 
       @media (max-width: 768px) {
@@ -485,7 +490,7 @@
           padding: 24px 20px;
         }
         .header {
-          padding: 16px 20px;
+          padding: 10px 20px;
           flex-wrap: wrap;
           gap: 10px;
         }
@@ -1033,7 +1038,7 @@
       </main>
     </div>
 
-    <div class="footer">OnBook ebook 패키저 가이드 · 콘텐츠 개발사용 · 패키저 v1.0.0 · 문서 v1.0</div>
+    <div class="footer"><span>OnBook ebook 패키저 가이드 · 콘텐츠 개발사용 · 패키저 v1.0.0 · 문서 v1.0</span><span>by Amanta</span></div>
 
     <script>
       // ─── 고정 헤더·푸터 높이를 CSS 변수(--header-h, --footer-h)에 반영 ───
