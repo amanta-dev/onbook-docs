@@ -848,11 +848,13 @@
         </p>
         <h3>로드 방법</h3>
         <p>
-          파일은 콘텐츠 폴더 안 <code>common/js/ob/</code>에 두고, 각
-          페이지에서 상대 경로로 로드합니다. 메인 화면 등 기본 제공 페이지에는
-          이미 포함되어 있습니다.
+          원본 파일은 제공된 OnBook 뷰어 샘플의
+          <code>platform/core/onbook.api.min.js</code>입니다. 이 파일을 복사해
+          콘텐츠 개발 폴더 안 <strong>원하는 위치</strong>에 두고, 각 페이지에서
+          해당 위치로 상대 경로 로드합니다 — 배치 위치와 경로에 정해진 규칙은
+          없습니다.
         </p>
-        <pre><span class="c">&lt;!-- 콘텐츠 HTML의 &lt;head&gt; 또는 &lt;body&gt; 하단 --&gt;</span>
+        <pre><span class="c">&lt;!-- 예: 콘텐츠 폴더의 common/js/ob/ 에 복사해 둔 경우 --&gt;</span>
 <span class="p">&lt;</span><span class="k">script</span> <span class="n">src=</span><span class="s">"../../common/js/ob/onbook.api.min.js"</span><span class="p">&gt;&lt;/</span><span class="k">script</span><span class="p">&gt;</span></pre>
         <h3>무엇을 할 수 있나</h3>
         <div class="params">
@@ -862,11 +864,19 @@
               <th>대표 함수</th>
             </tr>
             <tr>
-              <td>페이지 이동</td>
+              <td>단원(패키지) 내 이동</td>
               <td>
                 <code>goPage</code> · <code>goPageName</code> ·
                 <code>goPagePrev</code> / <code>goPageNext</code> ·
-                <code>goPageFirst</code> / <code>goPageLast</code>
+                <code>goPageFirst</code> / <code>goPageLast</code> —
+                <strong>현재 열려 있는 단원 안에서만</strong> 동작합니다.
+              </td>
+            </tr>
+            <tr>
+              <td>모든 HTML 이동/열기</td>
+              <td>
+                <code>openUrl</code> — 다른 단원·교과서·개발사 제작 페이지 등
+                어떤 HTML로든 이동하거나 새 창으로 엽니다.
               </td>
             </tr>
             <tr>
@@ -874,14 +884,14 @@
               <td><code>getPageNum</code> · <code>getPageTotal</code> 등</td>
             </tr>
             <tr>
-              <td>뷰어 화면으로 복귀</td>
+              <td>이전 화면으로 복귀</td>
               <td><code>historyBack</code></td>
             </tr>
             <tr>
-              <td>새 창·실행·다운로드</td>
+              <td>실행·다운로드</td>
               <td>
-                <code>openUrl</code> · <code>openApp</code> ·
-                <code>openFolder</code> · <code>downloadFile</code>
+                <code>openApp</code> · <code>openFolder</code> ·
+                <code>downloadFile</code>
               </td>
             </tr>
           </table>
@@ -908,7 +918,7 @@
           방식은 가급적 사용하지 말아 주세요. 뷰어의 페이지 이력·이동과 어긋날
           수 있습니다.
         </p>
-        <p>콘텐츠나 외부 페이지에서 뷰어 화면으로 되돌아올 때는:</p>
+        <p>콘텐츠나 외부 페이지에서 이전 화면으로 되돌아올 때는:</p>
         <pre><span class="n">window</span><span class="p">.</span><span class="n">ob</span><span class="p">.</span><span class="n">viewer</span><span class="p">.</span><span class="n">api</span><span class="p">.</span><span class="f">historyBack</span><span class="p">();</span></pre>
         <h3>화면·뷰포트 전제</h3>
         <p>

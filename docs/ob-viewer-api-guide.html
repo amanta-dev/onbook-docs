@@ -539,12 +539,18 @@
 <span class="n">&lt;script src=</span><span class="s">"../js/ob/onbook.api.min.js"</span><span class="n">&gt;&lt;/script&gt;</span></pre>
 
         <pre><span class="c">// 페이지 이동 예시</span>
-<span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"p010"</span><span class="p">);</span>
+<span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_01_01_01.html"</span><span class="p">);</span>
 <span class="n">ob.viewer.api.</span><span class="f">goPage</span><span class="p">(</span><span class="n">8</span><span class="p">);</span>
 
 <span class="c">// 정보 조회 예시</span>
 <span class="k">const</span> <span class="n">current = ob.viewer.api.</span><span class="f">getPageNum</span><span class="p">();</span>
 <span class="n">console.</span><span class="f">log</span><span class="p">(</span><span class="s">"현재 페이지:"</span><span class="p">,</span> <span class="n">current</span><span class="p">);</span></pre>
+        <div class="notice">
+          <code>goPage</code>를 비롯한 페이지 관련 API(이동·조회)는
+          <strong>현재 열려 있는 단원(하나의 콘텐츠 패키지) 안에서만</strong>
+          동작합니다. 다른 단원으로 이동하려면
+          <a href="#openUrl"><code>openUrl</code></a>로 대상 단원을 여세요.
+        </div>
 
         <hr class="divider" />
 
@@ -556,7 +562,10 @@
             <span class="tag tag-page">페이지</span>
           </div>
           <div class="api-card-body">
-            <p>뷰어의 페이지를 지정한 번호로 이동합니다.</p>
+            <p>
+              뷰어의 페이지를 지정한 번호로 이동합니다. 현재 열려 있는 단원
+              안에서만 이동합니다.
+            </p>
             <div class="params">
               <table>
                 <tr>
@@ -582,7 +591,10 @@
             <span class="tag tag-page">페이지</span>
           </div>
           <div class="api-card-body">
-            <p>HTML 페이지 파일명(pageName)으로 뷰어 페이지를 이동합니다.</p>
+            <p>
+              HTML 페이지 파일명(pageName)으로 뷰어 페이지를 이동합니다. 현재
+              열려 있는 단원 안에서만 이동합니다.
+            </p>
             <div class="params">
               <table>
                 <tr>
@@ -593,12 +605,15 @@
                 <tr>
                   <td><code>pageName</code></td>
                   <td><code>string</code></td>
-                  <td>이동할 페이지 파일명 (확장자 제외)</td>
+                  <td>
+                    이동할 페이지 파일명 — <strong><code>.html</code> 확장자
+                    포함</strong>
+                  </td>
                 </tr>
               </table>
             </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"p010"</span><span class="p">);</span>
-<span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"unit01_lesson01_p005"</span><span class="p">);</span></pre>
+            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_01_01_01.html"</span><span class="p">);</span>
+<span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_02_03_01.html"</span><span class="p">);</span></pre>
           </div>
         </div>
 
@@ -787,8 +802,9 @@
                   <td><code>pageName</code></td>
                   <td><code>string</code></td>
                   <td>
-                    진입할 페이지 파일명 (확장자 제외).
-                    <code>goPageName()</code>과 동일한 값을 사용합니다.
+                    진입할 페이지 파일명 — <strong><code>.html</code> 확장자
+                    포함</strong>. <code>goPageName()</code>과 동일한 값을
+                    사용합니다.
                   </td>
                 </tr>
                 <tr>
@@ -803,7 +819,7 @@
             </div>
             <pre><span class="c">// 다른 단원 콘텐츠로 이동 (pageName으로 진입 페이지 지정)</span>
 <span class="n">ob.viewer.api.</span><span class="f">openUrl</span><span class="p">(</span>
-  <span class="s">"/scene/contents/index.html?contentUrl=../../onbook/contents/unit01/lesson02&amp;pageName=p010"</span><span class="p">,</span>
+  <span class="s">"/scene/contents/index.html?contentUrl=../../onbook/contents/unit01/lesson02&amp;pageName=e5_01_02_01_01.html"</span><span class="p">,</span>
   <span class="s">"_top"</span>
 <span class="p">);</span>
 
