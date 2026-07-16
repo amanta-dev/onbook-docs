@@ -210,6 +210,7 @@
         font-size: 15px;
         font-weight: 700;
         margin: 28px 0 10px;
+        scroll-margin-top: calc(var(--header-h) + 8px);
       }
 
       p {
@@ -394,6 +395,25 @@
         cursor: zoom-in;
       }
 
+      /* 스크린샷 일부 강조 — 지정 영역만 원래 밝기, 나머지는 어둡게 */
+      .shot .spotlight {
+        position: relative;
+        display: inline-block;
+        overflow: hidden;
+        border-radius: 10px;
+        line-height: 0;
+        max-width: 100%;
+      }
+      .shot .spotlight img {
+        display: block;
+      }
+      .shot .spotlight .spot {
+        position: absolute;
+        border-radius: 6px;
+        box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.55);
+        pointer-events: none;
+      }
+
       /* 본문 인라인 아이콘 (원본 크기 유지) */
       .icon-inline {
         display: inline-block;
@@ -421,6 +441,24 @@
         margin: auto;
         border-radius: 8px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      }
+      .lightbox .lightbox-stage {
+        position: relative;
+        display: block;
+        margin: auto;
+        line-height: 0;
+        overflow: hidden;
+        border-radius: 8px;
+      }
+      .lightbox .lightbox-stage img {
+        margin: 0;
+      }
+      .lightbox .lightbox-stage .spot {
+        position: absolute;
+        border-radius: 6px;
+        box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.55);
+        pointer-events: none;
+        display: none;
       }
       .shot .shot-placeholder {
         display: flex;
@@ -534,8 +572,8 @@
       <div class="header-text">
         <h1>OnBook 뷰어 가이드</h1>
         <p>
-          콘텐츠 개발사를 위한 뷰어 안내 — 폴더 구조 · 뷰어 설정 · 라이브러리
-          활용 · 배치 · 설치본
+          콘텐츠 개발사를 위한 뷰어 안내 — 구조 · 설정 · 개발 · 배포 ·
+          업데이트
         </p>
       </div>
       <div class="meta">뷰어 v1.0.0 &nbsp;·&nbsp; 콘텐츠 개발사용</div>
@@ -550,8 +588,8 @@
           </button>
           <div class="nav-links">
             <a href="#vw-intro">개요</a>
-            <a href="#vw-structure">뷰어 폴더 구조</a>
-            <a href="#vw-screens">뷰어 주요 화면</a>
+            <a href="#vw-structure">폴더 구조</a>
+            <a href="#vw-screens">뷰어 화면 살펴보기</a>
           </div>
         </div>
         <div class="section-gap"></div>
@@ -560,29 +598,51 @@
             콘텐츠 개발<span class="nav-arrow">▼</span>
           </button>
           <div class="nav-links">
+            <a href="#vw-api">onbook.api 라이브러리</a>
             <a href="#vw-rules">콘텐츠 개발 규칙</a>
           </div>
         </div>
         <div class="section-gap"></div>
         <div class="nav-group">
           <button type="button" class="nav-title">
-            커스터마이징<span class="nav-arrow">▼</span>
+            뷰어 구성<span class="nav-arrow">▼</span>
           </button>
           <div class="nav-links">
             <a href="#vw-settings">뷰어 설정 (settings.json)</a>
-            <a href="#vw-main">메인 화면</a>
-            <a href="#vw-modules">뷰어 모듈</a>
+            <a href="#vw-booktab">책 탭 (book_tab.json)</a>
+            <a href="#vw-main">메인 화면 개발</a>
+            <a href="#vw-modules">모듈 개발</a>
           </div>
         </div>
         <div class="section-gap"></div>
         <div class="nav-group">
           <button type="button" class="nav-title">
-            패키징·배치<span class="nav-arrow">▼</span>
+            패키징·배포<span class="nav-arrow">▼</span>
           </button>
           <div class="nav-links">
             <a href="#vw-deploy">패키징과 배치</a>
-            <a href="#vw-web">웹 버전으로 사용하기</a>
-            <a href="#vw-install">설치본 구성</a>
+            <a href="#vw-install">설치본 만들기</a>
+            <a href="#vw-web">웹 버전으로 배포</a>
+          </div>
+        </div>
+        <div class="section-gap"></div>
+        <div class="nav-group">
+          <button type="button" class="nav-title">
+            운영·업데이트<span class="nav-arrow">▼</span>
+          </button>
+          <div class="nav-links">
+            <a href="#vw-update">업데이트 개요</a>
+            <a href="#vw-update-full">전체 업데이트</a>
+            <a href="#vw-update-lesson">단원 업데이트</a>
+          </div>
+        </div>
+        <div class="section-gap"></div>
+        <div class="nav-group">
+          <button type="button" class="nav-title">
+            부록<span class="nav-arrow">▼</span>
+          </button>
+          <div class="nav-links">
+            <a href="#vw-checklist">납품 전 체크리스트</a>
           </div>
         </div>
       </nav>
@@ -596,8 +656,9 @@
           버전으로도 사용할 수 있습니다.
         </p>
         <p>
-          이 문서는 콘텐츠 개발사가 OnBook 뷰어를 구성하고 활용하는 데 필요한
-          내용을 안내합니다.
+          OnBook 뷰어를 기반으로 제작한 결과물 전체를 이 문서에서는
+          <strong>전자저작물</strong>이라 칭합니다. 이 문서는 콘텐츠 개발사가
+          전자저작물을 구성하는 데 필요한 내용을 안내합니다.
         </p>
         <h3>이 문서에서 다루는 내용</h3>
         <ul>
@@ -605,16 +666,24 @@
             <a href="#vw-structure">OnBook 뷰어의 폴더 구조</a>
           </li>
           <li>
-            <a href="#vw-settings">각 뷰어의 UI·부가 기능 설정 방법</a> —
+            <a href="#vw-screens">세 가지 뷰어(ebook·contents·myclass)</a>와
+            <a href="#vw-settings">뷰어별 UI·부가 기능 설정 방법</a> —
             <code>settings.json</code>
           </li>
           <li>
-            <a href="#vw-rules"
-              >개발사 제작 페이지에서 뷰어 필수 라이브러리
-              (<code>onbook.api.min.js</code>)를 활용하는 방법</a
+            <a href="#vw-api"
+              >뷰어 필수 라이브러리(<code>onbook.api.min.js</code>)를 활용하는
+              방법</a
             >
             — 함수 상세는
-            <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html">API 가이드</a> 참고
+            <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html"
+              >API 가이드</a
+            >
+            참고
+          </li>
+          <li>
+            <a href="#vw-main">메인 화면</a>과
+            <a href="#vw-modules">모듈(자료실·활동 도우미 등)</a> 개발 방법
           </li>
           <li>
             <a href="#vw-deploy">패키징 산출물을 뷰어에 배치하는 방법</a> —
@@ -622,6 +691,13 @@
           </li>
           <li>
             <a href="#vw-install">설치본 구성·설정 방법</a>
+          </li>
+          <li>
+            <a href="#vw-web">웹 버전으로 배포하는 방법</a>
+          </li>
+          <li>
+            <a href="#vw-update">배포 후 업데이트 방법 2가지</a> — 전체
+            업데이트 · 단원 업데이트
           </li>
         </ul>
         <h3>관련 문서</h3>
@@ -657,12 +733,13 @@
           </table>
         </div>
 
-        <h2 id="vw-structure">뷰어 폴더 구조</h2>
+        <h2 id="vw-structure">폴더 구조</h2>
         <p>
-          뷰어는 교과서 폴더 단위로 배포됩니다. 콘텐츠 개발사가 다루는 작업
-          영역은 다음과 같습니다.
+          전자저작물은 교과서 폴더 단위로 구성됩니다. 콘텐츠 개발사가 다루는
+          작업 영역은 다음과 같습니다 (초록으로 표시).
         </p>
-        <pre><span class="n">(교과서 폴더)/</span>   <span class="c">← 폴더명 규칙은 <a href="#vw-install" style="color:#93c5fd">설치본 구성</a> 참고</span>
+        <pre><span class="n">(교과서 폴더)/</span>   <span class="c">← 폴더명 규칙은 <a href="#vw-install" style="color:#93c5fd">설치본 만들기</a> 참고</span>
+<span class="p">├─</span> <span class="n">startup.exe</span>        <span class="c">← 뷰어 실행 파일(런처)</span>
 <span class="p">└─</span> <span class="f">platform/</span>
    <span class="p">├─</span> <span class="f">onbook/</span>
    <span class="p">│  ├─</span> <span class="g">ebook/</span>          <span class="c">← 교과서 배치</span>
@@ -676,104 +753,80 @@
    <span class="p">│  ├─</span> <span class="g">contents/settings.json</span>  <span class="c">← contents 뷰어 설정</span>
    <span class="p">│  ├─</span> <span class="g">myclass/settings.json</span>   <span class="c">← myclass 뷰어 설정</span>
    <span class="p">│  └─</span> <span class="m">… (뷰어 화면 앱 — 수정 금지)</span>
+   <span class="p">├─</span> <span class="n">OnBookManager.exe</span>  <span class="c">← 설치된 책 목록 확인·삭제 (설치본용)</span>
+   <span class="p">├─</span> <span class="g">update-check.xml</span>   <span class="c">← <a href="#vw-update-full" style="color:#93c5fd">전체 업데이트</a> 설정</span>
+   <span class="p">├─</span> <span class="g">update-lesson.json</span> <span class="c">← <a href="#vw-update-lesson" style="color:#93c5fd">단원 업데이트</a> 설정</span>
    <span class="p">└─</span> <span class="m">… (실행 엔진 — 수정 금지)</span></pre>
-        <div class="notice">
-          초록으로 표시된 작업 영역 외의 파일·폴더(뷰어 화면 앱 내부, 실행 엔진
-          등)는 뷰어 동작에 필요한 구성 요소이므로 가급적 수정하지 말아 주세요.
-        </div>
         <h3>책(권) 단위 폴더 규칙</h3>
         <p>
           <code>ebook/</code>과 <code>contents/</code>는 같은 책(권) 단위
           폴더를 사용합니다 — <code>unit01</code>: 책 1,
           <code>unit02</code>: 책 2 (수학 익힘책처럼 2권으로 구성되는 경우).
+          <strong><code>unit01</code>·<code>unit02</code> 폴더명은 고정된
+          이름이므로 다른 이름으로 바꿀 수 없습니다.</strong>
         </p>
-        <ul>
-          <li>교과서: <code>platform/onbook/ebook/unit01/</code></li>
-          <li>
-            콘텐츠: <code>platform/onbook/contents/unit01/lesson01/</code>
-            (책 폴더 아래 단원 폴더)
-          </li>
-        </ul>
+        <p>
+          교과서(<code>ebook/</code>)는 책 폴더 바로 아래에 교과서 파일이
+          오고, 콘텐츠(<code>contents/</code>)는 책 폴더 아래에
+          <strong>단원 폴더가 한 단계 더</strong> 들어갑니다.
+        </p>
+        <pre><span class="n">platform/onbook/ebook/</span>
+<span class="p">├─</span> <span class="n">book_tab/</span>              <span class="c">← <a href="#vw-booktab" style="color:#93c5fd">책 탭 설정</a> (2권 구성일 때만)</span>
+<span class="p">├─</span> <span class="g">unit01/</span>                <span class="c">← 책 1 — <a href="#vw-deploy-ebook" style="color:#93c5fd">교과서 배치</a></span>
+<span class="p">│  ├─</span> <span class="f">book.xml</span>
+<span class="p">│  ├─</span> <span class="f">toc.xml</span>
+<span class="p">│  └─</span> <span class="f">web/</span>
+<span class="p">└─</span> <span class="g">unit02/</span>                <span class="c">← 책 2</span>
 
-        <h2 id="vw-screens">뷰어 주요 화면</h2>
+<span class="n">platform/onbook/contents/</span>
+<span class="p">├─</span> <span class="g">unit01/</span>                <span class="c">← 책 1</span>
+<span class="p">│  ├─</span> <span class="n">lesson01/</span>           <span class="c">← 단원 — <a href="#vw-deploy-contents" style="color:#93c5fd">콘텐츠 배치</a></span>
+<span class="p">│  │  ├─</span> <span class="f">toc.xml</span>
+<span class="p">│  │  └─</span> <span class="f">web/</span>
+<span class="p">│  └─</span> <span class="n">lesson02/</span>
+<span class="p">└─</span> <span class="g">unit02/</span>                <span class="c">← 책 2</span>
+   <span class="p">└─</span> <span class="n">lesson01/ …</span></pre>
+
+        <h2 id="vw-screens">뷰어 화면 살펴보기</h2>
         <p>
           제작한 교과서·콘텐츠가 뷰어에서 어떻게 표시되는지 화면별로
-          소개합니다.
+          소개합니다. 각 뷰어의 메뉴·기능 구성은
+          <a href="#vw-settings">뷰어 설정</a>으로 커스터마이징합니다.
         </p>
         <h3>메인 화면</h3>
+        <p>
+          뷰어 실행 시 처음 표시되는 화면입니다. 아래는 기본 제공 샘플이며,
+          <strong>개발사가 자유롭게 디자인·개발할 수 있습니다</strong> —
+          <a href="#vw-main">메인 화면 개발</a> 참고.
+        </p>
         <figure class="shot">
-          <div class="shot-placeholder">
-            <span>📷 스크린샷 준비 중</span>
-            <span class="shot-file">images/viewer/viewer-main.png</span>
-          </div>
-          <figcaption>메인 화면 — 주 메뉴 3개</figcaption>
+          <img src="images/viewer/main_1.png" alt="메인 화면 샘플" />
+          <figcaption>
+            메인 화면 (샘플) — 주 메뉴 3개와 오른쪽 위 유틸 메뉴(진도 보기 ·
+            자료실 · 사용 설명서)
+          </figcaption>
         </figure>
-        <div class="params">
-          <table>
-            <tr>
-              <th style="width: 160px">주 메뉴</th>
-              <th>이동하는 화면</th>
-            </tr>
-            <tr>
-              <td><strong>교과서</strong></td>
-              <td>
-                ebook 뷰어 — ebook 패키저로 만든 교과서가 표시됩니다.
-              </td>
-            </tr>
-            <tr>
-              <td><strong>콘텐츠</strong></td>
-              <td>
-                contents 뷰어 — contents 패키저로 만든 단원별 콘텐츠가
-                표시됩니다.
-              </td>
-            </tr>
-            <tr>
-              <td><strong>내 수업하기</strong></td>
-              <td>
-                myclass 뷰어 — 교과서·콘텐츠 페이지를 골라 수업을 구성하는
-                화면입니다.
-              </td>
-            </tr>
-          </table>
-        </div>
         <h3>ebook 뷰어 (교과서)</h3>
         <p>
           교과서 페이지를 넘기며 보는 화면입니다. 페이지 이동·썸네일 목록·그리기
-          도구를 제공합니다.
+          도구를 제공하며, 메뉴 구성은
+          <a href="#vw-settings">뷰어 설정</a>에서 조정합니다. 책이 2권으로
+          구성된 경우 왼쪽 상단의
+          <a href="#vw-booktab">책 탭</a>으로 두 책을 오갈 수 있습니다.
         </p>
         <figure class="shot">
-          <div class="shot-placeholder">
-            <span>📷 스크린샷 준비 중</span>
-            <span class="shot-file">images/viewer/viewer-ebook.png</span>
-          </div>
+          <img src="images/viewer/ebook_1.png" alt="ebook 뷰어" />
           <figcaption>ebook 뷰어 — 교과서 페이지</figcaption>
         </figure>
-        <p>
-          교과서 페이지에 배치한 <strong>버튼을 누르면 연결된 HTML
-          콘텐츠</strong>가 열립니다. 교과서(ebook 패키저)와 콘텐츠(HTML)가
-          만나는 지점이므로, 배치 후 버튼 연결이 정상 동작하는지 꼭
-          확인해 주세요.
-        </p>
-        <figure class="shot">
-          <div class="shot-placeholder">
-            <span>📷 스크린샷 준비 중</span>
-            <span class="shot-file"
-              >images/viewer/viewer-ebook-content-link.png</span
-            >
-          </div>
-          <figcaption>교과서 버튼으로 콘텐츠를 연 화면</figcaption>
-        </figure>
-        <h3>contents 뷰어 (콘텐츠)</h3>
+        <h3>contents 뷰어 (차시 콘텐츠)</h3>
         <p>
           단원별 콘텐츠를 페이지 순서대로 보는 화면입니다. 페이지 순서와
-          썸네일은 contents 패키저에서 정한 목록을 그대로 따릅니다.
+          썸네일은 contents 패키저에서 정한 목록을 그대로 따릅니다. 메뉴 구성은
+          <a href="#vw-settings">뷰어 설정</a>에서 조정합니다.
         </p>
         <figure class="shot">
-          <div class="shot-placeholder">
-            <span>📷 스크린샷 준비 중</span>
-            <span class="shot-file">images/viewer/viewer-contents.png</span>
-          </div>
-          <figcaption>contents 뷰어 — 단원 콘텐츠 페이지</figcaption>
+          <img src="images/viewer/contents_1.png" alt="contents 뷰어" />
+          <figcaption>contents 뷰어 — 차시 콘텐츠 페이지</figcaption>
         </figure>
         <h3>myclass 뷰어 (내 수업하기)</h3>
         <p>
@@ -783,33 +836,68 @@
           정의합니다.
         </p>
         <figure class="shot">
-          <div class="shot-placeholder">
-            <span>📷 스크린샷 준비 중</span>
-            <span class="shot-file">images/viewer/viewer-myclass.png</span>
-          </div>
+          <img src="images/viewer/myclass_1.png" alt="myclass 뷰어" />
           <figcaption>myclass 뷰어 — 수업 구성 화면</figcaption>
         </figure>
 
-        <h2 id="vw-rules">콘텐츠 개발 규칙</h2>
+        <h2 id="vw-api">onbook.api 라이브러리</h2>
         <p>
-          뷰어에서 정상 동작하는 HTML 콘텐츠를 만들기 위해 다음 규칙을 지켜
-          주세요.
+          <code>onbook.api.min.js</code>는 개발사 제작 페이지(콘텐츠·메인
+          화면·모듈)에서 뷰어 기능을 사용하기 위한
+          <strong>필수 라이브러리</strong>입니다.
         </p>
-        <h3>onbook.api 로드</h3>
+        <h3>로드 방법</h3>
         <p>
-          콘텐츠에서 뷰어 기능(페이지 이동 등)을 쓰려면
-          <code>onbook.api.min.js</code>를 로드합니다. 파일은 콘텐츠 폴더 안
-          <code>common/js/ob/</code>에 두고, 각 페이지에서 상대 경로로
-          로드합니다.
+          파일은 콘텐츠 폴더 안 <code>common/js/ob/</code>에 두고, 각
+          페이지에서 상대 경로로 로드합니다. 메인 화면 등 기본 제공 페이지에는
+          이미 포함되어 있습니다.
         </p>
         <pre><span class="c">&lt;!-- 콘텐츠 HTML의 &lt;head&gt; 또는 &lt;body&gt; 하단 --&gt;</span>
 <span class="p">&lt;</span><span class="k">script</span> <span class="n">src=</span><span class="s">"../../common/js/ob/onbook.api.min.js"</span><span class="p">&gt;&lt;/</span><span class="k">script</span><span class="p">&gt;</span></pre>
+        <h3>무엇을 할 수 있나</h3>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 180px">분류</th>
+              <th>대표 함수</th>
+            </tr>
+            <tr>
+              <td>페이지 이동</td>
+              <td>
+                <code>goPage</code> · <code>goPageName</code> ·
+                <code>goPagePrev</code> / <code>goPageNext</code> ·
+                <code>goPageFirst</code> / <code>goPageLast</code>
+              </td>
+            </tr>
+            <tr>
+              <td>페이지 정보 조회</td>
+              <td><code>getPageNum</code> · <code>getPageTotal</code> 등</td>
+            </tr>
+            <tr>
+              <td>뷰어 화면으로 복귀</td>
+              <td><code>historyBack</code></td>
+            </tr>
+            <tr>
+              <td>새 창·실행·다운로드</td>
+              <td>
+                <code>openUrl</code> · <code>openApp</code> ·
+                <code>openFolder</code> · <code>downloadFile</code>
+              </td>
+            </tr>
+          </table>
+        </div>
         <div class="info-box">
-          제공 함수 목록과 사용 방법은
+          함수별 사용 방법과 전체 목록은
           <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#setup">API 가이드 — 사용 방법</a> ·
           <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#summary">전체 API 목록</a>을
           참고하세요.
         </div>
+
+        <h2 id="vw-rules">콘텐츠 개발 규칙</h2>
+        <p>
+          뷰어에서 정상 동작하는 HTML 콘텐츠를 만들기 위해 다음 규칙을 지켜
+          주세요. <a href="#vw-api">onbook.api 로드</a>를 전제로 합니다.
+        </p>
         <h3>페이지 이동 규칙</h3>
         <p>
           페이지 이동·링크는 onbook.api 함수(<a
@@ -973,7 +1061,97 @@
           정상 동작하지 않습니다. 편집 후 뷰어를 다시 실행해 확인해 주세요.
         </div>
 
-        <h2 id="vw-main">메인 화면</h2>
+        <h2 id="vw-booktab">책 탭 설정 (book_tab.json)</h2>
+        <p>
+          책이 2권(<code>unit01</code>·<code>unit02</code>)으로 구성된 경우,
+          ebook 뷰어 왼쪽 상단에 <strong>책 탭</strong> 버튼을 표시해 두 책을
+          <strong>쪽수 대응으로 이동</strong>할 수 있습니다. 설정 파일은
+          <code>platform/onbook/ebook/book_tab/book_tab.json</code>이고, 탭
+          버튼 이미지도 같은 폴더에 배치합니다.
+        </p>
+        <p>
+          책이 1권인 경우 <code>book_tab/</code> 폴더가 없어도 됩니다 — 파일이
+          없으면 책 탭이 표시되지 않습니다.
+        </p>
+        <figure class="shot">
+          <span class="spotlight">
+            <img
+              src="images/viewer/ebook_1.png"
+              alt="ebook 뷰어 왼쪽 상단의 책 탭"
+            />
+            <span
+              class="spot"
+              style="left: 0.9%; top: 11.8%; width: 4.9%; height: 15%"
+            ></span>
+          </span>
+          <figcaption>ebook 뷰어 왼쪽 상단의 책 탭 (E-book 1 · E-book 2)</figcaption>
+        </figure>
+        <h3>작성 방법</h3>
+        <pre><span class="p">{</span>
+    <span class="s">"tabData"</span><span class="p">: [</span>
+        <span class="p">{</span>
+            <span class="s">"name"</span><span class="p">:</span> <span class="s">"ebook_unit01"</span><span class="p">,</span>              <span class="c">← 탭 식별자 (고정)</span>
+            <span class="s">"baseImage"</span><span class="p">:</span> <span class="s">"./tab01_0001.png"</span><span class="p">,</span>      <span class="c">← 기본</span>
+            <span class="s">"hoverImage"</span><span class="p">:</span> <span class="s">"./tab01_0002.png"</span><span class="p">,</span>     <span class="c">← 마우스 오버</span>
+            <span class="s">"activeImage"</span><span class="p">:</span> <span class="s">"./tab01_0003.png"</span><span class="p">,</span>    <span class="c">← 현재 보는 책</span>
+            <span class="s">"activeHoverImage"</span><span class="p">:</span> <span class="s">"./tab01_0004.png"</span><span class="p">,</span>
+            <span class="s">"width"</span><span class="p">:</span> <span class="s">"50px"</span><span class="p">,</span> <span class="s">"height"</span><span class="p">:</span> <span class="s">"50px"</span>
+        <span class="p">},</span>
+        <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"ebook_unit02"</span><span class="p">,</span> <span class="n">…</span> <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s">"pageTab"</span><span class="p">: [</span>
+        <span class="p">{</span>
+            <span class="s">"page"</span><span class="p">:</span> <span class="n">6</span><span class="p">,</span>                                             <span class="c">← 현재 쪽</span>
+            <span class="s">"ebook_unit01_url"</span><span class="p">:</span> <span class="s">"../../onbook/ebook/unit01/&amp;page=8"</span><span class="p">,</span>
+            <span class="s">"ebook_unit02_url"</span><span class="p">:</span> <span class="s">"../../onbook/ebook/unit02/&amp;page=6"</span>
+        <span class="p">},</span>
+        <span class="p">{</span> <span class="s">"page"</span><span class="p">:</span> <span class="n">7</span><span class="p">,</span> <span class="n">…</span> <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span></pre>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 210px">항목</th>
+              <th>설명</th>
+            </tr>
+            <tr>
+              <td><code>tabData[].name</code></td>
+              <td>
+                탭 식별자 — <code>ebook_unit01</code>·<code>ebook_unit02</code>
+                고정. <code>pageTab</code>의 <code>{name}_url</code> 키와
+                연결됩니다.
+              </td>
+            </tr>
+            <tr>
+              <td><code>tabData[]</code> 이미지 4종</td>
+              <td>
+                버튼 상태별 이미지 — 기본(<code>baseImage</code>) · 마우스
+                오버(<code>hoverImage</code>) · 현재 보는
+                책(<code>activeImage</code>) · 현재 책 위에
+                오버(<code>activeHoverImage</code>).
+                <code>book_tab/</code> 기준 상대 경로.
+              </td>
+            </tr>
+            <tr>
+              <td><code>tabData[].width</code> / <code>height</code></td>
+              <td>탭 버튼 크기.</td>
+            </tr>
+            <tr>
+              <td><code>pageTab[].page</code></td>
+              <td>현재 보고 있는 쪽수.</td>
+            </tr>
+            <tr>
+              <td><code>pageTab[].ebook_unitXX_url</code></td>
+              <td>
+                그 쪽에서 해당 탭을 눌렀을 때 이동할 책과 쪽. 두 책의 내용이
+                대응하는 쪽수를 짝 지어 등록합니다 (예: 책 2의 6쪽 ↔ 책 1의
+                8쪽).
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <h2 id="vw-main">메인 화면 개발</h2>
         <p>
           <code>platform/onbook/main/</code>은 뷰어 실행 시 처음 표시되는
           <strong>메인 화면</strong>으로, 콘텐츠 개발사가 직접 제작·커스터마이징
@@ -1037,8 +1215,15 @@
           css/js 참조는 유지</strong>해 주세요. 제거하면 해당 기능이 동작하지
           않습니다.
         </div>
+        <h3>단원 다운로드 UI</h3>
+        <p>
+          <a href="#vw-update-lesson">단원 업데이트</a>를 사용하는 경우, 단원
+          선택·다운로드 버튼 UI를 메인 화면에 구현하고 updateLesson 모듈이
+          제공하는 함수를 호출합니다. 함수와 동작 흐름은
+          <a href="#vw-update-lesson">단원 업데이트</a> 절을 참고하세요.
+        </p>
 
-        <h2 id="vw-modules">뷰어 모듈</h2>
+        <h2 id="vw-modules">모듈 개발</h2>
         <p>
           <code>platform/onbook/modules/</code>는 메인 화면과 각 뷰어에서
           사용하는 부가 페이지 모음입니다. <strong>필수 모듈</strong>과
@@ -1098,6 +1283,72 @@
             <code>../../onbook/modules/toolkit/timer.html</code>
           </li>
         </ul>
+        <h3>자료실(library) 제작</h3>
+        <p>
+          자료실은 교과 자료를 모아 보여주는 페이지로, 개발사가 자유롭게
+          제작합니다. 샘플 전자저작물에 제공된 자료실을 참고할 수 있습니다.
+        </p>
+        <ul>
+          <li>
+            자료 파일(문서·PPT·PDF 등)은
+            <code>platform/onbook/download/</code> 폴더에 배치합니다.
+          </li>
+          <li>
+            자료의 실행·다운로드는 onbook.api 함수를 사용합니다 —
+            <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#openUrl"><code>openUrl</code></a>(새 창으로 열기) ·
+            <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#openApp"><code>openApp</code></a>(연결 프로그램으로 실행) ·
+            <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#openFolder"><code>openFolder</code></a>(폴더 열기) ·
+            <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#downloadFile"><code>downloadFile</code></a>(파일 다운로드).
+          </li>
+        </ul>
+        <h3>활동 도우미(toolkit) 제작</h3>
+        <p>
+          칠판·타이머·모둠 점수판·발표 도우미 같은 수업 도구 페이지입니다. 기본
+          제공 도구를 참고해 새 도구를 추가할 수 있습니다.
+        </p>
+        <ol class="steps">
+          <li>
+            <strong>도구 페이지 제작</strong> — HTML 페이지를
+            <code>platform/onbook/modules/toolkit/</code>에 만듭니다.
+          </li>
+          <li>
+            <strong>뷰어 설정에 등록</strong> — 노출할 뷰어의
+            <a href="#vw-settings"><code>settings.json</code></a> →
+            <code>modules.toolkit.items</code>에 항목을 추가해야 활동 도우미
+            메뉴에 나타납니다.
+            <div class="params">
+              <table>
+                <tr>
+                  <th style="width: 130px">속성</th>
+                  <th>설명</th>
+                </tr>
+                <tr>
+                  <td><code>label</code></td>
+                  <td>메뉴에 표시할 도구 이름</td>
+                </tr>
+                <tr>
+                  <td><code>icon</code></td>
+                  <td>아이콘 이미지 경로 (35×30 픽셀)</td>
+                </tr>
+                <tr>
+                  <td><code>url</code></td>
+                  <td>
+                    도구 페이지 경로 —
+                    <code>../../onbook/modules/toolkit/…</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>target</code></td>
+                  <td><code>_blank</code>(새 창) / <code>_top</code>(현재 창)</td>
+                </tr>
+                <tr>
+                  <td><code>maximize</code></td>
+                  <td>새 창을 최대화로 열지 여부</td>
+                </tr>
+              </table>
+            </div>
+          </li>
+        </ol>
 
         <h2 id="vw-deploy">패키징과 배치</h2>
         <h3>패키징</h3>
@@ -1127,17 +1378,16 @@
             </tr>
           </table>
         </div>
-        <h3>교과서(ebook) 배치</h3>
+        <h3 id="vw-deploy-ebook">교과서(ebook) 배치</h3>
         <p>
           교과서 ZIP의 압축을 풀어 내용물이 책 폴더(<code>unitXX/</code>) 바로
           아래에 오도록 배치합니다.
         </p>
         <pre><span class="n">platform/onbook/ebook/unit01/</span>
-<span class="p">├─</span> <span class="f">book.xml</span>
-<span class="p">├─</span> <span class="f">toc.xml</span>
-<span class="p">├─</span> <span class="n">book_tab/</span>
+<span class="p">├─</span> <span class="n">book.xml</span>
+<span class="p">├─</span> <span class="n">toc.xml</span>
 <span class="p">└─</span> <span class="n">web/</span>   <span class="c">← 페이지 HTML · css · js · page_data · page_images · page_thumbnails</span></pre>
-        <h3>콘텐츠(contents) 배치</h3>
+        <h3 id="vw-deploy-contents">콘텐츠(contents) 배치</h3>
         <p>
           콘텐츠 ZIP의 압축을 풀어 내용물이 단원 폴더(<code>lessonXX/</code>)
           바로 아래에 오도록 배치합니다. 자세한 내용은
@@ -1145,8 +1395,15 @@
             >contents 패키저 가이드 — 뷰어 배치</a
           >를 참고하세요.
         </p>
+        <p>
+          책 폴더(<code>unit01</code>·<code>unit02</code>)와 달리
+          <strong>단원 폴더 이름은 개발사가 자유롭게 정할 수 있습니다</strong> —
+          예: <code>lesson01</code> ~ <code>lesson12</code>,
+          <code>special01</code> ~ <code>special05</code>,
+          <code>review01</code>, <code>review02</code>
+        </p>
         <pre><span class="n">platform/onbook/contents/unit01/lesson01/</span>
-<span class="p">├─</span> <span class="f">toc.xml</span>
+<span class="p">├─</span> <span class="n">toc.xml</span>
 <span class="p">└─</span> <span class="n">web/</span>   <span class="c">← toc.xhtml · page_thumbnails · 원본 파일들</span></pre>
         <h3>단원 다운로드 자료 (download/)</h3>
         <p>
@@ -1165,31 +1422,7 @@
           아래에 있어야 합니다.
         </div>
 
-        <h2 id="vw-web">웹 버전으로 사용하기</h2>
-        <p>
-          PC에서 배치·확인을 마친 뷰어는 웹 서버에 올려 브라우저로도 사용할 수
-          있습니다. <code>platform/</code> 안의 <code>onbook/</code>과
-          <code>scene/</code> <strong>두 폴더만</strong> 웹 서버에 나란히
-          업로드합니다.
-        </p>
-        <pre><span class="n">(웹 루트)/</span>
-<span class="p">├─</span> <span class="f">onbook/</span>   <span class="c">← 교과서·콘텐츠 포함</span>
-<span class="p">└─</span> <span class="f">scene/</span></pre>
-        <p>브라우저 진입 주소는 다음과 같습니다.</p>
-        <pre><span class="n">https://(웹 루트)/</span><span class="f">onbook/main/index.html</span></pre>
-        <p>
-          접속하면 PC 버전과 동일한 메인 화면이 표시됩니다. 교과서·콘텐츠
-          표시를 같은 방법으로 확인하세요.
-        </p>
-        <figure class="shot">
-          <div class="shot-placeholder">
-            <span>📷 스크린샷 준비 중</span>
-            <span class="shot-file">images/viewer/viewer-web-browser.png</span>
-          </div>
-          <figcaption>브라우저에서 연 OnBook 뷰어 메인 화면</figcaption>
-        </figure>
-
-        <h2 id="vw-install">설치본 구성</h2>
+        <h2 id="vw-install">설치본 만들기</h2>
         <p>
           USB 등 설치 매체로 배포할 때는 배포 루트에 설치 런처(<code>Start.exe</code>)와
           설치 정보 파일이 함께 들어가며, 다음 항목을 개발사(출판사)가
@@ -1257,6 +1490,335 @@
           <li>
             <code>platform/boot/icon.png</code> — 설치본 관리 목록에 표시되는
             교과서 아이콘.
+          </li>
+        </ul>
+
+        <h2 id="vw-web">웹 버전으로 배포</h2>
+        <p>
+          PC에서 배치·확인을 마친 뷰어는 웹 서버에 올려 브라우저로도 사용할 수
+          있습니다. <code>platform/</code> 안의 <code>onbook/</code>과
+          <code>scene/</code> <strong>두 폴더만</strong> 웹 서버에 나란히
+          업로드합니다.
+        </p>
+        <pre><span class="n">(웹 루트)/</span>
+<span class="p">├─</span> <span class="f">onbook/</span>   <span class="c">← 교과서·콘텐츠 포함</span>
+<span class="p">└─</span> <span class="f">scene/</span></pre>
+        <p>브라우저 진입 주소는 다음과 같습니다.</p>
+        <pre><span class="n">https://(웹 루트)/</span><span class="f">onbook/main/index.html</span></pre>
+        <p>
+          접속하면 PC 버전과 동일한 메인 화면이 표시됩니다. 교과서·콘텐츠
+          표시를 같은 방법으로 확인하세요.
+        </p>
+        <div class="notice">
+          웹 버전에서는 PC 설치본 전용 기능인
+          <a href="#vw-update-full">전체 업데이트</a>·<a href="#vw-update-lesson">단원 업데이트</a>가
+          동작하지 않습니다. 단원 제외 없이 <strong>콘텐츠 전체를 포함한
+          상태</strong>로 업로드해 주세요.
+        </div>
+        <figure class="shot">
+          <div class="shot-placeholder">
+            <span>📷 스크린샷 준비 중</span>
+            <span class="shot-file">images/viewer/viewer-web-browser.png</span>
+          </div>
+          <figcaption>브라우저에서 연 OnBook 뷰어 메인 화면</figcaption>
+        </figure>
+
+        <h2 id="vw-update">업데이트 개요</h2>
+        <p>
+          배포한 전자저작물은 두 가지 방법으로 갱신할 수 있습니다. 두 방법 모두
+          <strong>PC 설치본 전용</strong>입니다.
+        </p>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 120px">구분</th>
+              <th><a href="#vw-update-full">전체 업데이트</a></th>
+              <th><a href="#vw-update-lesson">단원 업데이트</a></th>
+            </tr>
+            <tr>
+              <td><strong>용도</strong></td>
+              <td>뷰어·콘텐츠 등 모든 파일의 수정·갱신</td>
+              <td>배포본에서 제외한 단원 콘텐츠의 추가 설치</td>
+            </tr>
+            <tr>
+              <td><strong>실행 시점</strong></td>
+              <td>뷰어 실행 시 자동으로 새 버전 확인</td>
+              <td>메인 화면에서 사용자가 단원별로 다운로드</td>
+            </tr>
+            <tr>
+              <td><strong>설정 파일</strong></td>
+              <td><code>platform/update-check.xml</code></td>
+              <td><code>platform/update-lesson.json</code></td>
+            </tr>
+            <tr>
+              <td><strong>서버 파일</strong></td>
+              <td>버전별 ZIP — <code>{id}_{버전}.zip</code></td>
+              <td>단원별 ZIP — <code>{단원 id}.zip</code></td>
+            </tr>
+          </table>
+        </div>
+        <div class="info-box">
+          그리기·메모·진도 등 사용 기록은 전자저작물 폴더가 아닌 PC의 사용자
+          영역에 저장되므로, 업데이트를 적용해도 <strong>유지됩니다</strong>.
+        </div>
+
+        <h2 id="vw-update-full">전체 업데이트 (update-check.xml)</h2>
+        <p>
+          뷰어 실행 시 서버의 새 버전을 확인해, 갱신 파일을 내려받아 적용하는
+          방식입니다. 뷰어를 포함한 전자저작물의 모든 파일을 갱신할 수
+          있습니다.
+        </p>
+        <h3>동작 방식</h3>
+        <ol class="steps">
+          <li>
+            뷰어 실행 시 <code>platform/update-check.xml</code>의 서버 정보로
+            서버의 버전 목록을 확인합니다.
+          </li>
+          <li>
+            새 버전이 있으면 사용자에게 업데이트 안내 창이 표시되고, 수락하면
+            해당 버전 ZIP을 내려받습니다.
+          </li>
+          <li>
+            ZIP의 내용물을 <code>platform/</code> 위에
+            <strong>덮어쓰기</strong>합니다. ZIP에 없는 기존 파일은 그대로
+            유지됩니다.
+          </li>
+          <li>적용된 버전이 기록되어 다음 실행부터는 다시 받지 않습니다.</li>
+        </ol>
+        <h3>update-check.xml 작성</h3>
+        <p>배포본의 <code>platform/update-check.xml</code>에 서버 정보를 기입합니다.</p>
+        <pre><span class="p">&lt;</span><span class="k">update-check</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="k">server</span> <span class="n">url=</span><span class="s">"https://(업데이트 서버 주소)"</span> <span class="n">edition=</span><span class="s">"2022book"</span> <span class="n">id=</span><span class="s">"EEN5A"</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="k">enabled</span><span class="p">&gt;</span><span class="n">true</span><span class="p">&lt;/</span><span class="k">enabled</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="k">update-check</span><span class="p">&gt;</span></pre>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 130px">항목</th>
+              <th>설명</th>
+            </tr>
+            <tr>
+              <td><code>server url</code></td>
+              <td>업데이트 서버 기본 주소.</td>
+            </tr>
+            <tr>
+              <td><code>server edition</code></td>
+              <td>교과서 판 구분. 서버 경로에 사용됩니다.</td>
+            </tr>
+            <tr>
+              <td><code>server id</code></td>
+              <td>교재 식별자. 서버 경로와 ZIP 파일명에 사용됩니다.</td>
+            </tr>
+            <tr>
+              <td><code>enabled</code></td>
+              <td>
+                <code>true</code>/<code>false</code>. <code>false</code>면
+                업데이트 확인을 하지 않습니다.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <h3>서버 업로드 규칙</h3>
+        <p>서버에는 다음 두 가지를 올립니다. 경로 규칙은 고정입니다.</p>
+        <pre><span class="n">{url}/{edition}/{id}/</span><span class="f">update-check.xml</span>      <span class="c">← 버전 목록 (릴리스마다 &lt;update&gt; 항목 추가)</span>
+<span class="n">{url}/{edition}/{id}/</span><span class="f">{id}_{버전}.zip</span>       <span class="c">← 버전별 갱신 ZIP (예: EEN5A_1.0.1.zip)</span></pre>
+        <p>
+          서버의 <code>update-check.xml</code>에는 릴리스한 버전을
+          <code>&lt;update&gt;</code> 항목으로 나열합니다.
+        </p>
+        <pre><span class="p">&lt;</span><span class="k">update</span> <span class="n">date=</span><span class="s">"2026-08-01"</span> <span class="n">note=</span><span class="s">"1차 업데이트"</span><span class="p">&gt;</span><span class="n">1.0.1</span><span class="p">&lt;/</span><span class="k">update</span><span class="p">&gt;</span></pre>
+        <p>
+          갱신 ZIP의 내부는 <strong>최상위에 <code>platform/</code> 폴더</strong>를
+          두고, 갱신할 파일을 원래 경로 그대로 배치합니다.
+        </p>
+        <pre><span class="n">EEN5A_1.0.1.zip</span>
+<span class="p">└─</span> <span class="f">platform/</span>
+   <span class="p">└─</span> <span class="n">onbook/contents/unit01/lesson01/…</span>   <span class="c">← 갱신할 파일만, 원래 경로 그대로</span></pre>
+        <h3>버전 관리 규칙</h3>
+        <ul>
+          <li>
+            버전은 <code>1.0.1</code>처럼 <strong>숫자 3자리
+            형식(x.y.z)</strong>을 지켜 주세요. 버전 크기 비교로 업데이트
+            여부를 판단합니다.
+          </li>
+          <li>릴리스마다 이전보다 큰 버전으로 올립니다.</li>
+          <li>
+            ZIP 파일명의 버전과 <code>&lt;update&gt;</code> 항목의 버전이
+            일치해야 합니다.
+          </li>
+        </ul>
+
+        <h2 id="vw-update-lesson">단원 업데이트 (update-lesson.json)</h2>
+        <p>
+          전자저작물 용량을 줄이기 위해 일부 단원 콘텐츠를 배포본에서 제외하고,
+          사용자가 메인 화면에서 <strong>필요한 단원만 내려받아 설치</strong>하게
+          하는 기능입니다.
+        </p>
+        <h3>동작 방식</h3>
+        <ol class="steps">
+          <li>
+            메인 화면의 단원 다운로드 UI에서 사용자가 미다운로드 단원의
+            <code>다운로드</code>를 누릅니다.
+          </li>
+          <li>
+            서버에서 <code>{downloadUrl}/{단원 id}.zip</code>을 내려받아
+            <code>platform/onbook/</code> 아래에 설치합니다. 이미 있는 파일은
+            건너뜁니다.
+          </li>
+          <li>
+            완료되면 해당 단원이 <code>다운 됨</code> 상태로 기록되고, 재실행
+            후에도 유지됩니다.
+          </li>
+          <li>
+            내려받지 않은 단원의 콘텐츠를 열면 안내 후 메인 화면으로
+            돌아갑니다(자동 제한).
+          </li>
+        </ol>
+        <h3>update-lesson.json 작성</h3>
+        <pre><span class="p">{</span>
+    <span class="s">"enabled"</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+    <span class="s">"downloadUrl"</span><span class="p">:</span> <span class="s">"https://(다운로드 서버 주소)"</span><span class="p">,</span>
+    <span class="s">"lessons"</span><span class="p">: [</span>
+        <span class="p">{</span> <span class="s">"id"</span><span class="p">:</span> <span class="s">"lesson01"</span><span class="p">,</span> <span class="s">"index"</span><span class="p">:</span> <span class="n">0</span><span class="p">,</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"1단원"</span><span class="p">,</span> <span class="s">"downloaded"</span><span class="p">:</span> <span class="k">false</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s">"id"</span><span class="p">:</span> <span class="s">"lesson02"</span><span class="p">,</span> <span class="s">"index"</span><span class="p">:</span> <span class="n">1</span><span class="p">,</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"2단원"</span><span class="p">,</span> <span class="s">"downloaded"</span><span class="p">:</span> <span class="k">false</span> <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span></pre>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 160px">항목</th>
+              <th>설명</th>
+            </tr>
+            <tr>
+              <td><code>enabled</code></td>
+              <td><code>false</code>면 단원 다운로드 기능을 사용하지 않습니다.</td>
+            </tr>
+            <tr>
+              <td><code>downloadUrl</code></td>
+              <td>
+                단원 ZIP을 받을 기본 주소.
+                <code>{downloadUrl}/{id}.zip</code>으로 조합됩니다.
+              </td>
+            </tr>
+            <tr>
+              <td><code>lessons[].id</code></td>
+              <td>
+                단원 식별자. ZIP 파일명과 콘텐츠의 단원 폴더명
+                (<code>lesson01</code> 등)에 대응합니다.
+              </td>
+            </tr>
+            <tr>
+              <td><code>lessons[].index</code></td>
+              <td>메인 화면 단원 다운로드 UI의 순번과 매칭합니다.</td>
+            </tr>
+            <tr>
+              <td><code>lessons[].name</code></td>
+              <td>다운로드 진행 창에 표시할 단원 이름.</td>
+            </tr>
+            <tr>
+              <td><code>lessons[].downloaded</code></td>
+              <td>
+                배포 시 <code>false</code>로 둡니다. 다운로드가 끝나면 뷰어가
+                자동으로 <code>true</code>로 기록합니다.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <h3>개발사가 준비할 것</h3>
+        <ol class="steps">
+          <li>
+            <strong>update-lesson.json 작성</strong> — 위 형식으로 단원 목록을
+            정의합니다.
+          </li>
+          <li>
+            <strong>배포본에서 해당 단원 제외</strong> — 내려받게 할 단원의
+            콘텐츠는 배포본에 넣지 않습니다.
+          </li>
+          <li>
+            <strong>메인 화면 UI 구현</strong> — updateLesson 모듈이 제공하는
+            함수를 호출합니다.
+            <div class="params">
+              <table>
+                <tr>
+                  <th style="width: 280px">함수</th>
+                  <th>역할</th>
+                </tr>
+                <tr>
+                  <td><code>INIT_UPDATE_LESSON(onReady)</code></td>
+                  <td>설정을 읽어 기능을 초기화합니다.</td>
+                </tr>
+                <tr>
+                  <td><code>CHECK_LESSON_UPDATE(index)</code></td>
+                  <td>
+                    해당 단원이 미다운로드 상태인지 확인합니다 (다운로드 버튼
+                    노출 판단용).
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>START_LESSON_UPDATE(index, callback)</code></td>
+                  <td>다운로드·설치를 실행합니다. 진행 창은 자동 표시됩니다.</td>
+                </tr>
+              </table>
+            </div>
+          </li>
+          <li>
+            <strong>서버에 단원 ZIP 업로드</strong> — 파일명은
+            <code>{id}.zip</code>, 내부는
+            <code>platform/onbook/</code> 기준 경로 구조로 만듭니다.
+            <pre style="margin-top: 8px"><span class="n">lesson01.zip</span>
+<span class="p">├─</span> <span class="f">contents/</span><span class="n">unit01/lesson01/…</span>
+<span class="p">├─</span> <span class="f">contents/</span><span class="n">unit02/lesson01/…</span>
+<span class="p">└─</span> <span class="f">download/</span><span class="n">lesson01/…</span></pre>
+          </li>
+        </ol>
+        <div class="notice">
+          단원 업데이트는 <strong>PC 설치본 전용</strong>입니다. 웹 버전에서는
+          단원 다운로드 UI가 표시되지 않으므로, 웹 배포본에는 콘텐츠 전체를
+          포함해 주세요.
+        </div>
+
+        <h2 id="vw-checklist">납품 전 체크리스트</h2>
+        <p>절마다 안내한 주의 사항의 최종 점검용 요약입니다.</p>
+        <ul class="checklist">
+          <li>
+            콘텐츠 페이지가 <a href="#vw-api">onbook.api</a>를 로드하고, 페이지
+            이동에 <code>window.location.href</code>를 직접 사용하지 않는다.
+            (<a href="#vw-rules">콘텐츠 개발 규칙</a>)
+          </li>
+          <li>
+            contents 패키징 시 <strong>썸네일 접두사를 비웠다</strong>.
+            (<a target="_blank" rel="noopener" href="ob-contents-packager-guide.html">contents 패키저 가이드</a>)
+          </li>
+          <li>
+            배치 후 <code>toc.xml</code>이 책/단원 폴더 바로 아래에 있다 —
+            압축 해제 시 폴더가 한 겹 더 생기지 않았다.
+            (<a href="#vw-deploy">패키징과 배치</a>)
+          </li>
+          <li>
+            <code>settings.json</code> 편집 후 JSON 문법 오류 없이 뷰어가 정상
+            실행된다. (<a href="#vw-settings">뷰어 설정</a>)
+          </li>
+          <li>
+            메인 화면에서 progress·updateLesson 모듈의 css/js 참조를 유지했다.
+            (<a href="#vw-main">메인 화면 개발</a>)
+          </li>
+          <li>
+            <code>start.ini</code>의 <code>TITLE</code>과 교과서 폴더명이
+            일치하고, <code>start.ini</code>·<code>autorun.inf</code>를 EUC-KR로
+            저장했다. (<a href="#vw-install">설치본 만들기</a>)
+          </li>
+          <li>
+            <code>update-check.xml</code>에 서버 정보를 기입했고 버전이
+            x.y.z 형식이다. (<a href="#vw-update-full">전체 업데이트</a>)
+          </li>
+          <li>
+            단원 업데이트 사용 시 — 해당 단원을 배포본에서 제외했고,
+            <code>lessons[].downloaded</code>가 모두 <code>false</code>다.
+            (<a href="#vw-update-lesson">단원 업데이트</a>)
+          </li>
+          <li>
+            웹 배포본에는 콘텐츠 전체를 포함했다.
+            (<a href="#vw-web">웹 버전으로 배포</a>)
           </li>
         </ul>
       </main>
@@ -1380,8 +1942,14 @@
       // ─── 이미지 클릭 시 원본 크기로 보기 (라이트박스) ───
       const lightbox = document.createElement("div");
       lightbox.className = "lightbox";
+      const lightboxStage = document.createElement("span");
+      lightboxStage.className = "lightbox-stage";
       const lightboxImg = document.createElement("img");
-      lightbox.appendChild(lightboxImg);
+      const lightboxSpot = document.createElement("span");
+      lightboxSpot.className = "spot";
+      lightboxStage.appendChild(lightboxImg);
+      lightboxStage.appendChild(lightboxSpot);
+      lightbox.appendChild(lightboxStage);
       document.body.appendChild(lightbox);
 
       function closeLightbox() {
@@ -1400,6 +1968,14 @@
         img.addEventListener("click", () => {
           lightboxImg.src = img.src;
           lightboxImg.alt = img.alt || "";
+          // 강조 표시(.spot)가 있는 이미지면 확대 화면에도 같은 좌표로 복제
+          const spot = img.closest(".spotlight")?.querySelector(".spot");
+          if (spot) {
+            lightboxSpot.style.cssText = spot.style.cssText;
+            lightboxSpot.style.display = "block";
+          } else {
+            lightboxSpot.style.display = "none";
+          }
           lightbox.classList.add("open");
           document.body.style.overflow = "hidden";
         });
