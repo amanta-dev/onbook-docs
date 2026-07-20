@@ -1306,12 +1306,21 @@
           <strong>메인 화면</strong>으로, 콘텐츠 개발사가 직접 제작·커스터마이징
           하는 영역입니다. 기본 제공 구성은 <code>index.html</code> +
           <code>js/index.js</code>(링크 설정) + <code>css/</code>·<code>images/</code>입니다.
+          메인 화면에서 연결하는 기능은 아래 세 가지로 나뉩니다.
         </p>
-        <h3>기능 연결 방법</h3>
+
+        <h3 id="vw-main-api">onbook.api</h3>
         <p>
-          메인 화면에서 각 기능은 다음 방식으로 연결합니다. 기본 제공
-          <code>js/index.js</code>의 링크 설정(<code>LINK_CONFIG</code>)을
-          수정하면 대상 교과서·콘텐츠에 맞게 바꿀 수 있습니다.
+          교과서·콘텐츠·내 수업하기 장면 이동, 자료실 이동, 개발사 HTML 새 창
+          열기는 <a href="#vw-api">onbook.api</a>를 사용합니다. 메인
+          <code>index.html</code>에 아래 스크립트를 반드시 포함하세요.
+        </p>
+        <pre><span class="c">&lt;!-- onbook.api — 뷰어 장면 이동·새 창 열기 등에 필수 --&gt;</span>
+<span class="p">&lt;</span><span class="k">script</span> <span class="n">src=</span><span class="s">"./js/ob/onbook.api.min.js"</span><span class="p">&gt;&lt;/</span><span class="k">script</span><span class="p">&gt;</span></pre>
+        <p>
+          기본 제공 <code>js/index.js</code>의
+          <code>LINK_CONFIG</code>를 참고하여 각각에 해당하는 링크를 연결하여
+          개발합니다.
         </p>
         <div class="params">
           <table>
@@ -1338,13 +1347,6 @@
               </td>
             </tr>
             <tr>
-              <td>진도 보기</td>
-              <td>
-                버튼 클릭 시 <code>window.OPEN_PROGRESS_VIEW()</code> 호출.
-                아래 <a href="#vw-main-progress">진도 보기 연결</a> 참고.
-              </td>
-            </tr>
-            <tr>
               <td>자료실</td>
               <td><code>../modules/library/index.html</code>로 이동.</td>
             </tr>
@@ -1358,14 +1360,19 @@
             </tr>
           </table>
         </div>
-        <div class="notice">
-          메인 화면 <code>index.html</code>이 로드하는
-          <strong>진도 보기(progress)·단원 다운로드(updateLesson) 모듈의
-          css/js 참조는 유지</strong>해 주세요. 제거하면 해당 기능이 동작하지
-          않습니다.
-        </div>
 
-        <h3 id="vw-main-progress">진도 보기 연결</h3>
+        <h3 id="vw-main-progress">진도 보기</h3>
+        <p>
+          진도 보기(progress) 모듈 UI·기능을 쓰려면 메인
+          <code>index.html</code>에 아래 css/js를 반드시 포함하세요.
+          경로·파일명을 바꾸거나 제거하면 동작하지 않습니다.
+          <code>modules/progress/</code> 폴더도 삭제·이름 변경하지 마세요.
+        </p>
+        <pre><span class="c">&lt;!-- head — 진도 보기(progress) 모듈 CSS --&gt;</span>
+<span class="p">&lt;</span><span class="k">link</span> <span class="n">href=</span><span class="s">"../modules/progress/css/index.min.css"</span> <span class="n">rel=</span><span class="s">"stylesheet"</span> <span class="p">/&gt;</span>
+
+<span class="c">&lt;!-- body 하단 — 진도 보기(progress) 모듈 JS — OPEN_PROGRESS_VIEW() 제공 --&gt;</span>
+<span class="p">&lt;</span><span class="k">script</span> <span class="n">defer</span> <span class="n">src=</span><span class="s">"../modules/progress/js/index.min.js"</span><span class="p">&gt;&lt;/</span><span class="k">script</span><span class="p">&gt;</span></pre>
         <p>
           progress 모듈은 <code>&lt;div id="root"&gt;</code> 안에 자기 UI를
           스스로 만들어 넣습니다. 메인 화면에 별도 HTML을 추가할 필요 없이,
@@ -1379,7 +1386,18 @@
   <span class="p">}</span>
 <span class="p">});</span></pre>
 
-        <h3 id="vw-main-download">단원 다운로드 UI</h3>
+        <h3 id="vw-main-download">단원 다운로드</h3>
+        <p>
+          단원 다운로드(updateLesson) 모듈을 쓰려면 메인
+          <code>index.html</code>에 아래 css/js를 반드시 포함하세요.
+          경로·파일명을 바꾸거나 제거하면 동작하지 않습니다.
+          <code>modules/updateLesson/</code> 폴더도 삭제·이름 변경하지 마세요.
+        </p>
+        <pre><span class="c">&lt;!-- head — 단원 다운로드(updateLesson) 모듈 CSS --&gt;</span>
+<span class="p">&lt;</span><span class="k">link</span> <span class="n">href=</span><span class="s">"../modules/updateLesson/css/index.min.css"</span> <span class="n">rel=</span><span class="s">"stylesheet"</span> <span class="p">/&gt;</span>
+
+<span class="c">&lt;!-- body 하단 — 단원 다운로드(updateLesson) 모듈 JS — INIT/CHECK/START 함수 제공 --&gt;</span>
+<span class="p">&lt;</span><span class="k">script</span> <span class="n">defer</span> <span class="n">src=</span><span class="s">"../modules/updateLesson/js/index.min.js"</span><span class="p">&gt;&lt;/</span><span class="k">script</span><span class="p">&gt;</span></pre>
         <p>
           <a href="#vw-update-lesson">단원 업데이트</a>를 사용하는 경우, 단원
           선택·다운로드 버튼 UI를 메인 화면에 구현하고 updateLesson 모듈이
@@ -2013,7 +2031,8 @@
             실행된다. (<a href="#vw-settings">뷰어 설정</a>)
           </li>
           <li>
-            메인 화면에서 progress·updateLesson 모듈의 css/js 참조를 유지했다.
+            메인 화면 <code>index.html</code>에 onbook.api·progress·updateLesson
+            필수 css/js를 각각 포함했다.
             (<a href="#vw-main">메인 화면 개발</a>)
           </li>
           <li>
