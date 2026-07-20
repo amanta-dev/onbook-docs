@@ -599,7 +599,7 @@
           </button>
           <div class="nav-links">
             <a href="#vw-api">onbook.api 라이브러리</a>
-            <a href="#vw-rules">콘텐츠 개발 규칙</a>
+            <a href="#vw-rules">콘텐츠 개발 규칙 및 권장 사항</a>
           </div>
         </div>
         <div class="section-gap"></div>
@@ -903,47 +903,76 @@
           참고하세요.
         </div>
 
-        <h2 id="vw-rules">콘텐츠 개발 규칙</h2>
+        <h2 id="vw-rules">콘텐츠 개발 규칙 및 권장 사항</h2>
         <p>
-          뷰어에서 정상 동작하는 HTML 콘텐츠를 만들기 위해 다음 규칙을 지켜
-          주세요. <a href="#vw-api">onbook.api 로드</a>를 전제로 합니다.
+          뷰어에서 동작하는 HTML 콘텐츠를 만들 때 지켜야 할 규칙과, 함께
+          권장하는 사항입니다. <a href="#vw-api">onbook.api 로드</a>를 전제로
+          합니다.
         </p>
-        <h3>페이지 이동 규칙</h3>
+        <h3>규칙: 페이지 이동</h3>
         <p>
-          페이지 이동·링크는 onbook.api 함수(<a
+          콘텐츠 내부에서의 화면 전환은 자유롭게 구현하시면 됩니다. 다만
+          뷰어에 등록된 페이지 간의 이동은 onbook.api 함수(<a
             target="_blank" rel="noopener" href="ob-viewer-api-guide.html#goPage"
             >goPage</a
           >
-          등)를 사용하고, <code>window.location.href</code>를 직접 변경하는
-          방식은 가급적 사용하지 말아 주세요. 뷰어의 페이지 이력·이동과 어긋날
-          수 있습니다.
+          등)를 사용해 주세요. 뷰어가 현재 페이지 상태를 함께 갱신하므로
+          페이지 이동·진도 기록이 어긋나지 않습니다.
         </p>
         <p>콘텐츠나 외부 페이지에서 이전 화면으로 되돌아올 때는:</p>
         <pre><span class="n">window</span><span class="p">.</span><span class="n">ob</span><span class="p">.</span><span class="n">viewer</span><span class="p">.</span><span class="n">api</span><span class="p">.</span><span class="f">historyBack</span><span class="p">();</span></pre>
-        <h3>화면·뷰포트 전제</h3>
+        <h3>규칙: viewport 선언</h3>
         <p>
-          뷰어는 화면 확대·축소(핀치 줌)를 사용하지 않습니다. 콘텐츠는 확대
-          없이 한 화면에 온전히 표시되도록 제작해 주세요.
+          차시 콘텐츠 페이지는 <strong>1280×720</strong> 해상도 기준으로
+          제작하고, 각 페이지의 <code>&lt;head&gt;</code>에 viewport를 다음과
+          같이 선언해 주세요. 뷰어가 이 값을 페이지의 원본 크기로 삼아
+          화면에 맞게 배율을 조정합니다.
         </p>
-        <h3>페이지 파일명 관례</h3>
-        <p>콘텐츠 페이지 파일명은 다음 형식을 따릅니다.</p>
-        <pre><span class="n">e</span><span class="s">{책}</span><span class="n">_</span><span class="s">{단원}</span><span class="n">_</span><span class="s">{차시}</span><span class="n">_</span><span class="s">{코너}</span><span class="n">_</span><span class="s">{탭}</span><span class="n">.html</span>   <span class="c">예: e5_01_02_01_01.html</span></pre>
+        <pre><span class="p">&lt;</span><span class="k">meta</span> <span class="n">name=</span><span class="s">"viewport"</span> <span class="n">content=</span><span class="s">"width=1280, height=720"</span> <span class="p">/&gt;</span></pre>
         <p>
-          뷰어가 파일명에서 단원·차시 정보를 읽으므로, 이 관례를 지켜
-          주세요.
+          웹에서 흔히 쓰는 <code>width=device-width</code> 형태로 선언하거나
+          선언을 누락하면 뷰어는 기본값 1280×720으로 간주합니다. 다른
+          해상도로 제작한 페이지는 배치가 어긋날 수 있으니 반드시 위 기준을
+          지켜 주세요.
         </p>
+        <div class="info-box">
+          이 규칙은 contents 뷰어 안에서 페이지로 표시되는 차시 콘텐츠에만
+          적용됩니다. 게임·단어장처럼 새 창으로 실행되는 콘텐츠는 뷰어의
+          배율 조정을 거치지 않으므로, 해상도를 자유롭게 정하시면 됩니다.
+        </div>
+        <h3>권장: 핀치 줌 자제</h3>
+        <p>
+          일반적인 페이지에서는 화면 확대·축소(핀치 줌)가 동작하지 않도록
+          제작해 주시기를 권장합니다. 학교 현장에서 터치스크린 방식의 전자
+          칠판을 사용할 때, 두 명 이상의 학생이 동시에 글을 쓰거나 지우는
+          동작에서 의도치 않은 핀치 줌이 동작할 수 있고, 현장에서는 이를
+          오류로 판단하기 쉽습니다.
+        </p>
+        <p>
+          다만 지도, 명화·사진 감상, 세밀한 관찰 자료처럼 확대·축소가 필요한
+          콘텐츠라면 해당 영역에 한해 사용하셔도 됩니다.
+        </p>
+        <h3>권장: 페이지 파일명</h3>
+        <p>
+          페이지 파일명에 정해진 규칙은 없습니다. 다만 페이지를 식별하기
+          쉽고, 이름순으로 정렬했을 때 페이지 순서대로 늘어서도록 지어
+          주시기를 권장합니다.
+          <a target="_blank" rel="noopener" href="ob-contents-packager-guide.html"
+            >contents 패키저</a
+          >로 단원 zip 파일을 만들 때 다루기 편리합니다.
+        </p>
+        <p>샘플 뷰어에서 사용하는 파일명 형식의 예입니다.</p>
+        <pre><span class="n">e</span><span class="s">{학년}</span><span class="n">_</span><span class="s">{단원}</span><span class="n">_</span><span class="s">{차시}</span><span class="n">_</span><span class="s">{코너}</span><span class="n">_</span><span class="s">{탭}</span><span class="n">.html</span>   <span class="c">예: e5_01_02_01_01.html</span></pre>
         <h3>개발 체크리스트</h3>
         <ul class="checklist">
+          <li><code>onbook.api.min.js</code>를 각 페이지에서 로드했다.</li>
+          <li>뷰어에 등록된 페이지 간 이동·복귀에 onbook.api를 사용했다.</li>
           <li>
-            <code>common/js/ob/onbook.api.min.js</code>를 각 페이지에서 상대
-            경로로 로드했다.
+            차시 콘텐츠 각 페이지에 viewport를
+            <code>width=1280, height=720</code>으로 선언했다.
           </li>
-          <li>
-            페이지 이동·복귀에 onbook.api를 사용했다
-            (<code>window.location.href</code> 직접 변경 없음).
-          </li>
-          <li>확대 없이 한 화면에 온전히 표시된다.</li>
-          <li>페이지 파일명이 명명 관례를 따른다.</li>
+          <li>일반 페이지에서 의도치 않은 핀치 줌이 동작하지 않는다.</li>
+          <li>페이지 파일명이 식별하기 쉽고 이름순 정렬 시 페이지 순서와 일치한다.</li>
         </ul>
 
         <h2 id="vw-settings">뷰어 설정 (settings.json)</h2>
@@ -1791,9 +1820,9 @@
         <p>절마다 안내한 주의 사항의 최종 점검용 요약입니다.</p>
         <ul class="checklist">
           <li>
-            콘텐츠 페이지가 <a href="#vw-api">onbook.api</a>를 로드하고, 페이지
-            이동에 <code>window.location.href</code>를 직접 사용하지 않는다.
-            (<a href="#vw-rules">콘텐츠 개발 규칙</a>)
+            콘텐츠 페이지가 <a href="#vw-api">onbook.api</a>를 로드하고,
+            뷰어에 등록된 페이지 간 이동에 onbook.api를 사용한다.
+            (<a href="#vw-rules">콘텐츠 개발 규칙 및 권장 사항</a>)
           </li>
           <li>
             contents 패키징 시 <strong>썸네일 접두사를 비웠다</strong>.
