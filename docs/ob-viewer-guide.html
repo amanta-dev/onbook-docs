@@ -657,7 +657,7 @@
           <div class="nav-links">
             <a href="#vw-update">업데이트 개요</a>
             <a href="#vw-update-full">전체 업데이트</a>
-            <a href="#vw-update-lesson">단원 업데이트</a>
+            <a href="#vw-update-lesson">단원 다운로드</a>
           </div>
         </div>
         <div class="section-gap"></div>
@@ -721,7 +721,7 @@
           </li>
           <li>
             <a href="#vw-update">배포 후 업데이트 방법 2가지</a> — 전체
-            업데이트 · 단원 업데이트
+            업데이트 · 단원 다운로드
           </li>
         </ul>
         <h3>관련 문서</h3>
@@ -779,7 +779,7 @@
    <span class="p">│  └─</span> <span class="m">… (뷰어 화면 앱 — 수정 금지)</span>
    <span class="p">├─</span> <span class="n">OnBookManager.exe</span>  <span class="c">← 설치된 책 목록 확인·삭제 (설치본용)</span>
    <span class="p">├─</span> <span class="g">update-check.xml</span>   <span class="c">← <a href="#vw-update-full" style="color:#93c5fd">전체 업데이트</a> 설정</span>
-   <span class="p">├─</span> <span class="g">update-lesson.json</span> <span class="c">← <a href="#vw-update-lesson" style="color:#93c5fd">단원 업데이트</a> 설정</span>
+   <span class="p">├─</span> <span class="g">update-lesson.json</span> <span class="c">← <a href="#vw-update-lesson" style="color:#93c5fd">단원 다운로드</a> 설정</span>
    <span class="p">└─</span> <span class="m">… (실행 엔진 — 수정 금지)</span></pre>
         <h3>책(권) 단위 폴더 규칙</h3>
         <p>
@@ -1399,11 +1399,13 @@
 <span class="c">&lt;!-- body 하단 — 단원 다운로드(updateLesson) 모듈 JS — INIT/CHECK/START 함수 제공 --&gt;</span>
 <span class="p">&lt;</span><span class="k">script</span> <span class="n">defer</span> <span class="n">src=</span><span class="s">"../modules/updateLesson/js/index.min.js"</span><span class="p">&gt;&lt;/</span><span class="k">script</span><span class="p">&gt;</span></pre>
         <p>
-          <a href="#vw-update-lesson">단원 업데이트</a>를 사용하는 경우, 단원
+          <a href="#vw-update-lesson">단원 다운로드</a>를 사용하는 경우, 단원
           선택·다운로드 버튼 UI를 메인 화면에 구현하고 updateLesson 모듈이
-          제공하는 <a href="#vw-update-lesson">세 함수</a>를 호출합니다.
+          제공하는 함수들(<code>INIT_UPDATE_LESSON</code> ·
+          <code>CHECK_LESSON_UPDATE</code> ·
+          <code>START_LESSON_UPDATE</code>)을 사용하여 구현합니다.
           <code>update-lesson.json</code> 작성법·서버 업로드 규칙은
-          <a href="#vw-update-lesson">단원 업데이트</a> 절을 참고하세요.
+          <a href="#vw-update-lesson">단원 다운로드</a> 절을 참고하세요.
         </p>
         <p>
           샘플은 단원 선택 <code>&lt;select&gt;</code>, 다운로드
@@ -1743,7 +1745,7 @@
         </p>
         <div class="notice">
           웹 버전에서는 PC 설치본 전용 기능인
-          <a href="#vw-update-full">전체 업데이트</a>·<a href="#vw-update-lesson">단원 업데이트</a>가
+          <a href="#vw-update-full">전체 업데이트</a>·<a href="#vw-update-lesson">단원 다운로드</a>가
           동작하지 않습니다. 단원 제외 없이 <strong>콘텐츠 전체를 포함한
           상태</strong>로 업로드해 주세요.
         </div>
@@ -1765,7 +1767,7 @@
             <tr>
               <th style="width: 120px">구분</th>
               <th><a href="#vw-update-full">전체 업데이트</a></th>
-              <th><a href="#vw-update-lesson">단원 업데이트</a></th>
+              <th><a href="#vw-update-lesson">단원 다운로드</a></th>
             </tr>
             <tr>
               <td><strong>용도</strong></td>
@@ -1880,7 +1882,7 @@
           </li>
         </ul>
 
-        <h2 id="vw-update-lesson">단원 업데이트 (update-lesson.json)</h2>
+        <h2 id="vw-update-lesson">단원 다운로드 (update-lesson.json)</h2>
         <p>
           전자저작물 용량을 줄이기 위해 일부 단원 콘텐츠를 배포본에서 제외하고,
           사용자가 메인 화면에서 <strong>필요한 단원만 내려받아 설치</strong>하게
@@ -2004,7 +2006,7 @@
           </li>
         </ol>
         <div class="notice">
-          단원 업데이트는 <strong>PC 설치본 전용</strong>입니다. 웹 버전에서는
+          단원 다운로드는 <strong>PC 설치본 전용</strong>입니다. 웹 버전에서는
           단원 다운로드 UI가 표시되지 않으므로, 웹 배포본에는 콘텐츠 전체를
           포함해 주세요.
         </div>
@@ -2045,9 +2047,9 @@
             x.y.z 형식이다. (<a href="#vw-update-full">전체 업데이트</a>)
           </li>
           <li>
-            단원 업데이트 사용 시 — 해당 단원을 배포본에서 제외했고,
+            단원 다운로드 사용 시 — 해당 단원을 배포본에서 제외했고,
             <code>lessons[].downloaded</code>가 모두 <code>false</code>다.
-            (<a href="#vw-update-lesson">단원 업데이트</a>)
+            (<a href="#vw-update-lesson">단원 다운로드</a>)
           </li>
           <li>
             웹 배포본에는 콘텐츠 전체를 포함했다.
