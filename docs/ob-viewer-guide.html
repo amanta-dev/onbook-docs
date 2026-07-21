@@ -669,15 +669,6 @@
             <a href="#vw-update-lesson">단원 다운로드</a>
           </div>
         </div>
-        <div class="section-gap"></div>
-        <div class="nav-group">
-          <button type="button" class="nav-title">
-            부록<span class="nav-arrow">▼</span>
-          </button>
-          <div class="nav-links">
-            <a href="#vw-checklist">납품 전 체크리스트</a>
-          </div>
-        </div>
       </nav>
 
       <main class="content">
@@ -1730,6 +1721,10 @@
               <th>설명</th>
             </tr>
             <tr>
+              <td><code>EDITION</code></td>
+              <td>교과서 판. 예: <code>2022개정</code></td>
+            </tr>
+            <tr>
               <td><code>TITLE</code></td>
               <td>
                 교과서 이름. <strong>배포 루트의 교과서 폴더명과 반드시
@@ -1743,13 +1738,13 @@
             <tr>
               <td><code>SUBJECT_CODE</code></td>
               <td>
-                과목 코드 — <code>{학교급}{과목}{학년}{저자구분}</code> 형식.
-                예: <code>EEN5A</code> (초등·영어·5학년·A)
+                과목 코드. 출판사의 과목 코드 규칙에 맞게 작성합니다. 예:
+                <code>EEN5A</code> (초등·영어·5학년·A 식으로 구성)
               </td>
             </tr>
             <tr>
-              <td><code>EDITION</code></td>
-              <td>교과서 판. 예: <code>2022개정</code></td>
+              <td><code>DIRECT_RUN_MSG</code></td>
+              <td>설치하지 않고 직접 실행할 때 표시할 안내 문구.</td>
             </tr>
             <tr>
               <td><code>INSTALL_DIR</code></td>
@@ -1757,11 +1752,7 @@
             </tr>
             <tr>
               <td><code>REQUIRED_SPACE</code></td>
-              <td>설치에 필요한 최소 디스크 공간 (바이트).</td>
-            </tr>
-            <tr>
-              <td><code>DIRECT_RUN_MSG</code></td>
-              <td>설치하지 않고 직접 실행할 때 표시할 안내 문구.</td>
+              <td>설치에 필요한 최소 디스크 공간 (바이트). 예: <code>9000000000</code> (약 9GB)</td>
             </tr>
           </table>
         </div>
@@ -1782,8 +1773,10 @@
             위치는 <code>start.ini</code>의 <code>[LAYOUT]</code>으로 조정.
           </li>
           <li>
-            <code>platform/boot/icon.png</code> — 설치본 관리 목록에 표시되는
-            교과서 아이콘.
+            <code>platform/boot/icon.png</code> — 설치본 관리 프로그램
+            (OnBookManager)의 책 목록에 표시되는 교과서 아이콘.
+            <strong>30×30px</strong> 영역에 맞춰 표시되며, 파일이 없으면
+            아이콘 자리가 빈칸으로 나옵니다.
           </li>
         </ul>
 
@@ -1791,7 +1784,7 @@
         <p>
           PC에서 배치·확인을 마친 뷰어는 웹 서버에 올려 브라우저로도 사용할 수
           있습니다. <code>platform/</code> 안의 <code>onbook/</code>과
-          <code>scene/</code> <strong>두 폴더만</strong> 웹 서버에 나란히
+          <code>scene/</code> <strong>두 폴더만</strong> 웹 루트에 나란히
           업로드합니다.
         </p>
         <pre><span class="n">(웹 루트)/</span>
@@ -1809,13 +1802,6 @@
           동작하지 않습니다. 단원 제외 없이 <strong>콘텐츠 전체를 포함한
           상태</strong>로 업로드해 주세요.
         </div>
-        <figure class="shot">
-          <div class="shot-placeholder">
-            <span>📷 스크린샷 준비 중</span>
-            <span class="shot-file">images/viewer/viewer-web-browser.png</span>
-          </div>
-          <figcaption>브라우저에서 연 OnBook 뷰어 메인 화면</figcaption>
-        </figure>
 
         <h2 id="vw-update">업데이트 개요</h2>
         <p>
@@ -2071,51 +2057,6 @@
           포함해 주세요.
         </div>
 
-        <h2 id="vw-checklist">납품 전 체크리스트</h2>
-        <p>절마다 안내한 주의 사항의 최종 점검용 요약입니다.</p>
-        <ul class="checklist">
-          <li>
-            콘텐츠 페이지가 <a href="#vw-api">onbook.api</a>를 로드하고,
-            뷰어에 등록된 페이지 간 이동에 onbook.api를 사용한다.
-            (<a href="#vw-rules">콘텐츠 개발 규칙 및 권장 사항</a>)
-          </li>
-          <li>
-            contents 패키징 시 <strong>썸네일 접두사를 비웠다</strong>.
-            (<a target="_blank" rel="noopener" href="ob-contents-packager-guide.html">contents 패키저 가이드</a>)
-          </li>
-          <li>
-            배치 후 <code>toc.xml</code>이 책/단원 폴더 바로 아래에 있다 —
-            압축 해제 시 폴더가 한 겹 더 생기지 않았다.
-            (<a href="#vw-deploy">패키징과 배치</a>)
-          </li>
-          <li>
-            <code>settings.json</code> 편집 후 JSON 문법 오류 없이 뷰어가 정상
-            실행된다. (<a href="#vw-settings">뷰어 설정</a>)
-          </li>
-          <li>
-            메인 화면 <code>index.html</code>에 onbook.api·progress·updateLesson
-            필수 css/js를 각각 포함했다.
-            (<a href="#vw-main">메인 화면 개발</a>)
-          </li>
-          <li>
-            <code>start.ini</code>의 <code>TITLE</code>과 교과서 폴더명이
-            일치하고, <code>start.ini</code>·<code>autorun.inf</code>를 EUC-KR로
-            저장했다. (<a href="#vw-install">설치본 만들기</a>)
-          </li>
-          <li>
-            <code>update-check.xml</code>에 서버 정보를 기입했고 버전이
-            x.y.z 형식이다. (<a href="#vw-update-full">전체 업데이트</a>)
-          </li>
-          <li>
-            단원 다운로드 사용 시 — 해당 단원을 배포본에서 제외했고,
-            <code>lessons[].downloaded</code>가 모두 <code>false</code>다.
-            (<a href="#vw-update-lesson">단원 다운로드</a>)
-          </li>
-          <li>
-            웹 배포본에는 콘텐츠 전체를 포함했다.
-            (<a href="#vw-web">웹 버전으로 배포</a>)
-          </li>
-        </ul>
       </main>
     </div>
 
