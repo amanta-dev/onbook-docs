@@ -483,8 +483,8 @@
         <div class="nav-group">
           <button type="button" class="nav-title">네비게이션<span class="nav-arrow">▼</span></button>
           <div class="nav-links">
+            <a href="#windowOpen">window.open</a>
             <a href="#historyBack">historyBack</a>
-            <a href="#openUrl">openUrl</a>
           </div>
         </div>
         <div class="section-gap"></div>
@@ -519,7 +519,7 @@
             현재 페이지 정보를 조회합니다.
           </li>
           <li>
-            <span class="tag tag-nav">네비게이션</span> 씬(scene) 이동 또는 외부
+            <span class="tag tag-nav">네비게이션</span> 뷰어 화면 이동 또는 외부
             링크를 엽니다.
           </li>
           <li>
@@ -549,7 +549,7 @@
           <code>goPage</code>를 비롯한 페이지 관련 API(이동·조회)는
           <strong>현재 열려 있는 단원(하나의 콘텐츠 패키지) 안에서만</strong>
           동작합니다. 다른 단원으로 이동하려면
-          <a href="#openUrl"><code>openUrl</code></a>로 대상 단원을 여세요.
+          <a href="#windowOpen"><code>window.open</code></a>으로 대상 단원을 여세요.
         </div>
 
         <hr class="divider" />
@@ -731,32 +731,19 @@
         <hr class="divider" />
 
         <!-- ===== 네비게이션 ===== -->
-        <h2 id="historyBack">historyBack</h2>
+        <h2 id="windowOpen">window.open</h2>
         <div class="api-card">
           <div class="api-card-header">
-            <code>ob.viewer.api.historyBack()</code>
+            <code>window.open( url, target, options )</code>
             <span class="tag tag-nav">네비게이션</span>
           </div>
           <div class="api-card-body">
             <p>
-              직전에 열었던 씬(scene)으로 돌아갑니다. 자료실·팝업 모듈의 닫기
-              버튼에 사용합니다.
-            </p>
-            <pre><span class="c">// 닫기 버튼 클릭 시</span>
-<span class="n">ob.viewer.api.</span><span class="f">historyBack</span><span class="p">();</span></pre>
-          </div>
-        </div>
-
-        <h2 id="openUrl">openUrl</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.openUrl( url, target, options )</code>
-            <span class="tag tag-nav">네비게이션</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              뷰어 씬(scene) URL로 이동하거나 새 창을 엽니다. 다른 단원으로
-              이동하거나 팝업 창을 열 때 사용합니다.
+              교과서(ebook)·콘텐츠(contents)·내 수업하기(myclass) 화면으로
+              이동하거나 새 창을 열 때는 브라우저 표준 함수인
+              <code>window.open</code>을 그대로 사용합니다. OnBook 뷰어
+              환경에서는 <code>window.open</code>이 내부적으로 연결되어 있어
+              NW.js(앱)와 웹 환경에서 동일한 방식으로 호출하면 됩니다.
             </p>
             <div class="params">
               <table>
@@ -768,7 +755,8 @@
                 <tr>
                   <td><code>url</code></td>
                   <td><code>string</code></td>
-                  <td>이동할 씬 URL</td>
+                  <td>이동/오픈할 URL — 교과서·콘텐츠·내 수업하기 화면 URL 또는
+                  임의의 html 파일 경로</td>
                 </tr>
                 <tr>
                   <td><code>target</code></td>
@@ -780,15 +768,16 @@
                   <td><code>object</code></td>
                   <td>
                     (선택) 창 옵션.<br />
-                    <code>maximize: true</code> — USB 버전·PC 설치 버전(NW.js
-                    앱)에서 새 창을 최대화하여 엽니다.
+                    <code>maximize: true</code> — 새 창을 최대화한 크기로
+                    엽니다. USB 버전·PC 설치 버전(NW.js 앱)에서 적용되며, 웹
+                    환경에서는 무시됩니다.
                   </td>
                 </tr>
               </table>
             </div>
             <h3>url 쿼리 파라미터</h3>
             <p>
-              씬 URL에 다음 쿼리 파라미터를 붙이면 콘텐츠가 열릴 때 특정
+              화면 URL에 다음 쿼리 파라미터를 붙이면 콘텐츠가 열릴 때 특정
               페이지로 바로 진입합니다.
             </p>
             <div class="params">
@@ -817,26 +806,47 @@
                 </tr>
               </table>
             </div>
-            <pre><span class="c">// 다른 단원 콘텐츠로 이동 (pageName으로 진입 페이지 지정)</span>
-<span class="n">ob.viewer.api.</span><span class="f">openUrl</span><span class="p">(</span>
+            <h3>사용 예시</h3>
+            <pre><span class="c">// ① ebook 뷰어를 새 창(최대화)으로 열기 — page 번호로 진입 페이지 지정</span>
+<span class="n">window.</span><span class="f">open</span><span class="p">(</span>
+  <span class="s">"/scene/ebook/index.html?contentUrl=../../onbook/ebook/unit01/&amp;page=5"</span><span class="p">,</span>
+  <span class="s">"_blank"</span><span class="p">,</span>
+  <span class="p">{</span> <span class="n">maximize: </span><span class="k">true</span> <span class="p">}</span>
+<span class="p">);</span></pre>
+            <pre><span class="c">// ② contents 뷰어에서 다른 단원의 특정 페이지 열기 (현재 창에서 이동)</span>
+<span class="c">// pageName으로 진입 페이지 지정</span>
+<span class="n">window.</span><span class="f">open</span><span class="p">(</span>
   <span class="s">"/scene/contents/index.html?contentUrl=../../onbook/contents/unit01/lesson02&amp;pageName=e5_01_02_01_01.html"</span><span class="p">,</span>
   <span class="s">"_top"</span>
 <span class="p">);</span>
 
 <span class="c">// page 번호로 진입 페이지 지정</span>
-<span class="n">ob.viewer.api.</span><span class="f">openUrl</span><span class="p">(</span>
+<span class="n">window.</span><span class="f">open</span><span class="p">(</span>
   <span class="s">"/scene/contents/index.html?contentUrl=../../onbook/contents/unit01/lesson02&amp;page=5"</span><span class="p">,</span>
   <span class="s">"_top"</span>
-<span class="p">);</span>
+<span class="p">);</span></pre>
+            <pre><span class="c">// ③ 기타 html 파일(도움말, 팝업 등)을 새 창(최대화)으로 열기</span>
+<span class="n">window.</span><span class="f">open</span><span class="p">(</span>
+  <span class="s">"../popup/help.html"</span><span class="p">,</span>
+  <span class="s">"_blank"</span><span class="p">,</span>
+  <span class="p">{</span> <span class="n">maximize: </span><span class="k">true</span> <span class="p">}</span>
+<span class="p">);</span></pre>
+          </div>
+        </div>
 
-<span class="c">// ebook 뷰어로 이동 (page 번호로 진입 페이지 지정)</span>
-<span class="n">ob.viewer.api.</span><span class="f">openUrl</span><span class="p">(</span>
-  <span class="s">"/scene/ebook/index.html?contentUrl=../../onbook/ebook/unit01/&amp;page=5"</span><span class="p">,</span>
-  <span class="s">"_top"</span>
-<span class="p">);</span>
-
-<span class="c">// 새 창(최대화)으로 열기</span>
-<span class="n">ob.viewer.api.</span><span class="f">openUrl</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s">"_blank"</span><span class="p">, {</span> <span class="n">maximize: </span><span class="k">true</span> <span class="p">});</span></pre>
+        <h2 id="historyBack">historyBack</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.historyBack()</code>
+            <span class="tag tag-nav">네비게이션</span>
+          </div>
+          <div class="api-card-body">
+            <p>
+              직전에 열었던 화면으로 돌아갑니다. 자료실·팝업 모듈의 닫기
+              버튼에 사용합니다.
+            </p>
+            <pre><span class="c">// 닫기 버튼 클릭 시</span>
+<span class="n">ob.viewer.api.</span><span class="f">historyBack</span><span class="p">();</span></pre>
           </div>
         </div>
 
@@ -992,14 +1002,14 @@
               <td>전체 페이지 수 반환</td>
             </tr>
             <tr>
-              <td><code>historyBack()</code></td>
+              <td><code>window.open(url, target, opts)</code></td>
               <td><span class="tag tag-nav">네비게이션</span></td>
-              <td>이전 씬으로 복귀</td>
+              <td>화면 URL 이동 / 새 창 열기</td>
             </tr>
             <tr>
-              <td><code>openUrl(url, target, opts)</code></td>
+              <td><code>historyBack()</code></td>
               <td><span class="tag tag-nav">네비게이션</span></td>
-              <td>씬 URL 이동 / 창 열기</td>
+              <td>이전 화면으로 복귀</td>
             </tr>
             <tr>
               <td><code>openFolder(path)</code></td>
