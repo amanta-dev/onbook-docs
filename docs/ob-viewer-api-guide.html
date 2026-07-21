@@ -465,7 +465,15 @@
         </div>
         <div class="section-gap"></div>
         <div class="nav-group">
-          <button type="button" class="nav-title">페이지<span class="nav-arrow">▼</span></button>
+          <button type="button" class="nav-title">페이지 이동<span class="nav-arrow">▼</span></button>
+          <div class="nav-links">
+            <a href="#windowOpen">window.open</a>
+            <a href="#historyBack">historyBack</a>
+          </div>
+        </div>
+        <div class="section-gap"></div>
+        <div class="nav-group">
+          <button type="button" class="nav-title">단원 내 이동<span class="nav-arrow">▼</span></button>
           <div class="nav-links">
             <a href="#goPage">goPage</a>
             <a href="#goPageName">goPageName</a>
@@ -477,14 +485,6 @@
             <a href="#getPageNumFirst">getPageNumFirst</a>
             <a href="#getPageNumLast">getPageNumLast</a>
             <a href="#getPageTotal">getPageTotal</a>
-          </div>
-        </div>
-        <div class="section-gap"></div>
-        <div class="nav-group">
-          <button type="button" class="nav-title">네비게이션<span class="nav-arrow">▼</span></button>
-          <div class="nav-links">
-            <a href="#windowOpen">window.open</a>
-            <a href="#historyBack">historyBack</a>
           </div>
         </div>
         <div class="section-gap"></div>
@@ -515,12 +515,15 @@
         <h3>API 카테고리</h3>
         <ul>
           <li>
-            <span class="tag tag-page">페이지</span> 뷰어의 페이지를 이동하거나
-            현재 페이지 정보를 조회합니다.
+            <span class="tag tag-nav">페이지 이동</span> 단원을 벗어나 다른
+            화면(교과서·콘텐츠·내 수업하기 등)으로 이동하거나 새 창을 열고,
+            이전 화면으로 돌아가는 등 <strong>전체 화면 이동</strong>을
+            담당합니다.
           </li>
           <li>
-            <span class="tag tag-nav">네비게이션</span> 뷰어 화면 이동 또는 외부
-            링크를 엽니다.
+            <span class="tag tag-page">단원 내 이동</span> 현재 열려 있는 단원(콘텐츠
+            패키지) <strong>안에서만</strong> 페이지를 이동하거나 페이지 정보를
+            조회합니다.
           </li>
           <li>
             <span class="tag tag-sys">시스템</span> 로컬 파일·폴더 열기, 앱
@@ -555,187 +558,11 @@
         <hr class="divider" />
 
         <!-- ===== 페이지 이동 ===== -->
-        <h2 id="goPage">goPage</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPage( pageNumber )</code>
-            <span class="tag tag-page">페이지</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              뷰어의 페이지를 지정한 번호로 이동합니다. 현재 열려 있는 단원
-              안에서만 이동합니다.
-            </p>
-            <div class="params">
-              <table>
-                <tr>
-                  <th>파라미터</th>
-                  <th>타입</th>
-                  <th>설명</th>
-                </tr>
-                <tr>
-                  <td><code>pageNumber</code></td>
-                  <td><code>number</code></td>
-                  <td>이동할 페이지 번호</td>
-                </tr>
-              </table>
-            </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPage</span><span class="p">(</span><span class="n">5</span><span class="p">);</span>  <span class="c">// 5페이지로 이동</span></pre>
-          </div>
-        </div>
-
-        <h2 id="goPageName">goPageName</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPageName( pageName )</code>
-            <span class="tag tag-page">페이지</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              HTML 페이지 파일명(pageName)으로 뷰어 페이지를 이동합니다. 현재
-              열려 있는 단원 안에서만 이동합니다.
-            </p>
-            <div class="params">
-              <table>
-                <tr>
-                  <th>파라미터</th>
-                  <th>타입</th>
-                  <th>설명</th>
-                </tr>
-                <tr>
-                  <td><code>pageName</code></td>
-                  <td><code>string</code></td>
-                  <td>
-                    이동할 페이지 파일명 — <strong><code>.html</code> 확장자
-                    포함</strong>
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_01_01_01.html"</span><span class="p">);</span>
-<span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_02_03_01.html"</span><span class="p">);</span></pre>
-          </div>
-        </div>
-
-        <h2 id="goPagePrev">goPagePrev</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPagePrev()</code>
-            <span class="tag tag-page">페이지</span>
-          </div>
-          <div class="api-card-body">
-            <p>현재 페이지에서 이전 페이지로 이동합니다.</p>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPagePrev</span><span class="p">();</span></pre>
-          </div>
-        </div>
-
-        <h2 id="goPageNext">goPageNext</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPageNext()</code>
-            <span class="tag tag-page">페이지</span>
-          </div>
-          <div class="api-card-body">
-            <p>현재 페이지에서 다음 페이지로 이동합니다.</p>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageNext</span><span class="p">();</span></pre>
-          </div>
-        </div>
-
-        <h2 id="goPageFirst">goPageFirst</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPageFirst()</code>
-            <span class="tag tag-page">페이지</span>
-          </div>
-          <div class="api-card-body">
-            <p>첫 번째 페이지로 이동합니다.</p>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageFirst</span><span class="p">();</span></pre>
-          </div>
-        </div>
-
-        <h2 id="goPageLast">goPageLast</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPageLast()</code>
-            <span class="tag tag-page">페이지</span>
-          </div>
-          <div class="api-card-body">
-            <p>마지막 페이지로 이동합니다.</p>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageLast</span><span class="p">();</span></pre>
-          </div>
-        </div>
-
-        <!-- ===== 페이지 정보 ===== -->
-        <h2 id="getPageNum">getPageNum</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.getPageNum()</code>
-            <span class="tag tag-page">페이지</span>
-          </div>
-          <div class="api-card-body">
-            <p>현재 뷰어에 표시 중인 페이지 번호를 반환합니다.</p>
-            <div class="returns">
-              반환값: <strong>number</strong> — 현재 페이지 번호
-            </div>
-            <pre><span class="k">const</span> <span class="n">page = ob.viewer.api.</span><span class="f">getPageNum</span><span class="p">();</span>
-<span class="n">console.</span><span class="f">log</span><span class="p">(</span><span class="s">"현재:"</span><span class="p">,</span> <span class="n">page</span><span class="p">);</span></pre>
-          </div>
-        </div>
-
-        <h2 id="getPageNumFirst">getPageNumFirst</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.getPageNumFirst()</code>
-            <span class="tag tag-page">페이지</span>
-          </div>
-          <div class="api-card-body">
-            <p>이 콘텐츠의 시작 페이지 번호를 반환합니다.</p>
-            <div class="returns">
-              반환값: <strong>number</strong> — 시작 페이지 번호
-            </div>
-            <pre><span class="k">const</span> <span class="n">first = ob.viewer.api.</span><span class="f">getPageNumFirst</span><span class="p">();</span></pre>
-          </div>
-        </div>
-
-        <h2 id="getPageNumLast">getPageNumLast</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.getPageNumLast()</code>
-            <span class="tag tag-page">페이지</span>
-          </div>
-          <div class="api-card-body">
-            <p>이 콘텐츠의 마지막 페이지 번호를 반환합니다.</p>
-            <div class="returns">
-              반환값: <strong>number</strong> — 마지막 페이지 번호
-            </div>
-            <pre><span class="k">const</span> <span class="n">last = ob.viewer.api.</span><span class="f">getPageNumLast</span><span class="p">();</span></pre>
-          </div>
-        </div>
-
-        <h2 id="getPageTotal">getPageTotal</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.getPageTotal()</code>
-            <span class="tag tag-page">페이지</span>
-          </div>
-          <div class="api-card-body">
-            <p>전체 페이지 수를 반환합니다.</p>
-            <div class="returns">
-              반환값: <strong>number</strong> — 전체 페이지 수
-            </div>
-            <pre><span class="k">const</span> <span class="n">total = ob.viewer.api.</span><span class="f">getPageTotal</span><span class="p">();</span>
-<span class="n">console.</span><span class="f">log</span><span class="p">(</span><span class="s">`${ob.viewer.api.getPageNum()} / ${total}`</span><span class="p">);</span></pre>
-          </div>
-        </div>
-
-        <hr class="divider" />
-
-        <!-- ===== 네비게이션 ===== -->
         <h2 id="windowOpen">window.open</h2>
         <div class="api-card">
           <div class="api-card-header">
             <code>window.open( url, target, options )</code>
-            <span class="tag tag-nav">네비게이션</span>
+            <span class="tag tag-nav">페이지 이동</span>
           </div>
           <div class="api-card-body">
             <p>
@@ -838,7 +665,7 @@
         <div class="api-card">
           <div class="api-card-header">
             <code>ob.viewer.api.historyBack()</code>
-            <span class="tag tag-nav">네비게이션</span>
+            <span class="tag tag-nav">페이지 이동</span>
           </div>
           <div class="api-card-body">
             <p>
@@ -847,6 +674,182 @@
             </p>
             <pre><span class="c">// 닫기 버튼 클릭 시</span>
 <span class="n">ob.viewer.api.</span><span class="f">historyBack</span><span class="p">();</span></pre>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- ===== 단원 내 이동 ===== -->
+        <h2 id="goPage">goPage</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.goPage( pageNumber )</code>
+            <span class="tag tag-page">단원 내 이동</span>
+          </div>
+          <div class="api-card-body">
+            <p>
+              뷰어의 페이지를 지정한 번호로 이동합니다. 현재 열려 있는 단원
+              안에서만 이동합니다.
+            </p>
+            <div class="params">
+              <table>
+                <tr>
+                  <th>파라미터</th>
+                  <th>타입</th>
+                  <th>설명</th>
+                </tr>
+                <tr>
+                  <td><code>pageNumber</code></td>
+                  <td><code>number</code></td>
+                  <td>이동할 페이지 번호</td>
+                </tr>
+              </table>
+            </div>
+            <pre><span class="n">ob.viewer.api.</span><span class="f">goPage</span><span class="p">(</span><span class="n">5</span><span class="p">);</span>  <span class="c">// 5페이지로 이동</span></pre>
+          </div>
+        </div>
+
+        <h2 id="goPageName">goPageName</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.goPageName( pageName )</code>
+            <span class="tag tag-page">단원 내 이동</span>
+          </div>
+          <div class="api-card-body">
+            <p>
+              HTML 페이지 파일명(pageName)으로 뷰어 페이지를 이동합니다. 현재
+              열려 있는 단원 안에서만 이동합니다.
+            </p>
+            <div class="params">
+              <table>
+                <tr>
+                  <th>파라미터</th>
+                  <th>타입</th>
+                  <th>설명</th>
+                </tr>
+                <tr>
+                  <td><code>pageName</code></td>
+                  <td><code>string</code></td>
+                  <td>
+                    이동할 페이지 파일명 — <strong><code>.html</code> 확장자
+                    포함</strong>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_01_01_01.html"</span><span class="p">);</span>
+<span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_02_03_01.html"</span><span class="p">);</span></pre>
+          </div>
+        </div>
+
+        <h2 id="goPagePrev">goPagePrev</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.goPagePrev()</code>
+            <span class="tag tag-page">단원 내 이동</span>
+          </div>
+          <div class="api-card-body">
+            <p>현재 페이지에서 이전 페이지로 이동합니다.</p>
+            <pre><span class="n">ob.viewer.api.</span><span class="f">goPagePrev</span><span class="p">();</span></pre>
+          </div>
+        </div>
+
+        <h2 id="goPageNext">goPageNext</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.goPageNext()</code>
+            <span class="tag tag-page">단원 내 이동</span>
+          </div>
+          <div class="api-card-body">
+            <p>현재 페이지에서 다음 페이지로 이동합니다.</p>
+            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageNext</span><span class="p">();</span></pre>
+          </div>
+        </div>
+
+        <h2 id="goPageFirst">goPageFirst</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.goPageFirst()</code>
+            <span class="tag tag-page">단원 내 이동</span>
+          </div>
+          <div class="api-card-body">
+            <p>첫 번째 페이지로 이동합니다.</p>
+            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageFirst</span><span class="p">();</span></pre>
+          </div>
+        </div>
+
+        <h2 id="goPageLast">goPageLast</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.goPageLast()</code>
+            <span class="tag tag-page">단원 내 이동</span>
+          </div>
+          <div class="api-card-body">
+            <p>마지막 페이지로 이동합니다.</p>
+            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageLast</span><span class="p">();</span></pre>
+          </div>
+        </div>
+
+        <!-- ===== 단원 내 정보 조회 ===== -->
+        <h2 id="getPageNum">getPageNum</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.getPageNum()</code>
+            <span class="tag tag-page">단원 내 이동</span>
+          </div>
+          <div class="api-card-body">
+            <p>현재 뷰어에 표시 중인 페이지 번호를 반환합니다.</p>
+            <div class="returns">
+              반환값: <strong>number</strong> — 현재 페이지 번호
+            </div>
+            <pre><span class="k">const</span> <span class="n">page = ob.viewer.api.</span><span class="f">getPageNum</span><span class="p">();</span>
+<span class="n">console.</span><span class="f">log</span><span class="p">(</span><span class="s">"현재:"</span><span class="p">,</span> <span class="n">page</span><span class="p">);</span></pre>
+          </div>
+        </div>
+
+        <h2 id="getPageNumFirst">getPageNumFirst</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.getPageNumFirst()</code>
+            <span class="tag tag-page">단원 내 이동</span>
+          </div>
+          <div class="api-card-body">
+            <p>이 콘텐츠의 시작 페이지 번호를 반환합니다.</p>
+            <div class="returns">
+              반환값: <strong>number</strong> — 시작 페이지 번호
+            </div>
+            <pre><span class="k">const</span> <span class="n">first = ob.viewer.api.</span><span class="f">getPageNumFirst</span><span class="p">();</span></pre>
+          </div>
+        </div>
+
+        <h2 id="getPageNumLast">getPageNumLast</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.getPageNumLast()</code>
+            <span class="tag tag-page">단원 내 이동</span>
+          </div>
+          <div class="api-card-body">
+            <p>이 콘텐츠의 마지막 페이지 번호를 반환합니다.</p>
+            <div class="returns">
+              반환값: <strong>number</strong> — 마지막 페이지 번호
+            </div>
+            <pre><span class="k">const</span> <span class="n">last = ob.viewer.api.</span><span class="f">getPageNumLast</span><span class="p">();</span></pre>
+          </div>
+        </div>
+
+        <h2 id="getPageTotal">getPageTotal</h2>
+        <div class="api-card">
+          <div class="api-card-header">
+            <code>ob.viewer.api.getPageTotal()</code>
+            <span class="tag tag-page">단원 내 이동</span>
+          </div>
+          <div class="api-card-body">
+            <p>전체 페이지 수를 반환합니다.</p>
+            <div class="returns">
+              반환값: <strong>number</strong> — 전체 페이지 수
+            </div>
+            <pre><span class="k">const</span> <span class="n">total = ob.viewer.api.</span><span class="f">getPageTotal</span><span class="p">();</span>
+<span class="n">console.</span><span class="f">log</span><span class="p">(</span><span class="s">`${ob.viewer.api.getPageNum()} / ${total}`</span><span class="p">);</span></pre>
           </div>
         </div>
 
@@ -874,11 +877,11 @@
                 <tr>
                   <td><code>path</code></td>
                   <td><code>string</code></td>
-                  <td>열 폴더의 절대 경로</td>
+                  <td>열 폴더 경로. 콘텐츠 기준 상대경로 또는 절대경로(<code>/onbook/…</code>)</td>
                 </tr>
               </table>
             </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">openFolder</span><span class="p">(</span><span class="s">"C:/data/unit01/files"</span><span class="p">);</span></pre>
+            <pre><span class="n">ob.viewer.api.</span><span class="f">openFolder</span><span class="p">(</span><span class="s">"../../onbook/download/unit01/files"</span><span class="p">);</span></pre>
           </div>
         </div>
 
@@ -890,8 +893,9 @@
           </div>
           <div class="api-card-body">
             <p>
-              지정한 경로의 실행 파일(.exe 등)을 실행합니다. NW.js(앱)
-              환경에서만 동작합니다.
+              지정한 경로의 파일을 연결 프로그램으로 엽니다 (예: <code>.hwp</code>는
+              한글, <code>.pdf</code>는 PDF 뷰어, <code>.exe</code>는 실행).
+              NW.js(앱) 환경에서만 동작합니다.
             </p>
             <div class="params">
               <table>
@@ -903,11 +907,11 @@
                 <tr>
                   <td><code>path</code></td>
                   <td><code>string</code></td>
-                  <td>실행할 파일의 절대 경로</td>
+                  <td>열 파일 경로. 콘텐츠 기준 상대경로 또는 절대경로(<code>/onbook/…</code>)</td>
                 </tr>
               </table>
             </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">openApp</span><span class="p">(</span><span class="s">"C:/data/unit01/app.exe"</span><span class="p">);</span></pre>
+            <pre><span class="n">ob.viewer.api.</span><span class="f">openApp</span><span class="p">(</span><span class="s">"../../onbook/download/unit01/game.exe"</span><span class="p">);</span></pre>
           </div>
         </div>
 
@@ -932,11 +936,11 @@
                 <tr>
                   <td><code>path</code></td>
                   <td><code>string</code></td>
-                  <td>다운로드할 파일의 절대 경로</td>
+                  <td>다운로드할 파일 경로. 콘텐츠 기준 상대경로 또는 절대경로(<code>/onbook/…</code>)</td>
                 </tr>
               </table>
             </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">downloadFile</span><span class="p">(</span><span class="s">"C:/data/unit01/document.hwp"</span><span class="p">);</span></pre>
+            <pre><span class="n">ob.viewer.api.</span><span class="f">downloadFile</span><span class="p">(</span><span class="s">"../../onbook/download/unit01/document.hwp"</span><span class="p">);</span></pre>
           </div>
         </div>
 
@@ -952,64 +956,64 @@
               <th>설명</th>
             </tr>
             <tr>
-              <td><code>goPage(n)</code></td>
-              <td><span class="tag tag-page">페이지</span></td>
-              <td>페이지 번호로 이동</td>
-            </tr>
-            <tr>
-              <td><code>goPageName(s)</code></td>
-              <td><span class="tag tag-page">페이지</span></td>
-              <td>페이지 파일명으로 이동</td>
-            </tr>
-            <tr>
-              <td><code>goPagePrev()</code></td>
-              <td><span class="tag tag-page">페이지</span></td>
-              <td>이전 페이지로 이동</td>
-            </tr>
-            <tr>
-              <td><code>goPageNext()</code></td>
-              <td><span class="tag tag-page">페이지</span></td>
-              <td>다음 페이지로 이동</td>
-            </tr>
-            <tr>
-              <td><code>goPageFirst()</code></td>
-              <td><span class="tag tag-page">페이지</span></td>
-              <td>첫 페이지로 이동</td>
-            </tr>
-            <tr>
-              <td><code>goPageLast()</code></td>
-              <td><span class="tag tag-page">페이지</span></td>
-              <td>마지막 페이지로 이동</td>
-            </tr>
-            <tr>
-              <td><code>getPageNum()</code></td>
-              <td><span class="tag tag-page">페이지</span></td>
-              <td>현재 페이지 번호 반환</td>
-            </tr>
-            <tr>
-              <td><code>getPageNumFirst()</code></td>
-              <td><span class="tag tag-page">페이지</span></td>
-              <td>시작 페이지 번호 반환</td>
-            </tr>
-            <tr>
-              <td><code>getPageNumLast()</code></td>
-              <td><span class="tag tag-page">페이지</span></td>
-              <td>마지막 페이지 번호 반환</td>
-            </tr>
-            <tr>
-              <td><code>getPageTotal()</code></td>
-              <td><span class="tag tag-page">페이지</span></td>
-              <td>전체 페이지 수 반환</td>
-            </tr>
-            <tr>
               <td><code>window.open(url, target, opts)</code></td>
-              <td><span class="tag tag-nav">네비게이션</span></td>
+              <td><span class="tag tag-nav">페이지 이동</span></td>
               <td>화면 URL 이동 / 새 창 열기</td>
             </tr>
             <tr>
               <td><code>historyBack()</code></td>
-              <td><span class="tag tag-nav">네비게이션</span></td>
+              <td><span class="tag tag-nav">페이지 이동</span></td>
               <td>이전 화면으로 복귀</td>
+            </tr>
+            <tr>
+              <td><code>goPage(n)</code></td>
+              <td><span class="tag tag-page">단원 내 이동</span></td>
+              <td>페이지 번호로 이동</td>
+            </tr>
+            <tr>
+              <td><code>goPageName(s)</code></td>
+              <td><span class="tag tag-page">단원 내 이동</span></td>
+              <td>페이지 파일명으로 이동</td>
+            </tr>
+            <tr>
+              <td><code>goPagePrev()</code></td>
+              <td><span class="tag tag-page">단원 내 이동</span></td>
+              <td>이전 페이지로 이동</td>
+            </tr>
+            <tr>
+              <td><code>goPageNext()</code></td>
+              <td><span class="tag tag-page">단원 내 이동</span></td>
+              <td>다음 페이지로 이동</td>
+            </tr>
+            <tr>
+              <td><code>goPageFirst()</code></td>
+              <td><span class="tag tag-page">단원 내 이동</span></td>
+              <td>첫 페이지로 이동</td>
+            </tr>
+            <tr>
+              <td><code>goPageLast()</code></td>
+              <td><span class="tag tag-page">단원 내 이동</span></td>
+              <td>마지막 페이지로 이동</td>
+            </tr>
+            <tr>
+              <td><code>getPageNum()</code></td>
+              <td><span class="tag tag-page">단원 내 이동</span></td>
+              <td>현재 페이지 번호 반환</td>
+            </tr>
+            <tr>
+              <td><code>getPageNumFirst()</code></td>
+              <td><span class="tag tag-page">단원 내 이동</span></td>
+              <td>시작 페이지 번호 반환</td>
+            </tr>
+            <tr>
+              <td><code>getPageNumLast()</code></td>
+              <td><span class="tag tag-page">단원 내 이동</span></td>
+              <td>마지막 페이지 번호 반환</td>
+            </tr>
+            <tr>
+              <td><code>getPageTotal()</code></td>
+              <td><span class="tag tag-page">단원 내 이동</span></td>
+              <td>전체 페이지 수 반환</td>
             </tr>
             <tr>
               <td><code>openFolder(path)</code></td>
@@ -1019,7 +1023,7 @@
             <tr>
               <td><code>openApp(path)</code></td>
               <td><span class="tag tag-sys">시스템</span></td>
-              <td>실행 파일 실행</td>
+              <td>연결 프로그램으로 열기</td>
             </tr>
             <tr>
               <td><code>downloadFile(path)</code></td>
