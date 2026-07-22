@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ob.viewer.api 콘텐츠 개발 가이드</title>
+    <title>OnBook 뷰어 API 가이드</title>
     <style>
       :root {
         --primary: #2563eb;
@@ -447,7 +447,7 @@
     <div class="header">
       <button type="button" class="menu-toggle" aria-label="목차 열기" aria-expanded="false">☰</button>
       <div class="header-text">
-        <h1>ob.viewer.api — 콘텐츠 개발 가이드</h1>
+        <h1>OnBook 뷰어 API 가이드 <span style="font-weight:400;opacity:0.7">(ob.viewer.api)</span></h1>
         <p>OnBook 뷰어가 콘텐츠 iframe에 제공하는 공개 API 레퍼런스</p>
       </div>
       <div class="meta">onbook.api v1.0.0 &nbsp;·&nbsp; 콘텐츠 개발사용</div>
@@ -494,6 +494,13 @@
             <a href="#openFolder">openFolder</a>
             <a href="#openApp">openApp</a>
             <a href="#downloadFile">downloadFile</a>
+          </div>
+        </div>
+        <div class="section-gap"></div>
+        <div class="nav-group">
+          <button type="button" class="nav-title">요약<span class="nav-arrow">▼</span></button>
+          <div class="nav-links">
+            <a href="#summary">전체 API 목록</a>
           </div>
         </div>
       </nav>
@@ -1035,7 +1042,7 @@
       </main>
     </div>
 
-    <div class="footer"><span>ob.viewer.api — 콘텐츠 개발 가이드 · 콘텐츠 개발사용 · API v1.0.0</span><span>&copy; 2026 Amanta</span></div>
+    <div class="footer"><span>OnBook 뷰어 API 가이드 · 콘텐츠 개발사용 · API v1.0.0 · 문서 v1.0</span><span>&copy; 2026 Amanta</span></div>
 
     <script>
       // ─── 고정 헤더·푸터 높이를 CSS 변수(--header-h, --footer-h)에 반영 ───
