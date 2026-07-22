@@ -775,6 +775,7 @@
    <span class="p">│  ├─</span> <span class="g">download/</span>       <span class="c">← 다운로드 자료</span>
    <span class="p">│  ├─</span> <span class="g">main/</span>           <span class="c">← 메인 화면 (개발사 제작·커스텀)</span>
    <span class="p">│  ├─</span> <span class="g">modules/</span>        <span class="c">← 뷰어 모듈 (개발사 페이지 + 필수 모듈)</span>
+   <span class="p">│  ├─</span> <span class="g">settings.json</span>   <span class="c">← <a href="#vw-settings" style="color:#93c5fd">전역 설정</a> (진입 화면·앱 창)</span>
    <span class="p">│  └─</span> <span class="m">…</span>
    <span class="p">├─</span> <span class="f">scene/</span>
    <span class="p">│  ├─</span> <span class="g">ebook/settings.json</span>     <span class="c">← ebook 뷰어 설정</span>
@@ -1054,9 +1055,51 @@
 
         <h2 id="vw-settings">뷰어 설정 (settings.json)</h2>
         <p>
-          각 뷰어의 메뉴 구성·기능·모듈 연결은
-          <strong>뷰어별 <code>settings.json</code></strong>으로 커스터마이징할
-          수 있습니다. 뷰어를 교과 특성에 맞게 조정하는 기본 파일입니다.
+          뷰어 설정은 <strong>전역 설정 1개</strong>와
+          <strong>뷰어별 설정 3개</strong>로 나뉩니다. 파일 이름은 모두
+          <code>settings.json</code>입니다.
+        </p>
+
+        <h3>전역 설정 — <code>platform/onbook/settings.json</code></h3>
+        <p>
+          뷰어의 진입 화면과 앱 창 동작을 정합니다.
+          <strong>PC 앱(NW.js) 전용</strong>이며, 웹 버전에서는 창 관련 값이
+          적용되지 않습니다.
+        </p>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 190px">키</th>
+              <th>설명</th>
+            </tr>
+            <tr>
+              <td><code>main</code></td>
+              <td>
+                뷰어 실행 시 열리는 메인 화면 경로.
+                <code>platform/onbook/</code> 폴더 기준 (예:
+                <code>./main/index.html</code>).
+              </td>
+            </tr>
+            <tr>
+              <td><code>width</code> · <code>height</code></td>
+              <td>
+                시작 시 창을 화면 중앙에 정렬하기 위한 기준 (px).
+                <strong>메인 화면 크기와 같게</strong> 지정합니다.
+              </td>
+            </tr>
+            <tr>
+              <td><code>maximize</code></td>
+              <td>
+                최대화 상태로 시작 (<code>true</code> | <code>false</code>).
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <h3>뷰어별 설정 — <code>platform/scene/*/settings.json</code></h3>
+        <p>
+          각 뷰어의 메뉴 구성·기능·모듈 연결을 뷰어 종류별로 정합니다. 뷰어를
+          교과 특성에 맞게 조정하는 기본 파일입니다.
         </p>
         <ul>
           <li><code>platform/scene/ebook/settings.json</code> — ebook 뷰어</li>
@@ -1067,7 +1110,7 @@
             <code>platform/scene/myclass/settings.json</code> — myclass 뷰어
           </li>
         </ul>
-        <h3>공통 설정 항목</h3>
+        <h3>공통 설정 항목 <span style="font-weight:400;color:var(--text-muted);font-size:13px">— 뷰어별 설정</span></h3>
         <div class="params">
           <table>
             <tr>
@@ -1143,8 +1186,9 @@
                 지정해 추가·제거할 수 있습니다
                 (<code>target</code>·<code>maximize</code> 의미는
                 <code>modules.library</code>와 동일).
-                <br /><code>icon</code>은 35×30px 크기이며, 원하는 디자인으로
-                직접 만들어 교체할 수 있습니다.
+                <br /><code>icon</code>은 35×30px입니다. 기본 도구에는 아이콘이
+                제공되며, 필요하면 직접 만들어 바꿀 수 있습니다 — 방법은
+                <a href="#vw-modules">활동 도우미(toolkit) 제작</a>을 참고하세요.
               </td>
             </tr>
             <tr>
@@ -1356,8 +1400,8 @@
         <h2 id="vw-main">메인 화면 개발</h2>
         <p>
           <code>platform/onbook/main/</code>은 뷰어 실행 시 처음 표시되는
-          <strong>메인 화면</strong>으로, 콘텐츠 개발사가 직접 제작·커스터마이징
-          하는 영역입니다. 기본 제공 구성은 <code>index.html</code> +
+          <strong>메인 화면</strong>으로, 콘텐츠 개발사가 직접 제작·커스터마이징하는
+          영역입니다. 기본 제공 구성은 <code>index.html</code> +
           <code>js/index.js</code>(링크 설정) + <code>css/</code>·<code>images/</code>입니다.
           메인 화면에서 연결하는 기능은 아래 세 가지로 나뉩니다.
         </p>
@@ -1622,7 +1666,16 @@
                 </tr>
                 <tr>
                   <td><code>icon</code></td>
-                  <td>아이콘 이미지 경로 (35×30 픽셀)</td>
+                  <td>
+                    아이콘 이미지 경로 (35×30px). 기본 제공 도구에는 아이콘이
+                    준비되어 있어 그대로 두면 됩니다.
+                    <strong>직접 만들어 쓰려면</strong>
+                    <code>_base</code>·<code>_hover</code> 2종을 개발사 영역(예:
+                    <code>onbook/modules/toolkit/</code>)에 두고, <code>url</code>과
+                    같은 <code>../../onbook/…</code> 형식으로 <code>_base</code>
+                    파일을 지정합니다. 마우스를 올리면 같은 이름의
+                    <code>_hover</code> 파일이 자동으로 표시됩니다.
+                  </td>
                 </tr>
                 <tr>
                   <td><code>url</code></td>
@@ -1713,16 +1766,49 @@
 
         <h2 id="vw-install">설치본 만들기</h2>
         <p>
-          USB 등 설치 매체로 배포할 때는 배포 루트에 설치 런처(<code>Start.exe</code>)와
-          설치 정보 파일이 함께 들어가며, 다음 항목을 개발사(출판사)가
-          정합니다.
+          USB 등 설치 매체로 배포할 때는, 앞서 구성한 <strong>교과서 폴더</strong>
+          위에 <strong>배포 루트</strong>를 두고 설치 런처(<code>Start.exe</code>)와
+          설치 정보 파일을 함께 담습니다. 배포 루트 구성은 다음과 같습니다.
         </p>
+        <pre><span class="n">(배포 루트)/</span>
+<span class="p">├─</span> <span class="g">Start.exe</span>          <span class="c">← 설치 런처 (설치 매체 실행 파일)</span>
+<span class="p">├─</span> <span class="g">start.ini</span>          <span class="c">← 설치 정보 (아래 표 참고)</span>
+<span class="p">├─</span> <span class="g">autorun.inf</span>        <span class="c">← 자동 실행 설정</span>
+<span class="p">├─</span> <span class="g">images/</span>            <span class="c">← 설치 화면 이미지 (배경·버튼 비트맵)</span>
+<span class="p">└─</span> <span class="g">(교과서 폴더)/</span>     <span class="c">← start.ini의 TITLE과 같은 이름</span>
+   <span class="p">├─</span> <span class="n">startup.exe</span>     <span class="c">← 뷰어 실행 파일(런처)</span>
+   <span class="p">└─</span> <span class="f">platform/</span>       <span class="c">← 뷰어 본체 (<a href="#vw-structure" style="color:#93c5fd">폴더 구조</a> 참고)</span></pre>
+        <p>배포 루트의 각 항목은 개발사(출판사)가 다음과 같이 정합니다.</p>
         <h3>설치 정보 (start.ini)</h3>
+        <p>
+          <code>[CONTENT]</code> · <code>[INSTALL]</code> ·
+          <code>[LAYOUT]</code> 세 <strong>섹션</strong>으로 구성됩니다. 섹션
+          헤더(<code>[…]</code>)는 <code>.ini</code> 문법이므로 반드시 포함해야
+          합니다.
+        </p>
+        <pre><span class="k">[CONTENT]</span>
+<span class="n">EDITION</span><span class="p">=</span><span class="s">2022개정</span>
+<span class="n">TITLE</span><span class="p">=</span><span class="s">초등학교 영어 지도서 5 전자책등</span>
+<span class="n">P_CODE</span><span class="p">=</span><span class="s">AMT1</span>
+<span class="n">SUBJECT_CODE</span><span class="p">=</span><span class="s">EEN5A</span>
+<span class="n">DIRECT_RUN_MSG</span><span class="p">=</span><span class="s">바로 실행하면 업데이트를 사용할 수 없습니다. \n계속하시겠습니까?</span>
+
+<span class="k">[INSTALL]</span>
+<span class="n">INSTALL_DIR</span><span class="p">=</span><span class="s">C:\OnBook</span>
+<span class="n">REQUIRED_SPACE</span><span class="p">=</span><span class="s">9000000000</span>
+
+<span class="k">[LAYOUT]</span>
+<span class="n">WINDOW_SIZE</span><span class="p">=</span><span class="s">850,850</span>
+<span class="n">BTN_PLAY_POS</span><span class="p">=</span><span class="s">425,676</span>
+<span class="n">BTN_INSTALL_POS</span><span class="p">=</span><span class="s">425,776</span></pre>
         <div class="params">
           <table>
             <tr>
-              <th style="width: 160px">항목</th>
+              <th style="width: 175px">항목</th>
               <th>설명</th>
+            </tr>
+            <tr>
+              <th colspan="2" style="color: var(--primary-dark)">[CONTENT] — 교과서 정보</th>
             </tr>
             <tr>
               <td><code>EDITION</code></td>
@@ -1748,7 +1834,13 @@
             </tr>
             <tr>
               <td><code>DIRECT_RUN_MSG</code></td>
-              <td>설치하지 않고 직접 실행할 때 표시할 안내 문구.</td>
+              <td>
+                설치하지 않고 바로 실행할 때 표시할 안내 문구.
+                <code>\n</code>으로 줄을 바꿉니다.
+              </td>
+            </tr>
+            <tr>
+              <th colspan="2" style="color: var(--primary-dark)">[INSTALL] — 설치 옵션</th>
             </tr>
             <tr>
               <td><code>INSTALL_DIR</code></td>
@@ -1757,6 +1849,31 @@
             <tr>
               <td><code>REQUIRED_SPACE</code></td>
               <td>설치에 필요한 최소 디스크 공간 (바이트). 예: <code>9000000000</code> (약 9GB)</td>
+            </tr>
+            <tr>
+              <th colspan="2" style="color: var(--primary-dark)">[LAYOUT] — 설치 화면 배치</th>
+            </tr>
+            <tr>
+              <td><code>WINDOW_SIZE</code></td>
+              <td>
+                설치 화면 크기(px). 배경 이미지(<code>images/bg.bmp</code>)의
+                <strong>가로,세로 크기를 그대로</strong> 지정합니다.
+              </td>
+            </tr>
+            <tr>
+              <td><code>BTN_PLAY_POS</code></td>
+              <td>
+                <strong>바로 실행</strong> 버튼(<code>images/usb_*.bmp</code>)의
+                <code>x,y</code> 위치 — <strong>버튼 중심</strong> 기준.
+              </td>
+            </tr>
+            <tr>
+              <td><code>BTN_INSTALL_POS</code></td>
+              <td>
+                <strong>복사 후 실행</strong>(설치)
+                버튼(<code>images/install_*.bmp</code>)의 <code>x,y</code> 위치
+                — <strong>버튼 중심</strong> 기준.
+              </td>
             </tr>
           </table>
         </div>
