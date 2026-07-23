@@ -582,8 +582,14 @@
             바로 아래에 내용물(<code>toc.xml</code>·<code>web/</code>)이 오도록
             배치합니다. 책 폴더는 ebook과 동일한 책(권) 단위입니다 —
             <code>unit01</code>: 책 1, <code>unit02</code>: 책 2(수학 익힘책처럼
-            2권으로 구성되는 경우). <br />예:
-            <code>platform/onbook/contents/unit01/lesson01/toc.xml</code>
+            2권으로 구성되는 경우).
+<pre><span class="n">platform/onbook/contents/</span>
+<span class="p">├─</span> <span class="f">unit01/</span>           <span class="c">← 책 1</span>
+<span class="p">│  ├─</span> <span class="f">lesson01/</span>      <span class="c">← 단원 폴더 — ZIP 내용물을 이 아래에 배치</span>
+<span class="p">│  │  ├─</span> <span class="n">toc.xml</span>
+<span class="p">│  │  └─</span> <span class="n">web/</span>
+<span class="p">│  └─</span> <span class="f">lesson02/</span>      <span class="c">← 단원 2 …</span>
+<span class="p">└─</span> <span class="f">unit02/</span>           <span class="c">← 책 2 (2권 구성일 때만)</span></pre>
           </li>
           <li>
             <strong>확인 방법</strong> — 배치 후 OnBook 뷰어를 실행해 실제

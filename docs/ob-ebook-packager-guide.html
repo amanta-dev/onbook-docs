@@ -517,6 +517,7 @@
           <button type="button" class="nav-title">시작하기<span class="nav-arrow">▼</span></button>
           <div class="nav-links">
             <a href="#eb-intro">소개</a>
+            <a href="#eb-flow">작업 흐름</a>
             <a href="#eb-screen">화면 구성</a>
           </div>
         </div>
@@ -563,10 +564,26 @@
             <strong>뷰어 배치</strong> — ZIP의 압축을 풀어 뷰어의 <code>platform/onbook/ebook/(책 폴더)/</code>
             바로 아래에 내용물(<code>book.xml</code>·<code>toc.xml</code>·<code>web/</code>)이 오도록 배치합니다.
             책 폴더는 책(권) 단위입니다 — <code>unit01</code>: 책 1, <code>unit02</code>: 책 2(수학 익힘책처럼 2권으로 구성되는 경우).
-            <br />예: <code>platform/onbook/ebook/unit01/book.xml</code>
+<pre><span class="n">platform/onbook/ebook/</span>
+<span class="p">├─</span> <span class="f">unit01/</span>        <span class="c">← 책 1 — ZIP 내용물을 이 아래에 배치</span>
+<span class="p">│  ├─</span> <span class="n">book.xml</span>
+<span class="p">│  ├─</span> <span class="n">toc.xml</span>
+<span class="p">│  └─</span> <span class="n">web/</span>
+<span class="p">└─</span> <span class="f">unit02/</span>        <span class="c">← 책 2 (2권 구성일 때만)</span></pre>
           </li>
           <li><strong>확인 방법</strong> — 배치 후 OnBook 뷰어를 실행해 실제 표시를 확인합니다.</li>
         </ul>
+
+        <h2 id="eb-flow">작업 흐름</h2>
+        <p>전체 작업은 다음 순서로 진행합니다. 자세한 방법은 각 절을 참고하세요.</p>
+        <ol>
+          <li><a href="#eb-pdf">PDF 페이지 추가</a> — 교과서 원본 PDF를 불러와 페이지를 구성합니다.</li>
+          <li><a href="#eb-pagelist">페이지 목록</a> — 페이지 순서를 정리하고 불필요한 페이지를 삭제합니다.</li>
+          <li><a href="#eb-button">버튼 만들기</a> — 페이지 위에 페이지 이동·링크 버튼을 배치합니다.</li>
+          <li><a href="#eb-search">페이지 속성 편집</a> — 필요 시 배경 이미지를 바꾸고 페이지 검색 내용을 다듬습니다.</li>
+          <li><a href="#eb-settings">설정 탭</a> — 시작 페이지·목차·출판 정보를 편집합니다.</li>
+          <li><a href="#eb-zip">ZIP 저장</a> — 결과물을 ZIP으로 저장하고, <a href="#eb-intro">소개</a>의 뷰어 배치 방법에 따라 뷰어에 넣어 확인합니다.</li>
+        </ol>
 
         <h2 id="eb-screen">화면 구성</h2>
         <figure class="shot">
