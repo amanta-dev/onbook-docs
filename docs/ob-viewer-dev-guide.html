@@ -642,6 +642,7 @@
           </button>
           <div class="nav-links">
             <a href="#vw-settings">뷰어 설정</a>
+            <a href="#vw-title">창 제목</a>
             <a href="#vw-booktab">책 탭 설정</a>
             <a href="#vw-main">메인 화면 개발</a>
             <a href="#vw-modules">모듈 개발</a>
@@ -1081,6 +1082,14 @@
               </td>
             </tr>
             <tr>
+              <td><code>title</code></td>
+              <td>
+                교과서명. 앱 창 제목에
+                <strong>&ldquo;교과서명 - 화면명&rdquo;</strong> 형태로 붙습니다
+                (<a href="#vw-title">창 제목</a> 참고).
+              </td>
+            </tr>
+            <tr>
               <td><code>width</code> · <code>height</code></td>
               <td>
                 시작 시 창을 화면 중앙에 정렬하기 위한 기준 (px).
@@ -1298,6 +1307,73 @@
         <div class="notice">
           <code>settings.json</code>은 JSON 문법(쉼표·따옴표)이 어긋나면 뷰어가
           정상 동작하지 않습니다. 편집 후 뷰어를 다시 실행해 확인해 주세요.
+        </div>
+
+        <h2 id="vw-title">창 제목</h2>
+        <p>
+          창 제목(웹 버전은 브라우저 탭 제목)은
+          <strong>각 화면 html의 <code>&lt;title&gt;</code></strong>로 정해집니다.
+          자료실·도움말·활동 도우미처럼 개발사가 만든 화면도 마찬가지이며,
+          별도의 스크립트를 넣을 필요는 없습니다.
+        </p>
+        <p>
+          PC 앱은 모든 화면이 하나의 창 틀 안에서 열리므로, 뷰어가 현재 화면의
+          <code>&lt;title&gt;</code> 앞에 <strong>교과서명</strong>을 붙여 창
+          제목으로 표시합니다. 교과서명은
+          <a href="#vw-settings">전역 설정</a>의 <code>title</code>에 지정합니다.
+        </p>
+        <pre><span class="c">platform/onbook/settings.json</span>
+<span class="p">{</span>
+  <span class="s">"main"</span><span class="p">:</span> <span class="s">"./main/index.html"</span><span class="p">,</span>
+  <span class="s">"title"</span><span class="p">:</span> <span class="s">"초등학교 영어 지도서 5"</span><span class="p">,</span>   <span class="c">← 교과서명</span>
+  <span class="s">"width"</span><span class="p">:</span> <span class="n">1280</span><span class="p">,</span>
+  <span class="s">"height"</span><span class="p">:</span> <span class="n">720</span><span class="p">,</span>
+  <span class="s">"maximize"</span><span class="p">:</span> <span class="k">true</span>
+<span class="p">}</span></pre>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 150px">화면</th>
+              <th style="width: 130px">화면 html의 <code>&lt;title&gt;</code></th>
+              <th>PC 창 제목</th>
+              <th>웹 탭 제목</th>
+            </tr>
+            <tr>
+              <td>메인</td>
+              <td>초등학교 영어 지도서 5</td>
+              <td>초등학교 영어 지도서 5</td>
+              <td>초등학교 영어 지도서 5</td>
+            </tr>
+            <tr>
+              <td>ebook 뷰어</td>
+              <td>교과서</td>
+              <td>초등학교 영어 지도서 5 - 교과서</td>
+              <td>교과서</td>
+            </tr>
+            <tr>
+              <td>자료실</td>
+              <td>자료실</td>
+              <td>초등학교 영어 지도서 5 - 자료실</td>
+              <td>자료실</td>
+            </tr>
+          </table>
+        </div>
+        <p>
+          <strong>메인 화면은 <code>&lt;title&gt;</code>에 교과서명을 그대로
+          쓰기를 권장합니다.</strong> 웹 버전에서 사용자가 가장 먼저 보는
+          페이지이므로, &ldquo;메인&rdquo; 같은 표기보다 교과서명이 안내에
+          맞습니다. PC에서는 화면 <code>&lt;title&gt;</code>이 이미 교과서명으로
+          시작하면 교과서명을 덧붙이지 않으므로 제목이 중복되지 않습니다.
+        </p>
+        <h3>뷰어 3종의 기본 제목</h3>
+        <ul>
+          <li><code>platform/scene/ebook/index.html</code> — 교과서</li>
+          <li><code>platform/scene/contents/index.html</code> — 콘텐츠</li>
+          <li><code>platform/scene/myclass/index.html</code> — 내 수업하기</li>
+        </ul>
+        <div class="notice">
+          전역 설정에 <code>title</code>이 없으면 PC에서도 교과서명이 붙지 않고
+          화면의 <code>&lt;title&gt;</code>이 그대로 창 제목이 됩니다.
         </div>
 
         <h2 id="vw-booktab">책 탭 설정 (book_tab.json)</h2>
@@ -1828,7 +1904,8 @@
               <td><code>TITLE</code></td>
               <td>
                 교과서 이름. <strong>배포 루트의 교과서 폴더명과 반드시
-                동일</strong>해야 합니다. 설치·실행 창 제목으로도 사용됩니다.
+                동일</strong>해야 합니다. 설치 프로그램의 창 제목으로도
+                사용됩니다.
               </td>
             </tr>
             <tr>
