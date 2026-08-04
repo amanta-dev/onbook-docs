@@ -1860,7 +1860,14 @@
 <span class="p">├─</span> <span class="g">Start.exe</span>          <span class="c">← 설치 런처 (설치 매체 실행 파일)</span>
 <span class="p">├─</span> <span class="g">start.ini</span>          <span class="c">← 설치 정보 (아래 표 참고)</span>
 <span class="p">├─</span> <span class="g">autorun.inf</span>        <span class="c">← 자동 실행 설정</span>
-<span class="p">├─</span> <span class="g">images/</span>            <span class="c">← 설치 화면 이미지 (배경·버튼 비트맵)</span>
+<span class="p">├─</span> <span class="g">images/</span>            <span class="c">← 설치 화면 이미지 (<a href="#vw-install-design" style="color:#93c5fd">디자인 변경</a> 참고)</span>
+<span class="p">│</span>  <span class="p">├─</span> <span class="s">bg.png</span>             <span class="c">← 배경</span>
+<span class="p">│</span>  <span class="p">├─</span> <span class="s">usb_normal.png</span>     <span class="c">← [바로 실행] 기본</span>
+<span class="p">│</span>  <span class="p">├─</span> <span class="s">usb_over.png</span>       <span class="c">← [바로 실행] 마우스 올림</span>
+<span class="p">│</span>  <span class="p">├─</span> <span class="s">usb_down.png</span>       <span class="c">← [바로 실행] 누름</span>
+<span class="p">│</span>  <span class="p">├─</span> <span class="s">install_normal.png</span> <span class="c">← [복사 후 실행] 기본</span>
+<span class="p">│</span>  <span class="p">├─</span> <span class="s">install_over.png</span>   <span class="c">← [복사 후 실행] 마우스 올림</span>
+<span class="p">│</span>  <span class="p">└─</span> <span class="s">install_down.png</span>   <span class="c">← [복사 후 실행] 누름</span>
 <span class="p">└─</span> <span class="g">(교과서 폴더)/</span>     <span class="c">← start.ini의 TITLE과 같은 이름</span>
    <span class="p">├─</span> <span class="n">startup.exe</span>     <span class="c">← 뷰어 실행 파일(런처)</span>
    <span class="p">└─</span> <span class="f">platform/</span>       <span class="c">← 뷰어 본체 (<a href="#vw-structure" style="color:#93c5fd">폴더 구조</a> 참고)</span></pre>
@@ -1943,14 +1950,14 @@
             <tr>
               <td><code>WINDOW_SIZE</code></td>
               <td>
-                설치 화면 크기(px). 배경 이미지(<code>images/bg.bmp</code>)의
+                설치 화면 크기(px). 배경 이미지(<code>images/bg.png</code>)의
                 <strong>가로,세로 크기를 그대로</strong> 지정합니다.
               </td>
             </tr>
             <tr>
               <td><code>BTN_PLAY_POS</code></td>
               <td>
-                <strong>바로 실행</strong> 버튼(<code>images/usb_*.bmp</code>)의
+                <strong>바로 실행</strong> 버튼(<code>images/usb_*.png</code>)의
                 <code>x,y</code> 위치 — <strong>버튼 중심</strong> 기준.
               </td>
             </tr>
@@ -1958,7 +1965,7 @@
               <td><code>BTN_INSTALL_POS</code></td>
               <td>
                 <strong>복사 후 실행</strong>(설치)
-                버튼(<code>images/install_*.bmp</code>)의 <code>x,y</code> 위치
+                버튼(<code>images/install_*.png</code>)의 <code>x,y</code> 위치
                 — <strong>버튼 중심</strong> 기준.
               </td>
             </tr>
@@ -1977,14 +1984,82 @@
             <code>autorun.inf</code> — <code>label</code>을 교과서명으로 지정.
           </li>
           <li>
-            <code>images/</code> — 설치 화면 이미지(배경·버튼 비트맵). 버튼
-            위치는 <code>start.ini</code>의 <code>[LAYOUT]</code>으로 조정.
+            <code>images/</code> — 설치 화면의 배경·버튼 이미지. 아래
+            <a href="#vw-install-design">디자인 변경</a> 참고.
           </li>
           <li>
             <code>platform/boot/icon.png</code> — 설치본 관리 프로그램
             (OnBookManager)의 책 목록에 표시되는 교과서 아이콘.
             <strong>30×30px</strong> 영역에 맞춰 표시되며, 파일이 없으면
             아이콘 자리가 빈칸으로 나옵니다.
+          </li>
+        </ul>
+
+        <h3 id="vw-install-design">디자인 변경</h3>
+        <p>
+          <code>images/</code>의 PNG 7개를 교체하면 설치 화면을 원하는 디자인으로
+          바꿀 수 있습니다. <strong>파일명은 그대로 두고</strong> 내용만
+          교체합니다.
+        </p>
+        <div class="params">
+          <table>
+            <tr>
+              <th style="width: 175px">파일</th>
+              <th>설명</th>
+            </tr>
+            <tr>
+              <td><code>bg.png</code></td>
+              <td>
+                배경. 가로·세로를 <code>start.ini</code>의
+                <code>WINDOW_SIZE</code>와 같게 맞춥니다. 크기가 다르면 화면에
+                맞춰 늘어나 찌그러져 보입니다.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code>usb_normal.png</code><br /><code>usb_over.png</code
+                ><br /><code>usb_down.png</code>
+              </td>
+              <td>
+                <strong>바로 실행</strong> 버튼의 기본 · 마우스 올림 · 누름 상태.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code>install_normal.png</code><br /><code>install_over.png</code
+                ><br /><code>install_down.png</code>
+              </td>
+              <td>
+                <strong>복사 후 실행</strong> 버튼의 기본 · 마우스 올림 · 누름
+                상태.
+              </td>
+            </tr>
+          </table>
+        </div>
+        <h4>버튼 디자인 규칙</h4>
+        <ul>
+          <li>
+            <strong>크기는 자유입니다.</strong> <code>[LAYOUT]</code>의
+            <code>BTN_PLAY_POS</code> · <code>BTN_INSTALL_POS</code>가 버튼
+            <strong>중심</strong> 좌표라, 크기를 바꿔도 위치는 그대로
+            유지됩니다.
+          </li>
+          <li>
+            단, <strong>한 버튼의 세 상태는 크기가 같아야</strong> 합니다.
+            <code>_over</code>·<code>_down</code>이
+            <code>_normal</code>과 크기가 다르면 마우스를 올릴 때 버튼이 한쪽으로
+            어긋납니다.
+          </li>
+          <li>
+            <code>_over</code>·<code>_down</code>은 생략할 수 있습니다. 파일이
+            없으면 <code>_normal</code>이 대신 표시됩니다.
+            <code>_normal</code>은 필수입니다. 파일명이 틀려도 오류 없이
+            <code>_normal</code>로 표시되므로, 눌러도 반응이 없다면 파일명부터
+            확인하세요.
+          </li>
+          <li>
+            버튼이 <code>WINDOW_SIZE</code> 밖으로 나가지 않도록 좌표를
+            확인하세요.
           </li>
         </ul>
 
