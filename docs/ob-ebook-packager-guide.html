@@ -507,7 +507,7 @@
         <h1>OnBook ebook 패키저 가이드</h1>
         <p>PDF 기반 교과서(ebook) 제작·패키징 도구 사용 가이드</p>
       </div>
-      <div class="meta">ebook 패키저 v1.0.0 &nbsp;·&nbsp; 콘텐츠 개발사용</div>
+      <div class="meta">ebook 패키저 v1.2.1 &nbsp;·&nbsp; 콘텐츠 개발사용</div>
     </div>
     <div class="backdrop"></div>
 
@@ -663,6 +663,7 @@
             <tr><th style="width: 200px">메뉴</th><th style="width: 140px">단축키</th><th>설명</th></tr>
             <tr><td>실행 취소</td><td><span class="kbd">Ctrl+Z</span></td><td>버튼 작업(배치·수정·삭제)을 되돌립니다.</td></tr>
             <tr><td>다시 실행</td><td><span class="kbd">Ctrl+Y</span></td><td>되돌린 작업을 다시 적용합니다 (<span class="kbd">Ctrl+Shift+Z</span>도 동일).</td></tr>
+            <tr><td>모든 버튼 선택</td><td><span class="kbd">Ctrl+A</span></td><td>현재 보이는 페이지(펼침면이면 양쪽)의 버튼을 모두 선택합니다.</td></tr>
             <tr><td>복사 / 잘라내기</td><td><span class="kbd">Ctrl+C</span> / <span class="kbd">Ctrl+X</span></td><td>선택한 버튼을 복사·잘라내기합니다.</td></tr>
             <tr><td>붙여넣기</td><td><span class="kbd">Ctrl+V</span></td><td>복사한 버튼을 붙여넣습니다.</td></tr>
             <tr><td>제자리에 붙여넣기</td><td><span class="kbd">Ctrl+Shift+V</span></td><td>복사한 위치 그대로 붙여넣습니다 (다른 페이지에 같은 위치로 복제할 때 유용).</td></tr>
@@ -731,6 +732,7 @@
         <ul>
           <li><strong>클릭</strong> — 페이지 1장의 선택 상태를 토글합니다 (선택 ↔ 해제).</li>
           <li><strong>드래그</strong> — 드래그 영역에 걸치는 페이지들을 한 번에 여러 장 선택할 때 사용합니다. 영역 안의 각 페이지는 선택 상태가 토글되므로, 이미 선택된 페이지가 영역에 걸리면 오히려 선택이 해제됩니다.</li>
+          <li><span class="kbd">Ctrl+A</span> — 전체 페이지를 선택합니다.</li>
           <li><span class="kbd">Esc</span> — 전체 선택을 취소합니다.</li>
         </ul>
         <p>페이지를 고른 뒤 <code>페이지 추출하기</code> → <code>다음</code>을 누릅니다.</p>
@@ -863,7 +865,7 @@
           <li>이 상태에서 편집 영역을 클릭하면 <strong>클릭한 위치에 버튼이 추가</strong>됩니다.</li>
           <li>추가된 버튼을 선택하면 <strong>테두리</strong>가 표시됩니다. <span class="kbd">Esc</span> 또는 편집 영역의 다른 곳을 클릭하면 선택이 해제됩니다.</li>
           <li>버튼을 선택한 상태에서는 오른쪽 패널의 <strong>버튼</strong> 탭에서 가로·세로 위치(%)를 숫자로 조정할 수 있고, <strong>마우스로 직접 드래그</strong>해서 위치를 옮길 수도 있습니다.</li>
-          <li>빈 곳에서 드래그하면 <strong>선택 영역</strong>이 만들어져 여러 버튼을 한 번에 선택할 수 있습니다.</li>
+          <li>빈 곳에서 드래그하면 <strong>선택 영역</strong>이 만들어져 여러 버튼을 한 번에 선택할 수 있습니다. <span class="kbd">Ctrl+A</span>를 누르면 현재 보이는 페이지의 버튼이 모두 선택됩니다.</li>
           <li>
             다중 선택 상태에서 복사(<span class="kbd">Ctrl+C</span>)·붙여넣기(<span class="kbd">Ctrl+V</span>)·제자리에 붙여넣기(<span class="kbd">Ctrl+Shift+V</span>)·삭제(<span class="kbd">Delete</span>)·이동·정렬(<span class="kbd">Ctrl+Shift+L</span> 등)을 일괄 수행합니다.
           </li>
@@ -1055,7 +1057,7 @@
       </main>
     </div>
 
-    <div class="footer"><span>OnBook ebook 패키저 가이드 · 콘텐츠 개발사용 · 패키저 v1.0.0 · 문서 v1.0</span><span>&copy; 2026 Amanta</span></div>
+    <div class="footer"><span>OnBook ebook 패키저 가이드 · 콘텐츠 개발사용 · 패키저 v1.2.1 · 문서 v1.0</span><span>&copy; 2026 Amanta</span></div>
 
     <script>
       // ─── 고정 헤더·푸터 높이를 CSS 변수(--header-h, --footer-h)에 반영 ───
