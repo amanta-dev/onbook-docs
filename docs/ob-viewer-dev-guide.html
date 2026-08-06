@@ -600,6 +600,8 @@
       }
       .changelog > summary {
         cursor: pointer;
+        -webkit-user-select: none;
+        user-select: none;
         padding: 12px 16px;
         font-weight: 600;
         font-size: 0.95rem;
@@ -656,6 +658,16 @@
         color: var(--text-muted);
         margin-left: 8px;
       }
+      .changelog-prod {
+        font-weight: 400;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        padding: 1px 8px;
+        border-radius: 999px;
+        margin-left: 8px;
+      }
       .changelog-body ul {
         margin: 0;
         padding-left: 20px;
@@ -684,7 +696,7 @@
           업데이트
         </p>
       </div>
-      <div class="meta">뷰어 v1.0.0 &nbsp;·&nbsp; 콘텐츠 개발사용</div>
+      <div class="meta">문서 v1.0.001 (뷰어 v1.0.0) &nbsp;·&nbsp; 콘텐츠 개발사용</div>
     </div>
     <div class="backdrop"></div>
 
@@ -750,12 +762,12 @@
       <main class="content">
         <!-- 변경 이력 -->
         <details class="changelog">
-          <summary>변경 이력<span class="changelog-latest">최신 v1.0.0</span></summary>
+          <summary>변경 이력<span class="changelog-latest">최신 문서 v1.0.001</span></summary>
           <div class="changelog-body">
             <div class="changelog-item">
-              <div class="changelog-ver">뷰어 v1.0.0</div>
+              <div class="changelog-ver">v1.0.001<span class="changelog-date">2026-07-23</span><span class="changelog-prod">뷰어 v1.0.0</span></div>
               <ul>
-                <li>현행 버전</li>
+                <li>최초 배포</li>
               </ul>
             </div>
           </div>
@@ -2432,7 +2444,7 @@
     </div>
 
     <div class="footer">
-      <span>OnBook 뷰어 개발자 가이드 · 콘텐츠 개발사용 · 뷰어 v1.0.0 · 문서 v1.0</span>
+      <span>OnBook 뷰어 개발자 가이드 · 콘텐츠 개발사용 · 문서 v1.0.001 (뷰어 v1.0.0)</span>
       <span>&copy; 2026 Amanta</span>
     </div>
 
