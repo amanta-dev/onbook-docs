@@ -218,53 +218,64 @@
         margin-bottom: 12px;
       }
 
-      .notice {
-        background: var(--yellow-bg);
-        border: 1px solid var(--yellow-border);
+      /* ─── 콜아웃 (5문서 공통, 수정 시 전체 동기화) ─── */
+      .callout {
         border-radius: 8px;
         padding: 14px 18px;
-        font-size: 13px;
-        margin-bottom: 20px;
+        font-size: 14px;
+        margin: 16px 0;
+        border: 1px solid;
       }
-
-      .info-box {
+      .callout::before {
+        display: inline-block;
+        padding: 1px 10px;
+        margin-right: 8px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid;
+        font-size: 12px;
+        font-weight: 700;
+        vertical-align: 1px;
+      }
+      .callout.tip {
+        background: var(--green-bg);
+        border-color: #bbf7d0;
+      }
+      .callout.tip::before {
+        content: "💡 TIP";
+        color: var(--green);
+        border-color: #bbf7d0;
+      }
+      .callout.note {
         background: var(--blue-bg);
-        border: 1px solid #bfdbfe;
-        border-radius: 8px;
-        padding: 14px 18px;
-        font-size: 13px;
-        margin-bottom: 20px;
+        border-color: #bfdbfe;
       }
-      .info-box a {
+      .callout.note::before {
+        content: "ℹ️ 참고";
+        color: var(--primary-dark);
+        border-color: #bfdbfe;
+      }
+      .callout.warn {
+        background: var(--yellow-bg);
+        border-color: var(--yellow-border);
+      }
+      .callout.warn::before {
+        content: "⚠️ 주의";
+        color: #a16207;
+        border-color: var(--yellow-border);
+      }
+      .callout a {
         color: var(--primary);
         font-weight: 700;
       }
-      .box-label {
-        display: inline-block;
-        padding: 2px 9px;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 700;
-        line-height: 1.6;
-        color: #fff;
-        margin-right: 7px;
-        vertical-align: 1px;
-      }
-      .info-box .box-label {
-        background: var(--primary);
-      }
-      .notice .box-label {
-        background: #b45309;
-      }
-      .notice ul,
-      .info-box ul {
+      .callout ul {
         font-size: inherit;
         margin: 6px 0 0;
       }
-      .notice li,
-      .info-box li {
+      .callout li {
         margin-bottom: 3px;
       }
+      /* ─── 콜아웃 끝 ─── */
 
       .tag {
         display: inline-block;
@@ -746,8 +757,8 @@
             접두사끼리 그룹). 순서는 불러온 뒤 드래그로 조정할 수 있습니다.
           </li>
         </ul>
-        <div class="info-box">
-          <span class="box-label">안내</span>불필요한 파일(작업 원본, 백업 등)이 폴더에 있으면 ZIP 용량이 커집니다.
+        <div class="callout note">
+          불필요한 파일(작업 원본, 백업 등)이 폴더에 있으면 ZIP 용량이 커집니다.
           배포용 콘텐츠만 남긴 폴더로 패키징하세요.
         </div>
 
@@ -907,8 +918,8 @@
           <li>
             <strong>저장</strong> — <code>저장</code> 버튼을 누르고 ZIP 저장
             위치를 지정하면 썸네일 캡처가 시작됩니다.
-            <div class="notice" style="margin-top: 8px">
-              <span class="box-label">주의</span><strong>캡처 중에는 가급적 PC를 조작하지 말아 주세요.</strong>
+            <div class="callout warn" style="margin-top: 8px">
+              <strong>캡처 중에는 가급적 PC를 조작하지 말아 주세요.</strong>
               썸네일이 잘못 캡처될 수 있습니다.
             </div>
           </li>

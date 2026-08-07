@@ -234,53 +234,64 @@
         margin-bottom: 12px;
       }
 
-      .notice {
-        background: var(--yellow-bg);
-        border: 1px solid var(--yellow-border);
+      /* ─── 콜아웃 (5문서 공통, 수정 시 전체 동기화) ─── */
+      .callout {
         border-radius: 8px;
         padding: 14px 18px;
-        font-size: 13px;
-        margin-bottom: 20px;
+        font-size: 14px;
+        margin: 16px 0;
+        border: 1px solid;
       }
-
-      .info-box {
+      .callout::before {
+        display: inline-block;
+        padding: 1px 10px;
+        margin-right: 8px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid;
+        font-size: 12px;
+        font-weight: 700;
+        vertical-align: 1px;
+      }
+      .callout.tip {
+        background: var(--green-bg);
+        border-color: #bbf7d0;
+      }
+      .callout.tip::before {
+        content: "💡 TIP";
+        color: var(--green);
+        border-color: #bbf7d0;
+      }
+      .callout.note {
         background: var(--blue-bg);
-        border: 1px solid #bfdbfe;
-        border-radius: 8px;
-        padding: 14px 18px;
-        font-size: 13px;
-        margin-bottom: 20px;
+        border-color: #bfdbfe;
       }
-      .info-box a {
+      .callout.note::before {
+        content: "ℹ️ 참고";
+        color: var(--primary-dark);
+        border-color: #bfdbfe;
+      }
+      .callout.warn {
+        background: var(--yellow-bg);
+        border-color: var(--yellow-border);
+      }
+      .callout.warn::before {
+        content: "⚠️ 주의";
+        color: #a16207;
+        border-color: var(--yellow-border);
+      }
+      .callout a {
         color: var(--primary);
         font-weight: 700;
       }
-      .box-label {
-        display: inline-block;
-        padding: 2px 9px;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 700;
-        line-height: 1.6;
-        color: #fff;
-        margin-right: 7px;
-        vertical-align: 1px;
-      }
-      .info-box .box-label {
-        background: var(--primary);
-      }
-      .notice .box-label {
-        background: #b45309;
-      }
-      .notice ul,
-      .info-box ul {
+      .callout ul {
         font-size: inherit;
         margin: 6px 0 0;
       }
-      .notice li,
-      .info-box li {
+      .callout li {
         margin-bottom: 3px;
       }
+      /* ─── 콜아웃 끝 ─── */
 
       .tag {
         display: inline-block;
@@ -1052,8 +1063,8 @@
             </tr>
           </table>
         </div>
-        <div class="info-box">
-          <span class="box-label">안내</span>함수별 사용 방법과 전체 목록은
+        <div class="callout note">
+          함수별 사용 방법과 전체 목록은
           <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#setup">API 가이드 — 사용 방법</a> ·
           <a target="_blank" rel="noopener" href="ob-viewer-api-guide.html#summary">전체 API 목록</a>을
           참고하세요.
@@ -1119,8 +1130,8 @@
 
 <span class="c">// 기타 html(그림 사전·도움말 등) 새 창으로 열기</span>
 <span class="n">window</span><span class="p">.</span><span class="f">open</span><span class="p">(</span><span class="s">"/onbook/modules/apps/dic/index.html"</span><span class="p">,</span> <span class="s">"_blank"</span><span class="p">,</span> <span class="p">{</span> <span class="n">maximize</span><span class="p">:</span> <span class="k">true</span> <span class="p">});</span></pre>
-        <div class="notice">
-          <span class="box-label">주의</span><code>contentUrl</code>은 뷰어를 열 때 <strong>어떤 교과서·단원을
+        <div class="callout warn">
+          <code>contentUrl</code>은 뷰어를 열 때 <strong>어떤 교과서·단원을
           표시할지</strong> 지정하는 쿼리 파라미터입니다(위 예시의
           <code>?contentUrl=…</code>). 자동 보정되지 않으므로
           <strong>절대경로 금지</strong> — 뷰어 폴더(scene/ebook 등) 기준 상대경로
@@ -1140,8 +1151,8 @@
           해상도로 제작한 페이지는 배치가 어긋날 수 있으니 반드시 위 기준을
           지켜 주세요.
         </p>
-        <div class="info-box">
-          <span class="box-label">안내</span>이 규칙은 contents 뷰어 안에서 페이지로 표시되는 차시 콘텐츠에만
+        <div class="callout note">
+          이 규칙은 contents 뷰어 안에서 페이지로 표시되는 차시 콘텐츠에만
           적용됩니다. 게임·단어장처럼 새 창으로 실행되는 콘텐츠는 뷰어의
           배율 조정을 거치지 않으므로, 해상도를 자유롭게 정하시면 됩니다.
         </div>
@@ -1430,8 +1441,8 @@
     <span class="s">"explainText"</span><span class="p">:</span> <span class="s">"해당 파일의 이름 변경, 위치 이동 등을 확인하시고&lt;/br&gt; 자료를 다시 추가하세요."</span>
   <span class="p">}</span>
 <span class="p">]</span></pre>
-        <div class="notice">
-          <span class="box-label">주의</span><code>settings.json</code>은 JSON 문법(쉼표·따옴표)이 어긋나면 뷰어가
+        <div class="callout warn">
+          <code>settings.json</code>은 JSON 문법(쉼표·따옴표)이 어긋나면 뷰어가
           정상 동작하지 않습니다. 편집 후 뷰어를 다시 실행해 확인해 주세요.
         </div>
 
@@ -1497,8 +1508,8 @@
           <li><code>platform/scene/contents/index.html</code> — 콘텐츠</li>
           <li><code>platform/scene/myclass/index.html</code> — 내 수업하기</li>
         </ul>
-        <div class="info-box">
-          <span class="box-label">안내</span>전역 설정에 <code>title</code>이 없으면 PC에서도 교과서명이 붙지 않고
+        <div class="callout note">
+          전역 설정에 <code>title</code>이 없으면 PC에서도 교과서명이 붙지 않고
           화면의 <code>&lt;title&gt;</code>이 그대로 창 제목이 됩니다.
         </div>
 
@@ -1767,8 +1778,8 @@
 <span class="n">window</span><span class="p">.</span><span class="n">INIT_UPDATE_LESSON</span><span class="p">(</span><span class="n">function</span> <span class="p">()</span> <span class="p">{</span>
   <span class="n">downloadArea</span><span class="p">.</span><span class="n">style</span><span class="p">.</span><span class="n">display</span> <span class="p">=</span> <span class="s">""</span><span class="p">;</span> <span class="c">// PC 설치본일 때만 콜백 실행 → UI 표시</span>
 <span class="p">});</span></pre>
-        <div class="info-box">
-          <span class="box-label">안내</span>웹 버전에서는 <code>INIT_UPDATE_LESSON</code>의 콜백이 실행되지
+        <div class="callout note">
+          웹 버전에서는 <code>INIT_UPDATE_LESSON</code>의 콜백이 실행되지
           않아 다운로드 UI가 자연히 표시되지 않습니다. PC/웹 여부를 별도로
           분기할 필요는 없습니다.
         </div>
@@ -2099,8 +2110,8 @@
         </div>
         <p>설치 시 다음 경로로 복사됩니다.</p>
         <pre><span class="n">{INSTALL_DIR}</span><span class="p">\</span><span class="f">{P_CODE}_{SUBJECT_CODE}_{EDITION}</span><span class="p">\</span><span class="f">{TITLE}</span><span class="p">\</span>   <span class="c">예: C:\OnBook\AMT1_EEN5A_2022개정\초등학교 영어 지도서 5 전자책등\</span></pre>
-        <div class="notice">
-          <span class="box-label">주의</span><code>start.ini</code>와 <code>autorun.inf</code>는 반드시
+        <div class="callout warn">
+          <code>start.ini</code>와 <code>autorun.inf</code>는 반드시
           <strong>EUC-KR 인코딩</strong>으로 저장해 주세요. UTF-8로 저장하면
           한글이 깨집니다.
         </div>
@@ -2205,8 +2216,8 @@
           접속하면 PC 버전과 동일한 메인 화면이 표시됩니다. 교과서·콘텐츠
           표시를 같은 방법으로 확인하세요.
         </p>
-        <div class="notice">
-          <span class="box-label">주의</span>웹 버전에서는 PC 설치본 전용 기능인
+        <div class="callout warn">
+          웹 버전에서는 PC 설치본 전용 기능인
           <a href="#vw-update-full">전체 업데이트</a>·<a href="#vw-update-lesson">단원 다운로드</a>가
           동작하지 않습니다. 단원 제외 없이 <strong>콘텐츠 전체를 포함한
           상태</strong>로 업로드해 주세요.
@@ -2246,8 +2257,8 @@
             </tr>
           </table>
         </div>
-        <div class="info-box">
-          <span class="box-label">안내</span>그리기·메모·진도 등 사용 기록은 전자저작물 폴더가 아닌 PC의 사용자
+        <div class="callout note">
+          그리기·메모·진도 등 사용 기록은 전자저작물 폴더가 아닌 PC의 사용자
           영역에 저장되므로, 업데이트를 적용해도 <strong>유지됩니다</strong>.
         </div>
 
@@ -2460,8 +2471,8 @@
 <span class="p">└─</span> <span class="f">download/</span><span class="n">lesson01/…</span></pre>
           </li>
         </ol>
-        <div class="notice">
-          <span class="box-label">주의</span>단원 다운로드는 <strong>PC 설치본 전용</strong>입니다. 웹 버전에서는
+        <div class="callout warn">
+          단원 다운로드는 <strong>PC 설치본 전용</strong>입니다. 웹 버전에서는
           단원 다운로드 UI가 표시되지 않으므로, 웹 배포본에는 콘텐츠 전체를
           포함해 주세요.
         </div>

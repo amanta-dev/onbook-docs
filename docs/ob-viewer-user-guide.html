@@ -262,6 +262,7 @@
         white-space: nowrap;
       }
 
+      /* ─── 콜아웃 (5문서 공통, 수정 시 전체 동기화) ─── */
       .callout {
         border-radius: 8px;
         padding: 14px 18px;
@@ -269,33 +270,56 @@
         margin: 16px 0;
         border: 1px solid;
       }
+      .callout::before {
+        display: inline-block;
+        padding: 1px 10px;
+        margin-right: 8px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid;
+        font-size: 12px;
+        font-weight: 700;
+        vertical-align: 1px;
+      }
       .callout.tip {
         background: var(--green-bg);
         border-color: #bbf7d0;
       }
       .callout.tip::before {
-        content: "💡 TIP  ";
-        font-weight: 700;
+        content: "💡 TIP";
         color: var(--green);
+        border-color: #bbf7d0;
       }
       .callout.note {
         background: var(--blue-bg);
         border-color: #bfdbfe;
       }
       .callout.note::before {
-        content: "ℹ️ 참고  ";
-        font-weight: 700;
+        content: "ℹ️ 참고";
         color: var(--primary-dark);
+        border-color: #bfdbfe;
       }
       .callout.warn {
         background: var(--yellow-bg);
         border-color: var(--yellow-border);
       }
       .callout.warn::before {
-        content: "⚠️ 주의  ";
-        font-weight: 700;
+        content: "⚠️ 주의";
         color: #a16207;
+        border-color: var(--yellow-border);
       }
+      .callout a {
+        color: var(--primary);
+        font-weight: 700;
+      }
+      .callout ul {
+        font-size: inherit;
+        margin: 6px 0 0;
+      }
+      .callout li {
+        margin-bottom: 3px;
+      }
+      /* ─── 콜아웃 끝 ─── */
 
       .kbd {
         display: inline-block;

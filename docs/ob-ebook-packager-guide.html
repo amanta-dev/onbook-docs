@@ -218,53 +218,64 @@
         margin-bottom: 12px;
       }
 
-      .notice {
-        background: var(--yellow-bg);
-        border: 1px solid var(--yellow-border);
+      /* ─── 콜아웃 (5문서 공통, 수정 시 전체 동기화) ─── */
+      .callout {
         border-radius: 8px;
         padding: 14px 18px;
-        font-size: 13px;
-        margin-bottom: 20px;
+        font-size: 14px;
+        margin: 16px 0;
+        border: 1px solid;
       }
-
-      .info-box {
+      .callout::before {
+        display: inline-block;
+        padding: 1px 10px;
+        margin-right: 8px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid;
+        font-size: 12px;
+        font-weight: 700;
+        vertical-align: 1px;
+      }
+      .callout.tip {
+        background: var(--green-bg);
+        border-color: #bbf7d0;
+      }
+      .callout.tip::before {
+        content: "💡 TIP";
+        color: var(--green);
+        border-color: #bbf7d0;
+      }
+      .callout.note {
         background: var(--blue-bg);
-        border: 1px solid #bfdbfe;
-        border-radius: 8px;
-        padding: 14px 18px;
-        font-size: 13px;
-        margin-bottom: 20px;
+        border-color: #bfdbfe;
       }
-      .info-box a {
+      .callout.note::before {
+        content: "ℹ️ 참고";
+        color: var(--primary-dark);
+        border-color: #bfdbfe;
+      }
+      .callout.warn {
+        background: var(--yellow-bg);
+        border-color: var(--yellow-border);
+      }
+      .callout.warn::before {
+        content: "⚠️ 주의";
+        color: #a16207;
+        border-color: var(--yellow-border);
+      }
+      .callout a {
         color: var(--primary);
         font-weight: 700;
       }
-      .box-label {
-        display: inline-block;
-        padding: 2px 9px;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 700;
-        line-height: 1.6;
-        color: #fff;
-        margin-right: 7px;
-        vertical-align: 1px;
-      }
-      .info-box .box-label {
-        background: var(--primary);
-      }
-      .notice .box-label {
-        background: #b45309;
-      }
-      .notice ul,
-      .info-box ul {
+      .callout ul {
         font-size: inherit;
         margin: 6px 0 0;
       }
-      .notice li,
-      .info-box li {
+      .callout li {
         margin-bottom: 3px;
       }
+      /* ─── 콜아웃 끝 ─── */
 
       .tag {
         display: inline-block;
@@ -917,7 +928,7 @@
           </table>
         </div>
 
-        <div class="info-box">
+        <div class="callout tip">
           개정판 PDF로 일부 페이지만 바꾸는 경우, 전체를 다시 만들 필요 없이
           <strong>교체 + 검색 내용 유지</strong>로 처리하면 기존 버튼·검색 편집을 보존할 수 있습니다.
         </div>
@@ -1005,8 +1016,8 @@
           </li>
           <li>모든 버튼 작업은 실행 취소(<span class="kbd">Ctrl+Z</span>)·다시 실행(<span class="kbd">Ctrl+Y</span>)이 가능합니다.</li>
         </ul>
-        <div class="notice">
-          <span class="box-label">주의</span>실행 취소·다시 실행 기록은 <strong>현재 페이지에서 한 버튼 작업에만</strong> 유지됩니다. 다른 페이지로
+        <div class="callout warn">
+          실행 취소·다시 실행 기록은 <strong>현재 페이지에서 한 버튼 작업에만</strong> 유지됩니다. 다른 페이지로
           이동하거나, 새 프로젝트·PDF 페이지 추가 적용·ZIP 불러오기·페이지 순서 변경·페이지 삭제를 하면 기록이
           초기화되어 그 이전 작업은 되돌릴 수 없습니다.
         </div>
@@ -1106,8 +1117,8 @@
           <img src="images/ebook_packager/ebook-toc-edit-01-default.png" alt="목차 편집 - 기본 자동 생성 목록" />
           <figcaption>목차를 아직 입력하지 않은 기본 상태 — 페이지마다 <code>Page 1, Page 2, …</code>가 자동 생성되어 있습니다.</figcaption>
         </figure>
-        <div class="info-box">
-          <span class="box-label">안내</span>목차를 따로 입력하지 않고 저장하면 이 기본 목차가 그대로 ZIP에 포함됩니다. 배포용 결과물에는
+        <div class="callout note">
+          목차를 따로 입력하지 않고 저장하면 이 기본 목차가 그대로 ZIP에 포함됩니다. 배포용 결과물에는
           실제 목차를 입력하는 것을 권장합니다.
         </div>
         <div class="params">
@@ -1125,8 +1136,8 @@
           <figcaption>단원(Lesson) → 차시(첫째시간·둘째시간) → 활동(warm up·Word Rap 등) 순으로 계층을 만든 예. 각 항목 오른쪽의 페이지 번호는 시작 페이지 설정이 반영된 실제 페이지입니다.</figcaption>
         </figure>
         <p>항목을 드래그하면 순서와 계층(들여쓰기)을 함께 조정할 수 있습니다.</p>
-        <div class="info-box">
-          <span class="box-label">TIP</span><strong>목차 파일을 직접 작성하기</strong><br />
+        <div class="callout tip">
+          <strong>목차 파일을 직접 작성하기</strong><br />
           XML 편집이 익숙하다면, 단원 하나 분량만 화면에서 만들어 <code>목차 파일 내보내기</code>로 저장한 뒤
           그 파일을 직접 편집해 나머지를 채우고 <code>목차 파일 불러오기</code>로 되돌리는 편이 빠릅니다.
           <ul>
@@ -1140,8 +1151,7 @@
               단원별 파일을 차례로 추가하는 방식으로도 쓸 수 있습니다.</li>
           </ul>
         </div>
-        <div class="notice">
-          <span class="box-label">주의</span>
+        <div class="callout warn">
           <ul>
             <li><strong>덮어쓰기</strong>를 고르면 편집 중인 목차가 전부 교체되고 되돌릴 수 없습니다.
               필요한 목차는 먼저 내보내 두십시오.</li>
@@ -1172,8 +1182,8 @@
             정보·시작 페이지 번호가 복원되어 이어서 편집할 수 있습니다.
           </li>
         </ul>
-        <div class="notice">
-          <span class="box-label">주의</span>ZIP 파일이 <strong>작업 파일이자 배포 파일</strong>입니다. 별도의 프로젝트 파일이
+        <div class="callout warn">
+          ZIP 파일이 <strong>작업 파일이자 배포 파일</strong>입니다. 별도의 프로젝트 파일이
           없으므로, 편집을 이어가려면 저장한 ZIP을 보관하세요.
         </div>
 
