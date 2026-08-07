@@ -239,6 +239,32 @@
         color: var(--primary);
         font-weight: 700;
       }
+      .box-label {
+        display: inline-block;
+        padding: 2px 9px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.6;
+        color: #fff;
+        margin-right: 7px;
+        vertical-align: 1px;
+      }
+      .info-box .box-label {
+        background: var(--primary);
+      }
+      .notice .box-label {
+        background: #b45309;
+      }
+      .notice ul,
+      .info-box ul {
+        font-size: inherit;
+        margin: 6px 0 0;
+      }
+      .notice li,
+      .info-box li {
+        margin-bottom: 3px;
+      }
 
       .tag {
         display: inline-block;
@@ -980,7 +1006,7 @@
           <li>모든 버튼 작업은 실행 취소(<span class="kbd">Ctrl+Z</span>)·다시 실행(<span class="kbd">Ctrl+Y</span>)이 가능합니다.</li>
         </ul>
         <div class="notice">
-          실행 취소·다시 실행 기록은 <strong>현재 페이지에서 한 버튼 작업에만</strong> 유지됩니다. 다른 페이지로
+          <span class="box-label">주의</span>실행 취소·다시 실행 기록은 <strong>현재 페이지에서 한 버튼 작업에만</strong> 유지됩니다. 다른 페이지로
           이동하거나, 새 프로젝트·PDF 페이지 추가 적용·ZIP 불러오기·페이지 순서 변경·페이지 삭제를 하면 기록이
           초기화되어 그 이전 작업은 되돌릴 수 없습니다.
         </div>
@@ -1080,8 +1106,8 @@
           <img src="images/ebook_packager/ebook-toc-edit-01-default.png" alt="목차 편집 - 기본 자동 생성 목록" />
           <figcaption>목차를 아직 입력하지 않은 기본 상태 — 페이지마다 <code>Page 1, Page 2, …</code>가 자동 생성되어 있습니다.</figcaption>
         </figure>
-        <div class="notice">
-          목차를 따로 입력하지 않고 저장하면 이 기본 목차가 그대로 ZIP에 포함됩니다. 배포용 결과물에는
+        <div class="info-box">
+          <span class="box-label">안내</span>목차를 따로 입력하지 않고 저장하면 이 기본 목차가 그대로 ZIP에 포함됩니다. 배포용 결과물에는
           실제 목차를 입력하는 것을 권장합니다.
         </div>
         <div class="params">
@@ -1147,7 +1173,7 @@
           </li>
         </ul>
         <div class="notice">
-          ZIP 파일이 <strong>작업 파일이자 배포 파일</strong>입니다. 별도의 프로젝트 파일이
+          <span class="box-label">주의</span>ZIP 파일이 <strong>작업 파일이자 배포 파일</strong>입니다. 별도의 프로젝트 파일이
           없으므로, 편집을 이어가려면 저장한 ZIP을 보관하세요.
         </div>
 

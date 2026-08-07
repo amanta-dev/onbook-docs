@@ -241,6 +241,32 @@
         font-size: 13px;
         margin-bottom: 20px;
       }
+      .box-label {
+        display: inline-block;
+        padding: 2px 9px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.6;
+        color: #fff;
+        margin-right: 7px;
+        vertical-align: 1px;
+      }
+      .info-box .box-label {
+        background: var(--primary);
+      }
+      .notice .box-label {
+        background: #b45309;
+      }
+      .notice ul,
+      .info-box ul {
+        font-size: inherit;
+        margin: 6px 0 0;
+      }
+      .notice li,
+      .info-box li {
+        margin-bottom: 3px;
+      }
 
       /* API 카드 */
       .api-card {
@@ -628,7 +654,7 @@
           <code>ob.viewer.api</code>를 통해 이루어집니다.
         </p>
         <div class="info-box">
-          <strong>ob.viewer.api</strong>는 콘텐츠 iframe의
+          <span class="box-label">안내</span><strong>ob.viewer.api</strong>는 콘텐츠 iframe의
           <code>window.ob.viewer.api</code>에 자동으로 설정됩니다. NW.js(앱)
           환경과 웹 환경 모두 동일한 방식으로 호출하면 됩니다.
         </div>
@@ -671,7 +697,7 @@
 <span class="k">const</span> <span class="n">current = ob.viewer.api.</span><span class="f">getPageNum</span><span class="p">();</span>
 <span class="n">console.</span><span class="f">log</span><span class="p">(</span><span class="s">"현재 페이지:"</span><span class="p">,</span> <span class="n">current</span><span class="p">);</span></pre>
         <div class="notice">
-          <code>goPage</code>를 비롯한 페이지 관련 API(이동·조회)는
+          <span class="box-label">주의</span><code>goPage</code>를 비롯한 페이지 관련 API(이동·조회)는
           <strong>현재 열려 있는 단원(하나의 콘텐츠 패키지) 안에서만</strong>
           동작합니다. 다른 단원으로 이동하려면
           <a href="#windowOpen"><code>window.open</code></a>으로 대상 단원을 여세요.
