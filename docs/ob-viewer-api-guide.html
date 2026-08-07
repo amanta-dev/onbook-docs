@@ -4,22 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OnBook 뷰어 API 가이드</title>
+    <link rel="stylesheet" href="assets/guide.css" />
     <style>
+      /* API 가이드 전용 — 분류 배지와 API 카드 */
       :root {
-        --primary: #2563eb;
-        --primary-dark: #1e40af;
-        --bg: #f8fafc;
-        --surface: #ffffff;
-        --border: #e2e8f0;
-        --text: #1e293b;
-        --text-muted: #64748b;
-        --code-bg: #f1f5f9;
-        --code-border: #cbd5e1;
-        --green: #16a34a;
-        --green-bg: #f0fdf4;
-        --blue-bg: #eff6ff;
-        --yellow-bg: #fefce8;
-        --yellow-border: #fde047;
         --tag-nav: #dbeafe;
         --tag-nav-text: #1d4ed8;
         --tag-sys: #d1fae5;
@@ -28,262 +16,24 @@
         --tag-page-text: #5b21b6;
         --tag-info: #fce7f3;
         --tag-info-text: #9d174d;
-        --header-h: 84px;
-        --footer-h: 0px;
+      }
+      .tag-page {
+        background: var(--tag-page);
+        color: var(--tag-page-text);
+      }
+      .tag-nav {
+        background: var(--tag-nav);
+        color: var(--tag-nav-text);
+      }
+      .tag-sys {
+        background: var(--tag-sys);
+        color: var(--tag-sys-text);
+      }
+      .tag-info {
+        background: var(--tag-info);
+        color: var(--tag-info-text);
       }
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        line-height: 1.6;
-      }
-
-      .header {
-        background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
-        color: #fff;
-        padding: 10px 48px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-      .header-text {
-        flex: 1;
-      }
-      .header h1 {
-        font-size: 18px;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        margin-bottom: 2px;
-      }
-      .header p {
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.75);
-        margin: 0;
-      }
-      .menu-toggle {
-        display: none;
-        width: 38px;
-        height: 38px;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
-        color: #fff;
-        font-size: 18px;
-        line-height: 1;
-        cursor: pointer;
-        flex-shrink: 0;
-      }
-      .backdrop {
-        position: fixed;
-        inset: var(--header-h) 0 0 0;
-        background: rgba(15, 23, 42, 0.4);
-        z-index: 85;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s;
-      }
-      body.menu-open .backdrop {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      .header .meta {
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.5);
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 999px;
-        padding: 4px 12px;
-        white-space: nowrap;
-      }
-
-      .layout {
-        display: flex;
-        min-height: calc(100vh - 120px);
-      }
-
-      .sidebar {
-        width: 230px;
-        flex-shrink: 0;
-        background: var(--surface);
-        border-right: 1px solid var(--border);
-        padding: 12px 0;
-        position: sticky;
-        top: var(--header-h);
-        height: calc(100vh - var(--header-h) - var(--footer-h));
-        overflow-y: auto;
-      }
-      .sidebar .nav-title {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        background: none;
-        border: none;
-        font-family: inherit;
-        font-size: 10.5px;
-        font-weight: 700;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        padding: 18px 16px 5px;
-        margin-top: 0;
-        border-top: 1px solid var(--border);
-        cursor: pointer;
-        text-align: left;
-      }
-      .sidebar .nav-group:first-child .nav-title {
-        border-top: none;
-        padding-top: 8px;
-      }
-      .sidebar .nav-title:hover {
-        color: var(--primary-dark);
-      }
-      .sidebar .nav-arrow {
-        font-size: 9px;
-        line-height: 1;
-        transition: transform 0.15s ease;
-      }
-      .sidebar .nav-group.collapsed .nav-arrow {
-        transform: rotate(-90deg);
-      }
-      .sidebar .nav-group.collapsed .nav-links {
-        display: none;
-      }
-      .sidebar a {
-        display: block;
-        padding: 7px 16px 7px 20px;
-        font-size: 13.5px;
-        color: var(--text);
-        text-decoration: none;
-        border-left: 3px solid transparent;
-        transition:
-          background 0.12s,
-          color 0.12s;
-      }
-      .sidebar a:hover {
-        color: var(--primary);
-        background: var(--blue-bg);
-        border-left-color: #bfdbfe;
-      }
-      .sidebar a.active {
-        color: var(--primary);
-        background: var(--blue-bg);
-        border-left-color: var(--primary);
-        font-weight: 700;
-      }
-      .sidebar .section-gap {
-        height: 12px;
-      }
-
-      .content {
-        flex: 1;
-        min-width: 0;
-        padding: 40px 48px;
-        max-width: 900px;
-      }
-
-      h2 {
-        font-size: 20px;
-        font-weight: 700;
-        color: var(--text);
-        margin: 48px 0 16px;
-        padding-top: 16px;
-        border-top: 1px solid var(--border);
-        scroll-margin-top: calc(var(--header-h) + 8px);
-      }
-      h2:first-child {
-        margin-top: 0;
-        border-top: none;
-      }
-      h3 {
-        font-size: 15px;
-        font-weight: 700;
-        margin: 28px 0 10px;
-      }
-
-      p {
-        font-size: 14px;
-        color: var(--text);
-        margin-bottom: 12px;
-      }
-
-      /* ─── 콜아웃 (5문서 공통, 수정 시 전체 동기화) ─── */
-      .callout {
-        border-radius: 8px;
-        padding: 14px 18px;
-        font-size: 14px;
-        margin: 16px 0;
-        border: 1px solid;
-      }
-      .callout::before {
-        display: inline-block;
-        padding: 1px 10px;
-        margin-right: 8px;
-        border-radius: 999px;
-        background: #fff;
-        border: 1px solid;
-        font-size: 12px;
-        font-weight: 700;
-        vertical-align: 1px;
-      }
-      .callout.tip {
-        background: var(--green-bg);
-        border-color: #bbf7d0;
-      }
-      .callout.tip::before {
-        content: "💡 TIP";
-        color: var(--green);
-        border-color: #bbf7d0;
-      }
-      .callout.note {
-        background: var(--blue-bg);
-        border-color: #bfdbfe;
-      }
-      .callout.note::before {
-        content: "ℹ️ 참고";
-        color: var(--primary-dark);
-        border-color: #bfdbfe;
-      }
-      .callout.warn {
-        background: var(--yellow-bg);
-        border-color: var(--yellow-border);
-      }
-      .callout.warn::before {
-        content: "⚠️ 주의";
-        color: #a16207;
-        border-color: var(--yellow-border);
-      }
-      .callout a {
-        color: var(--primary);
-        font-weight: 700;
-      }
-      .callout ul {
-        font-size: inherit;
-        margin: 6px 0 0;
-      }
-      .callout li {
-        margin-bottom: 3px;
-      }
-      /* ─── 콜아웃 끝 ─── */
-
-      /* API 카드 */
       .api-card {
         background: var(--surface);
         border: 1px solid var(--border);
@@ -305,207 +55,12 @@
         font-weight: 700;
         color: var(--primary-dark);
       }
-      .tag {
-        display: inline-block;
-        font-size: 10px;
-        font-weight: 700;
-        padding: 2px 8px;
-        border-radius: 999px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-      .tag-page {
-        background: var(--tag-page);
-        color: var(--tag-page-text);
-      }
-      .tag-nav {
-        background: var(--tag-nav);
-        color: var(--tag-nav-text);
-      }
-      .tag-sys {
-        background: var(--tag-sys);
-        color: var(--tag-sys-text);
-      }
-      .tag-info {
-        background: var(--tag-info);
-        color: var(--tag-info-text);
-      }
-
-      /* ─── 변경 이력 (펼침/닫힘) ─── */
-      .changelog {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        margin: 0 0 28px;
-      }
-      .changelog > summary {
-        cursor: pointer;
-        -webkit-user-select: none;
-        user-select: none;
-        padding: 12px 16px;
-        font-weight: 600;
-        font-size: 0.95rem;
-        color: var(--text);
-        list-style: none;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .changelog > summary::-webkit-details-marker {
-        display: none;
-      }
-      .changelog > summary::before {
-        content: "▶";
-        font-size: 0.7rem;
-        color: var(--text-muted);
-        transition: transform 0.15s;
-      }
-      .changelog[open] > summary::before {
-        transform: rotate(90deg);
-      }
-      .changelog > summary:hover {
-        background: var(--code-bg);
-        border-radius: 8px;
-      }
-      .changelog-latest {
-        margin-left: auto;
-        font-weight: 500;
-        font-size: 0.8rem;
-        color: var(--primary);
-        background: var(--blue-bg);
-        padding: 2px 10px;
-        border-radius: 999px;
-      }
-      .changelog-body {
-        padding: 4px 16px 16px;
-        border-top: 1px solid var(--border);
-      }
-      .changelog-item {
-        padding: 12px 0;
-      }
-      .changelog-item + .changelog-item {
-        border-top: 1px dashed var(--border);
-      }
-      .changelog-ver {
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: var(--primary-dark);
-        margin-bottom: 6px;
-      }
-      .changelog-date {
-        font-weight: 400;
-        font-size: 0.8rem;
-        color: var(--text-muted);
-        margin-left: 8px;
-      }
-      .changelog-prod {
-        font-weight: 400;
-        font-size: 0.75rem;
-        color: var(--text-muted);
-        background: var(--code-bg);
-        border: 1px solid var(--border);
-        padding: 1px 8px;
-        border-radius: 999px;
-        margin-left: 8px;
-      }
-      .changelog-body ul {
-        margin: 0;
-        padding-left: 20px;
-      }
-      .changelog-body li {
-        font-size: 0.9rem;
-        color: var(--text);
-        margin: 4px 0;
-      }
-
       .api-card-body {
         padding: 14px 18px;
       }
       .api-card-body p {
         margin-bottom: 8px;
         font-size: 13px;
-      }
-
-      .params {
-        margin: 10px 0;
-      }
-      .params table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 12px;
-      }
-      .params th {
-        text-align: left;
-        padding: 6px 10px;
-        background: var(--code-bg);
-        border: 1px solid var(--border);
-        color: var(--text-muted);
-        font-weight: 600;
-      }
-      .params td {
-        padding: 6px 10px;
-        border: 1px solid var(--border);
-        vertical-align: top;
-      }
-      .params td code {
-        font-size: 11px;
-        background: var(--code-bg);
-        padding: 1px 5px;
-        border-radius: 3px;
-      }
-
-      /* 코드 블록 */
-      pre {
-        background: #1e293b;
-        color: #e2e8f0;
-        border-radius: 8px;
-        padding: 16px 18px;
-        font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-        font-size: 13px;
-        line-height: 1.7;
-        overflow-x: auto;
-        margin: 12px 0 16px;
-      }
-      pre .c {
-        color: #64748b;
-      } /* comment */
-      pre .k {
-        color: #93c5fd;
-      } /* keyword */
-      pre .s {
-        color: #86efac;
-      } /* string */
-      pre .f {
-        color: #fde68a;
-      } /* function */
-      pre .n {
-        color: #e2e8f0;
-      } /* normal */
-      pre .p {
-        color: #94a3b8;
-      } /* punctuation */
-
-      code {
-        font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-        font-size: 13px;
-      }
-      p code,
-      li code {
-        background: var(--code-bg);
-        border: 1px solid var(--code-border);
-        padding: 1px 6px;
-        border-radius: 4px;
-        font-size: 12px;
-      }
-
-      ul,
-      ol {
-        padding-left: 20px;
-        font-size: 14px;
-        margin-bottom: 12px;
-      }
-      li {
-        margin-bottom: 4px;
       }
 
       .returns {
@@ -515,59 +70,6 @@
       }
       .returns strong {
         color: var(--green);
-      }
-
-      /* 구분선 */
-      .divider {
-        border: none;
-        border-top: 1px solid var(--border);
-        margin: 8px 0 24px;
-      }
-
-      .footer {
-        border-top: 1px solid var(--border);
-        padding: 10px 48px;
-        font-size: 12.5px;
-        color: var(--text-muted);
-        background: var(--surface);
-        position: sticky;
-        bottom: 0;
-        z-index: 100;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-
-      @media (max-width: 768px) {
-        .menu-toggle {
-          display: inline-flex;
-        }
-        .sidebar {
-          position: fixed;
-          left: 0;
-          top: var(--header-h);
-          height: calc(100vh - var(--header-h) - var(--footer-h));
-          z-index: 90;
-          transform: translateX(-100%);
-          transition: transform 0.2s ease;
-        }
-        body.menu-open .sidebar {
-          transform: translateX(0);
-          box-shadow: 2px 0 12px rgba(15, 23, 42, 0.15);
-        }
-        .content {
-          padding: 24px 20px;
-        }
-        .header {
-          padding: 10px 20px;
-          flex-wrap: wrap;
-          gap: 10px;
-        }
-        .header .meta {
-          display: none;
-        }
       }
     </style>
   </head>
@@ -662,148 +164,153 @@
         </details>
 
         <!-- 개요 -->
-        <h2 id="overview">개요</h2>
-        <p>
-          콘텐츠는 OnBook 뷰어 안에서 <strong>iframe</strong>으로 실행됩니다.
-          뷰어와의 상호작용(페이지 이동, 파일 열기 등)은 모두
-          <code>ob.viewer.api</code>를 통해 이루어집니다.
-        </p>
-        <div class="callout note">
-          <strong>ob.viewer.api</strong>는 콘텐츠 iframe의
-          <code>window.ob.viewer.api</code>에 자동으로 설정됩니다. NW.js(앱)
-          환경과 웹 환경 모두 동일한 방식으로 호출하면 됩니다.
-        </div>
+        <section id="overview">
+          <h2>개요</h2>
+          <p>
+            콘텐츠는 OnBook 뷰어 안에서 <strong>iframe</strong>으로 실행됩니다.
+            뷰어와의 상호작용(페이지 이동, 파일 열기 등)은 모두
+            <code>ob.viewer.api</code>를 통해 이루어집니다.
+          </p>
+          <div class="callout note">
+            <strong>ob.viewer.api</strong>는 콘텐츠 iframe의
+            <code>window.ob.viewer.api</code>에 자동으로 설정됩니다. NW.js(앱)
+            환경과 웹 환경 모두 동일한 방식으로 호출하면 됩니다.
+          </div>
 
-        <h3>API 카테고리</h3>
-        <ul>
-          <li>
-            <span class="tag tag-nav">페이지 이동</span> 단원을 벗어나 다른
-            화면(교과서·콘텐츠·내 수업하기 등)으로 이동하거나 새 창을 열고,
-            이전 화면으로 돌아가는 등 <strong>전체 화면 이동</strong>을
-            담당합니다.
-          </li>
-          <li>
-            <span class="tag tag-page">단원 내 이동</span> 현재 열려 있는 단원(콘텐츠
-            패키지) <strong>안에서만</strong> 페이지를 이동하거나 페이지 정보를
-            조회합니다.
-          </li>
-          <li>
-            <span class="tag tag-sys">시스템</span> 로컬 파일·폴더 열기, 앱
-            실행, 다운로드를 수행합니다.
-          </li>
-        </ul>
+          <h3>API 카테고리</h3>
+          <ul>
+            <li>
+              <span class="tag tag-nav">페이지 이동</span> 단원을 벗어나 다른
+              화면(교과서·콘텐츠·내 수업하기 등)으로 이동하거나 새 창을 열고,
+              이전 화면으로 돌아가는 등 <strong>전체 화면 이동</strong>을
+              담당합니다.
+            </li>
+            <li>
+              <span class="tag tag-page">단원 내 이동</span> 현재 열려 있는 단원(콘텐츠
+              패키지) <strong>안에서만</strong> 페이지를 이동하거나 페이지 정보를
+              조회합니다.
+            </li>
+            <li>
+              <span class="tag tag-sys">시스템</span> 로컬 파일·폴더 열기, 앱
+              실행, 다운로드를 수행합니다.
+            </li>
+          </ul>
+        </section>
 
         <!-- 사용 방법 -->
-        <h2 id="setup">사용 방법</h2>
-        <p>
-          콘텐츠 HTML에 <code>onbook.api.min.js</code>를 포함하면
-          <code>ob.viewer.api</code>가 자동으로 준비됩니다. 별도의 초기화 없이
-          바로 호출하면 됩니다. 경로는 파일을 둔 위치 기준 상대경로이며, 아래는
-          예시입니다.
-        </p>
-        <pre><span class="c">&lt;!-- 콘텐츠 HTML에 포함 (경로는 예시) --&gt;</span>
+        <section id="setup">
+          <h2>사용 방법</h2>
+          <p>
+            콘텐츠 HTML에 <code>onbook.api.min.js</code>를 포함하면
+            <code>ob.viewer.api</code>가 자동으로 준비됩니다. 별도의 초기화 없이
+            바로 호출하면 됩니다. 경로는 파일을 둔 위치 기준 상대경로이며, 아래는
+            예시입니다.
+          </p>
+          <pre><span class="c">&lt;!-- 콘텐츠 HTML에 포함 (경로는 예시) --&gt;</span>
 <span class="n">&lt;script src=</span><span class="s">"../js/ob/onbook.api.min.js"</span><span class="n">&gt;&lt;/script&gt;</span></pre>
 
-        <pre><span class="c">// 페이지 이동 예시</span>
+          <pre><span class="c">// 페이지 이동 예시</span>
 <span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_01_01_01.html"</span><span class="p">);</span>
 <span class="n">ob.viewer.api.</span><span class="f">goPage</span><span class="p">(</span><span class="n">8</span><span class="p">);</span>
 
 <span class="c">// 정보 조회 예시</span>
 <span class="k">const</span> <span class="n">current = ob.viewer.api.</span><span class="f">getPageNum</span><span class="p">();</span>
 <span class="n">console.</span><span class="f">log</span><span class="p">(</span><span class="s">"현재 페이지:"</span><span class="p">,</span> <span class="n">current</span><span class="p">);</span></pre>
-        <div class="callout warn">
-          <code>goPage</code>를 비롯한 페이지 관련 API(이동·조회)는
-          <strong>현재 열려 있는 단원(하나의 콘텐츠 패키지) 안에서만</strong>
-          동작합니다. 다른 단원으로 이동하려면
-          <a href="#windowOpen"><code>window.open</code></a>으로 대상 단원을 여세요.
-        </div>
+          <div class="callout warn">
+            <code>goPage</code>를 비롯한 페이지 관련 API(이동·조회)는
+            <strong>현재 열려 있는 단원(하나의 콘텐츠 패키지) 안에서만</strong>
+            동작합니다. 다른 단원으로 이동하려면
+            <a href="#windowOpen"><code>window.open</code></a>으로 대상 단원을 여세요.
+          </div>
+        </section>
 
         <hr class="divider" />
 
         <!-- ===== 페이지 이동 ===== -->
-        <h2 id="windowOpen">window.open</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>window.open( url, target, options )</code>
-            <span class="tag tag-nav">페이지 이동</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              교과서(ebook)·콘텐츠(contents)·내 수업하기(myclass) 화면으로
-              이동하거나 새 창을 열 때는 브라우저 표준 함수인
-              <code>window.open</code>을 그대로 사용합니다. OnBook 뷰어
-              환경에서는 <code>window.open</code>이 내부적으로 연결되어 있어
-              NW.js(앱)와 웹 환경에서 동일한 방식으로 호출하면 됩니다.
-            </p>
-            <div class="params">
-              <table>
-                <tr>
-                  <th>파라미터</th>
-                  <th>타입</th>
-                  <th>설명</th>
-                </tr>
-                <tr>
-                  <td><code>url</code></td>
-                  <td><code>string</code></td>
-                  <td>이동/오픈할 URL — 교과서·콘텐츠·내 수업하기 화면 URL 또는
-                  임의의 html 파일 경로</td>
-                </tr>
-                <tr>
-                  <td><code>target</code></td>
-                  <td><code>string</code></td>
-                  <td><code>"_top"</code> · <code>"_blank"</code> · 창 이름</td>
-                </tr>
-                <tr>
-                  <td><code>options</code></td>
-                  <td><code>object</code></td>
-                  <td>
-                    (선택) 창 옵션.<br />
-                    <code>maximize: true</code> — 새 창을 최대화한 크기로
-                    엽니다. USB 버전·PC 설치 버전(NW.js 앱)에서 적용되며, 웹
-                    환경에서는 무시됩니다.
-                  </td>
-                </tr>
-              </table>
+        <section id="windowOpen">
+          <h2>window.open</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>window.open( url, target, options )</code>
+              <span class="tag tag-nav">페이지 이동</span>
             </div>
-            <h3>url 쿼리 파라미터</h3>
-            <p>
-              화면 URL에 다음 쿼리 파라미터를 붙이면 콘텐츠가 열릴 때 특정
-              페이지로 바로 진입합니다.
-            </p>
-            <div class="params">
-              <table>
-                <tr>
-                  <th>파라미터</th>
-                  <th>타입</th>
-                  <th>설명</th>
-                </tr>
-                <tr>
-                  <td><code>pageName</code></td>
-                  <td><code>string</code></td>
-                  <td>
-                    진입할 페이지 파일명 — <strong><code>.html</code> 확장자
-                    포함</strong>. <code>goPageName()</code>과 동일한 값을
-                    사용합니다.
-                  </td>
-                </tr>
-                <tr>
-                  <td><code>page</code></td>
-                  <td><code>number</code></td>
-                  <td>
-                    진입할 페이지 번호. <code>goPage()</code>와 동일한 값을
-                    사용합니다.
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <h3>사용 예시</h3>
-            <pre><span class="c">// ① ebook 뷰어를 새 창(최대화)으로 열기 — page 번호로 진입 페이지 지정</span>
+            <div class="api-card-body">
+              <p>
+                교과서(ebook)·콘텐츠(contents)·내 수업하기(myclass) 화면으로
+                이동하거나 새 창을 열 때는 브라우저 표준 함수인
+                <code>window.open</code>을 그대로 사용합니다. OnBook 뷰어
+                환경에서는 <code>window.open</code>이 내부적으로 연결되어 있어
+                NW.js(앱)와 웹 환경에서 동일한 방식으로 호출하면 됩니다.
+              </p>
+              <div class="params">
+                <table>
+                  <tr>
+                    <th>파라미터</th>
+                    <th>타입</th>
+                    <th>설명</th>
+                  </tr>
+                  <tr>
+                    <td><code>url</code></td>
+                    <td><code>string</code></td>
+                    <td>이동/오픈할 URL — 교과서·콘텐츠·내 수업하기 화면 URL 또는
+                    임의의 html 파일 경로</td>
+                  </tr>
+                  <tr>
+                    <td><code>target</code></td>
+                    <td><code>string</code></td>
+                    <td><code>"_top"</code> · <code>"_blank"</code> · 창 이름</td>
+                  </tr>
+                  <tr>
+                    <td><code>options</code></td>
+                    <td><code>object</code></td>
+                    <td>
+                      (선택) 창 옵션.<br />
+                      <code>maximize: true</code> — 새 창을 최대화한 크기로
+                      엽니다. USB 버전·PC 설치 버전(NW.js 앱)에서 적용되며, 웹
+                      환경에서는 무시됩니다.
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <h3>url 쿼리 파라미터</h3>
+              <p>
+                화면 URL에 다음 쿼리 파라미터를 붙이면 콘텐츠가 열릴 때 특정
+                페이지로 바로 진입합니다.
+              </p>
+              <div class="params">
+                <table>
+                  <tr>
+                    <th>파라미터</th>
+                    <th>타입</th>
+                    <th>설명</th>
+                  </tr>
+                  <tr>
+                    <td><code>pageName</code></td>
+                    <td><code>string</code></td>
+                    <td>
+                      진입할 페이지 파일명 — <strong><code>.html</code> 확장자
+                      포함</strong>. <code>goPageName()</code>과 동일한 값을
+                      사용합니다.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><code>page</code></td>
+                    <td><code>number</code></td>
+                    <td>
+                      진입할 페이지 번호. <code>goPage()</code>와 동일한 값을
+                      사용합니다.
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <h3>사용 예시</h3>
+              <pre><span class="c">// ① ebook 뷰어를 새 창(최대화)으로 열기 — page 번호로 진입 페이지 지정</span>
 <span class="n">window.</span><span class="f">open</span><span class="p">(</span>
   <span class="s">"/scene/ebook/index.html?contentUrl=../../onbook/ebook/unit01/&amp;page=5"</span><span class="p">,</span>
   <span class="s">"_blank"</span><span class="p">,</span>
   <span class="p">{</span> <span class="n">maximize: </span><span class="k">true</span> <span class="p">}</span>
 <span class="p">);</span></pre>
-            <pre><span class="c">// ② contents 뷰어에서 다른 단원의 특정 페이지 열기 (현재 창에서 이동)</span>
+              <pre><span class="c">// ② contents 뷰어에서 다른 단원의 특정 페이지 열기 (현재 창에서 이동)</span>
 <span class="c">// pageName으로 진입 페이지 지정</span>
 <span class="n">window.</span><span class="f">open</span><span class="p">(</span>
   <span class="s">"/scene/contents/index.html?contentUrl=../../onbook/contents/unit01/lesson02&amp;pageName=e5_01_02_01_01.html"</span><span class="p">,</span>
@@ -815,534 +322,470 @@
   <span class="s">"/scene/contents/index.html?contentUrl=../../onbook/contents/unit01/lesson02&amp;page=5"</span><span class="p">,</span>
   <span class="s">"_top"</span>
 <span class="p">);</span></pre>
-            <pre><span class="c">// ③ 기타 html 파일(도움말, 팝업 등)을 새 창(최대화)으로 열기</span>
+              <pre><span class="c">// ③ 기타 html 파일(도움말, 팝업 등)을 새 창(최대화)으로 열기</span>
 <span class="n">window.</span><span class="f">open</span><span class="p">(</span>
   <span class="s">"../popup/help.html"</span><span class="p">,</span>
   <span class="s">"_blank"</span><span class="p">,</span>
   <span class="p">{</span> <span class="n">maximize: </span><span class="k">true</span> <span class="p">}</span>
 <span class="p">);</span></pre>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <h2 id="historyBack">historyBack</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.historyBack()</code>
-            <span class="tag tag-nav">페이지 이동</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              직전에 열었던 화면으로 돌아갑니다. 자료실·팝업 모듈의 닫기
-              버튼에 사용합니다.
-            </p>
-            <pre><span class="c">// 닫기 버튼 클릭 시</span>
+        <section id="historyBack">
+          <h2>historyBack</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.historyBack()</code>
+              <span class="tag tag-nav">페이지 이동</span>
+            </div>
+            <div class="api-card-body">
+              <p>
+                직전에 열었던 화면으로 돌아갑니다. 자료실·팝업 모듈의 닫기
+                버튼에 사용합니다.
+              </p>
+              <pre><span class="c">// 닫기 버튼 클릭 시</span>
 <span class="n">ob.viewer.api.</span><span class="f">historyBack</span><span class="p">();</span></pre>
+            </div>
           </div>
-        </div>
+        </section>
 
         <hr class="divider" />
 
         <!-- ===== 단원 내 이동 ===== -->
-        <h2 id="goPage">goPage</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPage( pageNumber )</code>
-            <span class="tag tag-page">단원 내 이동</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              뷰어의 페이지를 지정한 번호로 이동합니다. 현재 열려 있는 단원
-              안에서만 이동합니다.
-            </p>
-            <div class="params">
-              <table>
-                <tr>
-                  <th>파라미터</th>
-                  <th>타입</th>
-                  <th>설명</th>
-                </tr>
-                <tr>
-                  <td><code>pageNumber</code></td>
-                  <td><code>number</code></td>
-                  <td>이동할 페이지 번호</td>
-                </tr>
-              </table>
+        <section id="goPage">
+          <h2>goPage</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.goPage( pageNumber )</code>
+              <span class="tag tag-page">단원 내 이동</span>
             </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPage</span><span class="p">(</span><span class="n">5</span><span class="p">);</span>  <span class="c">// 5페이지로 이동</span></pre>
+            <div class="api-card-body">
+              <p>
+                뷰어의 페이지를 지정한 번호로 이동합니다. 현재 열려 있는 단원
+                안에서만 이동합니다.
+              </p>
+              <div class="params">
+                <table>
+                  <tr>
+                    <th>파라미터</th>
+                    <th>타입</th>
+                    <th>설명</th>
+                  </tr>
+                  <tr>
+                    <td><code>pageNumber</code></td>
+                    <td><code>number</code></td>
+                    <td>이동할 페이지 번호</td>
+                  </tr>
+                </table>
+              </div>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">goPage</span><span class="p">(</span><span class="n">5</span><span class="p">);</span>  <span class="c">// 5페이지로 이동</span></pre>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <h2 id="goPageName">goPageName</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPageName( pageName )</code>
-            <span class="tag tag-page">단원 내 이동</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              HTML 페이지 파일명(pageName)으로 뷰어 페이지를 이동합니다. 현재
-              열려 있는 단원 안에서만 이동합니다.
-            </p>
-            <div class="params">
-              <table>
-                <tr>
-                  <th>파라미터</th>
-                  <th>타입</th>
-                  <th>설명</th>
-                </tr>
-                <tr>
-                  <td><code>pageName</code></td>
-                  <td><code>string</code></td>
-                  <td>
-                    이동할 페이지 파일명 — <strong><code>.html</code> 확장자
-                    포함</strong>
-                  </td>
-                </tr>
-              </table>
+        <section id="goPageName">
+          <h2>goPageName</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.goPageName( pageName )</code>
+              <span class="tag tag-page">단원 내 이동</span>
             </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_01_01_01.html"</span><span class="p">);</span>
+            <div class="api-card-body">
+              <p>
+                HTML 페이지 파일명(pageName)으로 뷰어 페이지를 이동합니다. 현재
+                열려 있는 단원 안에서만 이동합니다.
+              </p>
+              <div class="params">
+                <table>
+                  <tr>
+                    <th>파라미터</th>
+                    <th>타입</th>
+                    <th>설명</th>
+                  </tr>
+                  <tr>
+                    <td><code>pageName</code></td>
+                    <td><code>string</code></td>
+                    <td>
+                      이동할 페이지 파일명 — <strong><code>.html</code> 확장자
+                      포함</strong>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_01_01_01.html"</span><span class="p">);</span>
 <span class="n">ob.viewer.api.</span><span class="f">goPageName</span><span class="p">(</span><span class="s">"e5_01_02_03_01.html"</span><span class="p">);</span></pre>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <h2 id="goPagePrev">goPagePrev</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPagePrev()</code>
-            <span class="tag tag-page">단원 내 이동</span>
+        <section id="goPagePrev">
+          <h2>goPagePrev</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.goPagePrev()</code>
+              <span class="tag tag-page">단원 내 이동</span>
+            </div>
+            <div class="api-card-body">
+              <p>현재 페이지에서 이전 페이지로 이동합니다.</p>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">goPagePrev</span><span class="p">();</span></pre>
+            </div>
           </div>
-          <div class="api-card-body">
-            <p>현재 페이지에서 이전 페이지로 이동합니다.</p>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPagePrev</span><span class="p">();</span></pre>
-          </div>
-        </div>
+        </section>
 
-        <h2 id="goPageNext">goPageNext</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPageNext()</code>
-            <span class="tag tag-page">단원 내 이동</span>
+        <section id="goPageNext">
+          <h2>goPageNext</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.goPageNext()</code>
+              <span class="tag tag-page">단원 내 이동</span>
+            </div>
+            <div class="api-card-body">
+              <p>현재 페이지에서 다음 페이지로 이동합니다.</p>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">goPageNext</span><span class="p">();</span></pre>
+            </div>
           </div>
-          <div class="api-card-body">
-            <p>현재 페이지에서 다음 페이지로 이동합니다.</p>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageNext</span><span class="p">();</span></pre>
-          </div>
-        </div>
+        </section>
 
-        <h2 id="goPageFirst">goPageFirst</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPageFirst()</code>
-            <span class="tag tag-page">단원 내 이동</span>
+        <section id="goPageFirst">
+          <h2>goPageFirst</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.goPageFirst()</code>
+              <span class="tag tag-page">단원 내 이동</span>
+            </div>
+            <div class="api-card-body">
+              <p>첫 번째 페이지로 이동합니다.</p>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">goPageFirst</span><span class="p">();</span></pre>
+            </div>
           </div>
-          <div class="api-card-body">
-            <p>첫 번째 페이지로 이동합니다.</p>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageFirst</span><span class="p">();</span></pre>
-          </div>
-        </div>
+        </section>
 
-        <h2 id="goPageLast">goPageLast</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.goPageLast()</code>
-            <span class="tag tag-page">단원 내 이동</span>
+        <section id="goPageLast">
+          <h2>goPageLast</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.goPageLast()</code>
+              <span class="tag tag-page">단원 내 이동</span>
+            </div>
+            <div class="api-card-body">
+              <p>마지막 페이지로 이동합니다.</p>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">goPageLast</span><span class="p">();</span></pre>
+            </div>
           </div>
-          <div class="api-card-body">
-            <p>마지막 페이지로 이동합니다.</p>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">goPageLast</span><span class="p">();</span></pre>
-          </div>
-        </div>
+        </section>
 
         <!-- ===== 단원 내 정보 조회 ===== -->
-        <h2 id="getPageNum">getPageNum</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.getPageNum()</code>
-            <span class="tag tag-page">단원 내 이동</span>
-          </div>
-          <div class="api-card-body">
-            <p>현재 뷰어에 표시 중인 페이지 번호를 반환합니다.</p>
-            <div class="returns">
-              반환값: <strong>number</strong> — 현재 페이지 번호
+        <section id="getPageNum">
+          <h2>getPageNum</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.getPageNum()</code>
+              <span class="tag tag-page">단원 내 이동</span>
             </div>
-            <pre><span class="k">const</span> <span class="n">page = ob.viewer.api.</span><span class="f">getPageNum</span><span class="p">();</span>
+            <div class="api-card-body">
+              <p>현재 뷰어에 표시 중인 페이지 번호를 반환합니다.</p>
+              <div class="returns">
+                반환값: <strong>number</strong> — 현재 페이지 번호
+              </div>
+              <pre><span class="k">const</span> <span class="n">page = ob.viewer.api.</span><span class="f">getPageNum</span><span class="p">();</span>
 <span class="n">console.</span><span class="f">log</span><span class="p">(</span><span class="s">"현재:"</span><span class="p">,</span> <span class="n">page</span><span class="p">);</span></pre>
-          </div>
-        </div>
-
-        <h2 id="getPageNumFirst">getPageNumFirst</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.getPageNumFirst()</code>
-            <span class="tag tag-page">단원 내 이동</span>
-          </div>
-          <div class="api-card-body">
-            <p>이 콘텐츠의 시작 페이지 번호를 반환합니다.</p>
-            <div class="returns">
-              반환값: <strong>number</strong> — 시작 페이지 번호
             </div>
-            <pre><span class="k">const</span> <span class="n">first = ob.viewer.api.</span><span class="f">getPageNumFirst</span><span class="p">();</span></pre>
           </div>
-        </div>
+        </section>
 
-        <h2 id="getPageNumLast">getPageNumLast</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.getPageNumLast()</code>
-            <span class="tag tag-page">단원 내 이동</span>
-          </div>
-          <div class="api-card-body">
-            <p>이 콘텐츠의 마지막 페이지 번호를 반환합니다.</p>
-            <div class="returns">
-              반환값: <strong>number</strong> — 마지막 페이지 번호
+        <section id="getPageNumFirst">
+          <h2>getPageNumFirst</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.getPageNumFirst()</code>
+              <span class="tag tag-page">단원 내 이동</span>
             </div>
-            <pre><span class="k">const</span> <span class="n">last = ob.viewer.api.</span><span class="f">getPageNumLast</span><span class="p">();</span></pre>
+            <div class="api-card-body">
+              <p>이 콘텐츠의 시작 페이지 번호를 반환합니다.</p>
+              <div class="returns">
+                반환값: <strong>number</strong> — 시작 페이지 번호
+              </div>
+              <pre><span class="k">const</span> <span class="n">first = ob.viewer.api.</span><span class="f">getPageNumFirst</span><span class="p">();</span></pre>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <h2 id="getPageTotal">getPageTotal</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.getPageTotal()</code>
-            <span class="tag tag-page">단원 내 이동</span>
-          </div>
-          <div class="api-card-body">
-            <p>전체 페이지 수를 반환합니다.</p>
-            <div class="returns">
-              반환값: <strong>number</strong> — 전체 페이지 수
+        <section id="getPageNumLast">
+          <h2>getPageNumLast</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.getPageNumLast()</code>
+              <span class="tag tag-page">단원 내 이동</span>
             </div>
-            <pre><span class="k">const</span> <span class="n">total = ob.viewer.api.</span><span class="f">getPageTotal</span><span class="p">();</span>
+            <div class="api-card-body">
+              <p>이 콘텐츠의 마지막 페이지 번호를 반환합니다.</p>
+              <div class="returns">
+                반환값: <strong>number</strong> — 마지막 페이지 번호
+              </div>
+              <pre><span class="k">const</span> <span class="n">last = ob.viewer.api.</span><span class="f">getPageNumLast</span><span class="p">();</span></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="getPageTotal">
+          <h2>getPageTotal</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.getPageTotal()</code>
+              <span class="tag tag-page">단원 내 이동</span>
+            </div>
+            <div class="api-card-body">
+              <p>전체 페이지 수를 반환합니다.</p>
+              <div class="returns">
+                반환값: <strong>number</strong> — 전체 페이지 수
+              </div>
+              <pre><span class="k">const</span> <span class="n">total = ob.viewer.api.</span><span class="f">getPageTotal</span><span class="p">();</span>
 <span class="n">console.</span><span class="f">log</span><span class="p">(</span><span class="s">`${ob.viewer.api.getPageNum()} / ${total}`</span><span class="p">);</span></pre>
+            </div>
           </div>
-        </div>
+        </section>
 
         <hr class="divider" />
 
         <!-- ===== 파일 / 시스템 ===== -->
-        <h2 id="openFolder">openFolder</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.openFolder( path )</code>
-            <span class="tag tag-sys">시스템</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              지정한 경로의 폴더를 탐색기(파일 관리자)로 엽니다. NW.js(앱)
-              환경에서만 동작합니다.
-            </p>
-            <div class="params">
-              <table>
-                <tr>
-                  <th>파라미터</th>
-                  <th>타입</th>
-                  <th>설명</th>
-                </tr>
-                <tr>
-                  <td><code>path</code></td>
-                  <td><code>string</code></td>
-                  <td>열 폴더 경로. 콘텐츠 기준 상대경로 또는 절대경로(<code>/onbook/…</code>)</td>
-                </tr>
-              </table>
+        <section id="openFolder">
+          <h2>openFolder</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.openFolder( path )</code>
+              <span class="tag tag-sys">시스템</span>
             </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">openFolder</span><span class="p">(</span><span class="s">"../../onbook/download/unit01/files"</span><span class="p">);</span></pre>
+            <div class="api-card-body">
+              <p>
+                지정한 경로의 폴더를 탐색기(파일 관리자)로 엽니다. NW.js(앱)
+                환경에서만 동작합니다.
+              </p>
+              <div class="params">
+                <table>
+                  <tr>
+                    <th>파라미터</th>
+                    <th>타입</th>
+                    <th>설명</th>
+                  </tr>
+                  <tr>
+                    <td><code>path</code></td>
+                    <td><code>string</code></td>
+                    <td>열 폴더 경로. 콘텐츠 기준 상대경로 또는 절대경로(<code>/onbook/…</code>)</td>
+                  </tr>
+                </table>
+              </div>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">openFolder</span><span class="p">(</span><span class="s">"../../onbook/download/unit01/files"</span><span class="p">);</span></pre>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <h2 id="openApp">openApp</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.openApp( path )</code>
-            <span class="tag tag-sys">시스템</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              지정한 경로의 파일을 연결 프로그램으로 엽니다 (예: <code>.hwp</code>는
-              한글, <code>.pdf</code>는 PDF 뷰어, <code>.exe</code>는 실행).
-              NW.js(앱) 환경에서만 동작합니다.
-            </p>
-            <div class="params">
-              <table>
-                <tr>
-                  <th>파라미터</th>
-                  <th>타입</th>
-                  <th>설명</th>
-                </tr>
-                <tr>
-                  <td><code>path</code></td>
-                  <td><code>string</code></td>
-                  <td>열 파일 경로. 콘텐츠 기준 상대경로 또는 절대경로(<code>/onbook/…</code>)</td>
-                </tr>
-              </table>
+        <section id="openApp">
+          <h2>openApp</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.openApp( path )</code>
+              <span class="tag tag-sys">시스템</span>
             </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">openApp</span><span class="p">(</span><span class="s">"../../onbook/download/unit01/game.exe"</span><span class="p">);</span></pre>
+            <div class="api-card-body">
+              <p>
+                지정한 경로의 파일을 연결 프로그램으로 엽니다 (예: <code>.hwp</code>는
+                한글, <code>.pdf</code>는 PDF 뷰어, <code>.exe</code>는 실행).
+                NW.js(앱) 환경에서만 동작합니다.
+              </p>
+              <div class="params">
+                <table>
+                  <tr>
+                    <th>파라미터</th>
+                    <th>타입</th>
+                    <th>설명</th>
+                  </tr>
+                  <tr>
+                    <td><code>path</code></td>
+                    <td><code>string</code></td>
+                    <td>열 파일 경로. 콘텐츠 기준 상대경로 또는 절대경로(<code>/onbook/…</code>)</td>
+                  </tr>
+                </table>
+              </div>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">openApp</span><span class="p">(</span><span class="s">"../../onbook/download/unit01/game.exe"</span><span class="p">);</span></pre>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <h2 id="downloadFile">downloadFile</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.downloadFile( path )</code>
-            <span class="tag tag-sys">시스템</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              지정한 경로의 파일을 다운로드합니다. NW.js(앱) 환경에서만
-              동작합니다.
-            </p>
-            <div class="params">
-              <table>
-                <tr>
-                  <th>파라미터</th>
-                  <th>타입</th>
-                  <th>설명</th>
-                </tr>
-                <tr>
-                  <td><code>path</code></td>
-                  <td><code>string</code></td>
-                  <td>다운로드할 파일 경로. 콘텐츠 기준 상대경로 또는 절대경로(<code>/onbook/…</code>)</td>
-                </tr>
-              </table>
+        <section id="downloadFile">
+          <h2>downloadFile</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.downloadFile( path )</code>
+              <span class="tag tag-sys">시스템</span>
             </div>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">downloadFile</span><span class="p">(</span><span class="s">"../../onbook/download/unit01/document.hwp"</span><span class="p">);</span></pre>
+            <div class="api-card-body">
+              <p>
+                지정한 경로의 파일을 다운로드합니다. NW.js(앱) 환경에서만
+                동작합니다.
+              </p>
+              <div class="params">
+                <table>
+                  <tr>
+                    <th>파라미터</th>
+                    <th>타입</th>
+                    <th>설명</th>
+                  </tr>
+                  <tr>
+                    <td><code>path</code></td>
+                    <td><code>string</code></td>
+                    <td>다운로드할 파일 경로. 콘텐츠 기준 상대경로 또는 절대경로(<code>/onbook/…</code>)</td>
+                  </tr>
+                </table>
+              </div>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">downloadFile</span><span class="p">(</span><span class="s">"../../onbook/download/unit01/document.hwp"</span><span class="p">);</span></pre>
+            </div>
           </div>
-        </div>
+        </section>
 
         <hr class="divider" />
 
         <!-- ===== 내 수업하기 ===== -->
-        <h2 id="hideMyClassUi">hideMyClassUi</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.hideMyClassUi()</code>
-            <span class="tag tag-info">내 수업하기</span>
-          </div>
-          <div class="api-card-body">
-            <p>
-              「내 수업하기」 화면의 상단 UI를 숨깁니다. 콘텐츠를 넓게 보여줘야
-              할 때 사용합니다.
-            </p>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">hideMyClassUi</span><span class="p">();</span></pre>
-          </div>
-        </div>
-
-        <h2 id="showMyClassUi">showMyClassUi</h2>
-        <div class="api-card">
-          <div class="api-card-header">
-            <code>ob.viewer.api.showMyClassUi()</code>
-            <span class="tag tag-info">내 수업하기</span>
-          </div>
-          <div class="api-card-body">
-            <p>숨긴 상단 UI를 다시 표시합니다.</p>
-            <pre><span class="n">ob.viewer.api.</span><span class="f">showMyClassUi</span><span class="p">();</span></pre>
-            <div class="returns">
-              「내 수업하기」 화면에서만 동작합니다. 숨긴 뒤에는 반드시 다시
-              표시해 주세요.
+        <section id="hideMyClassUi">
+          <h2>hideMyClassUi</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.hideMyClassUi()</code>
+              <span class="tag tag-info">내 수업하기</span>
+            </div>
+            <div class="api-card-body">
+              <p>
+                「내 수업하기」 화면의 상단 UI를 숨깁니다. 콘텐츠를 넓게 보여줘야
+                할 때 사용합니다.
+              </p>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">hideMyClassUi</span><span class="p">();</span></pre>
             </div>
           </div>
-        </div>
+        </section>
+
+        <section id="showMyClassUi">
+          <h2>showMyClassUi</h2>
+          <div class="api-card">
+            <div class="api-card-header">
+              <code>ob.viewer.api.showMyClassUi()</code>
+              <span class="tag tag-info">내 수업하기</span>
+            </div>
+            <div class="api-card-body">
+              <p>숨긴 상단 UI를 다시 표시합니다.</p>
+              <pre><span class="n">ob.viewer.api.</span><span class="f">showMyClassUi</span><span class="p">();</span></pre>
+              <div class="returns">
+                「내 수업하기」 화면에서만 동작합니다. 숨긴 뒤에는 반드시 다시
+                표시해 주세요.
+              </div>
+            </div>
+          </div>
+        </section>
 
         <hr class="divider" />
 
         <!-- 전체 API 요약 -->
-        <h2 id="summary">전체 API 목록</h2>
-        <div class="params">
-          <table>
-            <tr>
-              <th>함수</th>
-              <th>카테고리</th>
-              <th>설명</th>
-            </tr>
-            <tr>
-              <td><code>window.open(url, target, opts)</code></td>
-              <td><span class="tag tag-nav">페이지 이동</span></td>
-              <td>화면 URL 이동 / 새 창 열기</td>
-            </tr>
-            <tr>
-              <td><code>historyBack()</code></td>
-              <td><span class="tag tag-nav">페이지 이동</span></td>
-              <td>이전 화면으로 복귀</td>
-            </tr>
-            <tr>
-              <td><code>goPage(n)</code></td>
-              <td><span class="tag tag-page">단원 내 이동</span></td>
-              <td>페이지 번호로 이동</td>
-            </tr>
-            <tr>
-              <td><code>goPageName(s)</code></td>
-              <td><span class="tag tag-page">단원 내 이동</span></td>
-              <td>페이지 파일명으로 이동</td>
-            </tr>
-            <tr>
-              <td><code>goPagePrev()</code></td>
-              <td><span class="tag tag-page">단원 내 이동</span></td>
-              <td>이전 페이지로 이동</td>
-            </tr>
-            <tr>
-              <td><code>goPageNext()</code></td>
-              <td><span class="tag tag-page">단원 내 이동</span></td>
-              <td>다음 페이지로 이동</td>
-            </tr>
-            <tr>
-              <td><code>goPageFirst()</code></td>
-              <td><span class="tag tag-page">단원 내 이동</span></td>
-              <td>첫 페이지로 이동</td>
-            </tr>
-            <tr>
-              <td><code>goPageLast()</code></td>
-              <td><span class="tag tag-page">단원 내 이동</span></td>
-              <td>마지막 페이지로 이동</td>
-            </tr>
-            <tr>
-              <td><code>getPageNum()</code></td>
-              <td><span class="tag tag-page">단원 내 이동</span></td>
-              <td>현재 페이지 번호 반환</td>
-            </tr>
-            <tr>
-              <td><code>getPageNumFirst()</code></td>
-              <td><span class="tag tag-page">단원 내 이동</span></td>
-              <td>시작 페이지 번호 반환</td>
-            </tr>
-            <tr>
-              <td><code>getPageNumLast()</code></td>
-              <td><span class="tag tag-page">단원 내 이동</span></td>
-              <td>마지막 페이지 번호 반환</td>
-            </tr>
-            <tr>
-              <td><code>getPageTotal()</code></td>
-              <td><span class="tag tag-page">단원 내 이동</span></td>
-              <td>전체 페이지 수 반환</td>
-            </tr>
-            <tr>
-              <td><code>openFolder(path)</code></td>
-              <td><span class="tag tag-sys">시스템</span></td>
-              <td>탐색기로 폴더 열기</td>
-            </tr>
-            <tr>
-              <td><code>openApp(path)</code></td>
-              <td><span class="tag tag-sys">시스템</span></td>
-              <td>연결 프로그램으로 열기</td>
-            </tr>
-            <tr>
-              <td><code>downloadFile(path)</code></td>
-              <td><span class="tag tag-sys">시스템</span></td>
-              <td>파일 다운로드</td>
-            </tr>
-            <tr>
-              <td><code>hideMyClassUi()</code></td>
-              <td><span class="tag tag-info">내 수업하기</span></td>
-              <td>상단 UI 숨김</td>
-            </tr>
-            <tr>
-              <td><code>showMyClassUi()</code></td>
-              <td><span class="tag tag-info">내 수업하기</span></td>
-              <td>상단 UI 표시</td>
-            </tr>
-          </table>
-        </div>
+        <section id="summary">
+          <h2>전체 API 목록</h2>
+          <div class="params">
+            <table>
+              <tr>
+                <th>함수</th>
+                <th>카테고리</th>
+                <th>설명</th>
+              </tr>
+              <tr>
+                <td><code>window.open(url, target, opts)</code></td>
+                <td><span class="tag tag-nav">페이지 이동</span></td>
+                <td>화면 URL 이동 / 새 창 열기</td>
+              </tr>
+              <tr>
+                <td><code>historyBack()</code></td>
+                <td><span class="tag tag-nav">페이지 이동</span></td>
+                <td>이전 화면으로 복귀</td>
+              </tr>
+              <tr>
+                <td><code>goPage(n)</code></td>
+                <td><span class="tag tag-page">단원 내 이동</span></td>
+                <td>페이지 번호로 이동</td>
+              </tr>
+              <tr>
+                <td><code>goPageName(s)</code></td>
+                <td><span class="tag tag-page">단원 내 이동</span></td>
+                <td>페이지 파일명으로 이동</td>
+              </tr>
+              <tr>
+                <td><code>goPagePrev()</code></td>
+                <td><span class="tag tag-page">단원 내 이동</span></td>
+                <td>이전 페이지로 이동</td>
+              </tr>
+              <tr>
+                <td><code>goPageNext()</code></td>
+                <td><span class="tag tag-page">단원 내 이동</span></td>
+                <td>다음 페이지로 이동</td>
+              </tr>
+              <tr>
+                <td><code>goPageFirst()</code></td>
+                <td><span class="tag tag-page">단원 내 이동</span></td>
+                <td>첫 페이지로 이동</td>
+              </tr>
+              <tr>
+                <td><code>goPageLast()</code></td>
+                <td><span class="tag tag-page">단원 내 이동</span></td>
+                <td>마지막 페이지로 이동</td>
+              </tr>
+              <tr>
+                <td><code>getPageNum()</code></td>
+                <td><span class="tag tag-page">단원 내 이동</span></td>
+                <td>현재 페이지 번호 반환</td>
+              </tr>
+              <tr>
+                <td><code>getPageNumFirst()</code></td>
+                <td><span class="tag tag-page">단원 내 이동</span></td>
+                <td>시작 페이지 번호 반환</td>
+              </tr>
+              <tr>
+                <td><code>getPageNumLast()</code></td>
+                <td><span class="tag tag-page">단원 내 이동</span></td>
+                <td>마지막 페이지 번호 반환</td>
+              </tr>
+              <tr>
+                <td><code>getPageTotal()</code></td>
+                <td><span class="tag tag-page">단원 내 이동</span></td>
+                <td>전체 페이지 수 반환</td>
+              </tr>
+              <tr>
+                <td><code>openFolder(path)</code></td>
+                <td><span class="tag tag-sys">시스템</span></td>
+                <td>탐색기로 폴더 열기</td>
+              </tr>
+              <tr>
+                <td><code>openApp(path)</code></td>
+                <td><span class="tag tag-sys">시스템</span></td>
+                <td>연결 프로그램으로 열기</td>
+              </tr>
+              <tr>
+                <td><code>downloadFile(path)</code></td>
+                <td><span class="tag tag-sys">시스템</span></td>
+                <td>파일 다운로드</td>
+              </tr>
+              <tr>
+                <td><code>hideMyClassUi()</code></td>
+                <td><span class="tag tag-info">내 수업하기</span></td>
+                <td>상단 UI 숨김</td>
+              </tr>
+              <tr>
+                <td><code>showMyClassUi()</code></td>
+                <td><span class="tag tag-info">내 수업하기</span></td>
+                <td>상단 UI 표시</td>
+              </tr>
+            </table>
+          </div>
+        </section>
       </main>
     </div>
 
     <div class="footer"><span>OnBook 뷰어 API 가이드 · 콘텐츠 개발사용 · 문서 v1.0.002 (onbook.api v1.0.1)</span><span>&copy; 2026 Amanta</span></div>
 
-    <script>
-      // ─── 고정 헤더·푸터 높이를 CSS 변수(--header-h, --footer-h)에 반영 ───
-      const headerEl = document.querySelector(".header");
-      const footerEl = document.querySelector(".footer");
-      function setBarHeights() {
-        if (headerEl) {
-          document.documentElement.style.setProperty("--header-h", headerEl.offsetHeight + "px");
-        }
-        if (footerEl) {
-          // 가로 스크롤바가 있으면 그 높이만큼 사이드바가 밀려 올라가므로 footer 높이에 합산해 보정
-          const hScrollbar = Math.max(0, window.innerHeight - document.documentElement.clientHeight);
-          document.documentElement.style.setProperty("--footer-h", footerEl.offsetHeight + hScrollbar + "px");
-        }
-      }
-      window.addEventListener("resize", setBarHeights);
-      setBarHeights();
-
-      // ─── 좁은 화면: 햄버거 메뉴로 사이드바 열고 닫기 ───
-      const menuToggle = document.querySelector(".menu-toggle");
-      const backdrop = document.querySelector(".backdrop");
-
-      function closeMenu() {
-        document.body.classList.remove("menu-open");
-        if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
-      }
-
-      if (menuToggle) {
-        menuToggle.addEventListener("click", () => {
-          const open = document.body.classList.toggle("menu-open");
-          menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
-        });
-      }
-      if (backdrop) {
-        backdrop.addEventListener("click", closeMenu);
-      }
-      document.querySelectorAll(".sidebar a").forEach((link) => {
-        link.addEventListener("click", closeMenu);
-      });
-      window.addEventListener("resize", () => {
-        if (window.innerWidth > 768) closeMenu();
-      });
-
-      // ─── 사이드바 카테고리 펼침/닫힘 (페이지 진입 시 항상 펼침) ───
-      document.querySelectorAll(".sidebar .nav-group").forEach((group) => {
-        const btn = group.querySelector(".nav-title");
-        if (btn) {
-          btn.addEventListener("click", () => {
-            group.classList.toggle("collapsed");
-          });
-        }
-      });
-
-      const headings = Array.from(document.querySelectorAll("h2[id]"));
-      const navLinks = document.querySelectorAll('.sidebar a[href^="#"]');
-      let clicking = false;
-
-      function setActive(id) {
-        navLinks.forEach((a) => a.classList.remove("active"));
-        const link = document.querySelector(`.sidebar a[href="#${id}"]`);
-        if (link) link.classList.add("active");
-      }
-
-      function updateActiveByScroll() {
-        if (clicking) return;
-        const threshold = window.scrollY + window.innerHeight * 0.25;
-        // 스크롤 위치를 지난 헤딩 중 가장 마지막 것을 active로
-        let active = headings[0];
-        for (const h of headings) {
-          if (h.getBoundingClientRect().top + window.scrollY <= threshold) {
-            active = h;
-          }
-        }
-        if (active) setActive(active.id);
-      }
-
-      // 클릭 시 즉시 active 적용 + 세로로만 스크롤 (가로 스크롤 위치 유지)
-      navLinks.forEach((a) => {
-        a.addEventListener("click", (e) => {
-          const id = a.getAttribute("href").slice(1);
-          const target = document.getElementById(id);
-          if (target) {
-            e.preventDefault();
-            const headerH = headerEl ? headerEl.offsetHeight : 0;
-            const y = target.getBoundingClientRect().top + window.scrollY - headerH - 8;
-            window.scrollTo(window.scrollX, y);
-            history.replaceState(null, "", "#" + id);
-          }
-          setActive(id);
-          clicking = true;
-          setTimeout(() => {
-            clicking = false;
-          }, 800);
-        });
-      });
-
-      window.addEventListener("scroll", updateActiveByScroll, {
-        passive: true,
-      });
-      updateActiveByScroll();
-    </script>
+    <script src="assets/guide.js"></script>
   </body>
 </html>

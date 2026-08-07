@@ -1,0 +1,795 @@
+/*
+ * OnBook 가이드 문서 공통 스타일
+ *
+ * docs/ 의 가이드 5종이 함께 사용한다. 이 파일을 고치면 5문서에 모두 반영되므로
+ * 한 문서에만 필요한 규칙은 여기 두지 말고 해당 HTML 의 <style> 에 남긴다.
+ * (문서별 태그 색 --tag-*, API 가이드의 .api-card 등)
+ *
+ * 본문 구조 규약: <main class="content"> 안의 각 절은 <section id="..."> 로 감싸고
+ * 제목은 <h2> 로 쓴다. 앵커 id 는 section 이 갖는다.
+ */
+
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --text: #1e293b;
+  --text-muted: #64748b;
+  --code-bg: #f1f5f9;
+  --code-border: #cbd5e1;
+  --green: #16a34a;
+  --green-bg: #f0fdf4;
+  --blue-bg: #eff6ff;
+  --yellow-bg: #fefce8;
+  --yellow-border: #fde047;
+  /* 고정 헤더·푸터 높이 — guide.js 가 실제 높이로 갱신한다 */
+  --header-h: 84px;
+  --footer-h: 0px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ─── 헤더 ─── */
+.header {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+  color: #fff;
+  padding: 10px 48px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-text {
+  flex: 1;
+}
+.header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+.header p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+.header .meta {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 4px 12px;
+  white-space: nowrap;
+}
+.menu-toggle {
+  display: none;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.backdrop {
+  position: fixed;
+  inset: var(--header-h) 0 0 0;
+  background: rgba(15, 23, 42, 0.4);
+  z-index: 85;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+body.menu-open .backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ─── 레이아웃·사이드바 ─── */
+.layout {
+  display: flex;
+  min-height: calc(100vh - 120px);
+}
+
+.sidebar {
+  width: 230px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 12px 0;
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h) - var(--footer-h));
+  overflow-y: auto;
+}
+.sidebar .nav-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 18px 16px 5px;
+  margin-top: 0;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+  text-align: left;
+}
+.sidebar .nav-group:first-child .nav-title {
+  border-top: none;
+  padding-top: 8px;
+}
+.sidebar .nav-title:hover {
+  color: var(--primary-dark);
+}
+.sidebar .nav-arrow {
+  font-size: 9px;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+.sidebar .nav-group.collapsed .nav-arrow {
+  transform: rotate(-90deg);
+}
+.sidebar .nav-group.collapsed .nav-links {
+  display: none;
+}
+.sidebar a {
+  display: block;
+  padding: 7px 16px 7px 20px;
+  font-size: 13.5px;
+  color: var(--text);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+.sidebar a:hover {
+  color: var(--primary);
+  background: var(--blue-bg);
+  border-left-color: #bfdbfe;
+}
+.sidebar a.active {
+  color: var(--primary);
+  background: var(--blue-bg);
+  border-left-color: var(--primary);
+  font-weight: 700;
+}
+.sidebar .section-gap {
+  height: 12px;
+}
+.sidebar .nav-divider {
+  border-top: 1px dashed var(--code-border);
+  margin: 8px 16px;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 40px 48px;
+  max-width: 900px;
+}
+
+/* ─── 본문 타이포 ─── */
+section {
+  margin-bottom: 56px;
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+section > h2 {
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  padding-bottom: 10px;
+  margin-bottom: 18px;
+  border-bottom: 2px solid var(--primary);
+}
+section h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 28px 0 10px;
+  scroll-margin-top: calc(var(--header-h) + 8px);
+}
+section h4 {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 22px 0 8px;
+  scroll-margin-top: calc(var(--header-h) + 8px);
+}
+section p {
+  font-size: 14.5px;
+  margin-bottom: 12px;
+}
+section ul,
+section ol {
+  font-size: 14.5px;
+  padding-left: 22px;
+  margin-bottom: 12px;
+}
+section li {
+  margin-bottom: 5px;
+}
+.sub-group {
+  border-left: 3px solid var(--border);
+  padding-left: 20px;
+  margin-top: 14px;
+}
+
+/* ─── 콜아웃 ─── */
+.callout {
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 14px;
+  margin: 16px 0;
+  border: 1px solid;
+}
+.callout::before {
+  display: inline-block;
+  padding: 1px 10px;
+  margin-right: 8px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid;
+  font-size: 12px;
+  font-weight: 700;
+  vertical-align: 1px;
+}
+.callout.tip {
+  background: var(--green-bg);
+  border-color: #bbf7d0;
+}
+.callout.tip::before {
+  content: "💡 TIP";
+  color: var(--green);
+  border-color: #bbf7d0;
+}
+.callout.note {
+  background: var(--blue-bg);
+  border-color: #bfdbfe;
+}
+.callout.note::before {
+  content: "ℹ️ 참고";
+  color: var(--primary-dark);
+  border-color: #bfdbfe;
+}
+.callout.warn {
+  background: var(--yellow-bg);
+  border-color: var(--yellow-border);
+}
+.callout.warn::before {
+  content: "⚠️ 주의";
+  color: #a16207;
+  border-color: var(--yellow-border);
+}
+.callout a {
+  color: var(--primary);
+  font-weight: 700;
+}
+.callout ul {
+  font-size: inherit;
+  margin: 6px 0 0;
+}
+.callout li {
+  margin-bottom: 3px;
+}
+
+/* ─── 표 (기본) ─── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  margin: 14px 0 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+th,
+td {
+  text-align: left;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  background: var(--code-bg);
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+td.feature-name {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ─── 표 (.params — 촘촘한 격자형) ─── */
+/* 위 기본 표 규칙이 흘러들지 않도록 필요한 값을 모두 명시한다. */
+.params {
+  margin: 10px 0;
+}
+.params table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+.params th,
+.params td {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  vertical-align: top;
+  font-size: inherit;
+  white-space: normal;
+}
+.params th {
+  text-align: left;
+  background: var(--code-bg);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.params tr:last-child td {
+  border-bottom: 1px solid var(--border);
+}
+.params td code {
+  font-size: 11px;
+  background: var(--code-bg);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.params td a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ─── 코드 ─── */
+pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 16px 18px;
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: auto;
+  margin: 12px 0 16px;
+}
+pre .c {
+  color: #64748b;
+}
+pre .k {
+  color: #93c5fd;
+}
+pre .s {
+  color: #86efac;
+}
+pre .f {
+  color: #fde68a;
+}
+pre .n {
+  color: #e2e8f0;
+}
+pre .p {
+  color: #94a3b8;
+}
+pre .g {
+  color: #86efac;
+  font-weight: 700;
+}
+pre .m {
+  color: #94a3b8;
+}
+
+code {
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-size: 13px;
+}
+p code,
+li code,
+td code {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+p a,
+li a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ─── 리스트 변형 ─── */
+ol.steps > li {
+  margin-bottom: 10px;
+}
+ol.steps > li > strong {
+  color: var(--primary-dark);
+}
+.step-list li {
+  margin-bottom: 8px;
+}
+ul.checklist {
+  list-style: none;
+  padding-left: 4px;
+}
+ul.checklist li {
+  padding-left: 26px;
+  position: relative;
+  margin-bottom: 8px;
+}
+ul.checklist li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--green);
+  border-radius: 4px;
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+  background: var(--green-bg);
+}
+
+/* ─── 스크린샷 ─── */
+.shot {
+  margin: 14px 0 20px;
+  text-align: center;
+}
+.shot img {
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
+  cursor: zoom-in;
+}
+/* 잘라낸 조각 이미지는 확대(라이트박스) 대상이 아니다 */
+.shot img.crop {
+  cursor: default;
+}
+.shot figcaption {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 6px;
+}
+.shot .shot-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 130px;
+  background: var(--code-bg);
+  border: 2px dashed var(--code-border);
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.shot .shot-placeholder .shot-file {
+  font-family: "JetBrains Mono", Consolas, monospace;
+  font-size: 11.5px;
+  color: #94a3b8;
+}
+
+/* 스크린샷 일부 강조 — 지정 영역만 원래 밝기, 나머지는 어둡게 */
+.shot .spotlight {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 10px;
+  line-height: 0;
+  max-width: 100%;
+}
+.shot .spotlight img {
+  display: block;
+}
+.shot .spotlight .spot {
+  position: absolute;
+  border-radius: 6px;
+  box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.55);
+  pointer-events: none;
+}
+
+/* 세로로 긴 스크린샷 여러 장을 가로로 나란히 배치 */
+.shot-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 14px 0 20px;
+}
+.shot-row .shot {
+  margin: 0;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: max-content;
+}
+.shot-row .shot img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 본문 인라인 아이콘 (원본 크기 유지) */
+.icon-inline {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 2px;
+  border-radius: 3px;
+}
+
+/* ─── 이미지 원본 보기 (라이트박스) ─── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(15, 23, 42, 0.88);
+  display: none;
+  overflow: auto;
+  padding: 32px;
+  cursor: zoom-out;
+}
+.lightbox.open {
+  display: flex;
+}
+.lightbox img {
+  display: block;
+  margin: auto;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+.lightbox .lightbox-stage {
+  position: relative;
+  display: block;
+  margin: auto;
+  line-height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.lightbox .lightbox-stage img {
+  margin: 0;
+}
+.lightbox .lightbox-stage .spot {
+  position: absolute;
+  border-radius: 6px;
+  box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.55);
+  pointer-events: none;
+  display: none;
+}
+
+/* ─── 인라인 컴포넌트 ─── */
+/* 배지 — 색은 문서별 .tag-* 에서 지정한다 */
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.kbd {
+  display: inline-block;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 0 7px;
+  font-family: "JetBrains Mono", Consolas, monospace;
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+/* 긴 경로·인터넷 주소는 줄바꿈 허용 (가로 스크롤 방지) */
+.kbd.path {
+  white-space: normal;
+  word-break: break-all;
+}
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 8px 0 24px;
+}
+.report-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin: 14px 0;
+}
+.report-box dt {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-top: 12px;
+}
+.report-box dt:first-child {
+  margin-top: 0;
+}
+.report-box dd {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin-left: 0;
+}
+
+/* 테스터 전용 요소 — 주소에 ?tester 파라미터가 있을 때만 표시 */
+body:not(.tester-mode) .tester-only {
+  display: none !important;
+}
+
+/* ─── 푸터 ─── */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 10px 48px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  background: var(--surface);
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ─── 좁은 화면 ─── */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: inline-flex;
+  }
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: var(--header-h);
+    height: calc(100vh - var(--header-h) - var(--footer-h));
+    z-index: 90;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  body.menu-open .sidebar {
+    transform: translateX(0);
+    box-shadow: 2px 0 12px rgba(15, 23, 42, 0.15);
+  }
+  .content {
+    padding: 24px 20px;
+  }
+  .header {
+    padding: 10px 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .header .meta {
+    display: none;
+  }
+}
+
+/* ─── 변경 이력 (펼침/닫힘) ─── */
+.changelog {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 0 0 28px;
+}
+.changelog > summary {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.changelog > summary::-webkit-details-marker {
+  display: none;
+}
+.changelog > summary::before {
+  content: "▶";
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  transition: transform 0.15s;
+}
+.changelog[open] > summary::before {
+  transform: rotate(90deg);
+}
+.changelog > summary:hover {
+  background: var(--code-bg);
+  border-radius: 8px;
+}
+.changelog-latest {
+  margin-left: auto;
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--primary);
+  background: var(--blue-bg);
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+.changelog-body {
+  padding: 4px 16px 16px;
+  border-top: 1px solid var(--border);
+}
+.changelog-item {
+  padding: 12px 0;
+}
+.changelog-item + .changelog-item {
+  border-top: 1px dashed var(--border);
+}
+.changelog-ver {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+}
+.changelog-date {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-left: 8px;
+}
+.changelog-prod {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  padding: 1px 8px;
+  border-radius: 999px;
+  margin-left: 8px;
+}
+.changelog-body ul {
+  margin: 0;
+  padding-left: 20px;
+}
+.changelog-body li {
+  font-size: 0.9rem;
+  color: var(--text);
+  margin: 4px 0;
+}
