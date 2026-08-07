@@ -754,7 +754,7 @@
             <tr><td>PDF 페이지 추가</td><td><span class="kbd">Alt+D</span></td><td>PDF에서 페이지를 선택해 삽입·교체합니다.</td></tr>
             <tr><td>ZIP 파일 불러오기</td><td><span class="kbd">Ctrl+E</span></td><td>저장했던 ZIP을 열어 이어서 편집합니다.</td></tr>
             <tr><td>ZIP 파일 저장</td><td><span class="kbd">Ctrl+S</span></td><td>현재 프로젝트를 ZIP으로 저장합니다.</td></tr>
-            <tr><td>프로그램 종료</td><td><span class="kbd">Ctrl+Q</span></td><td>패키저를 종료합니다.</td></tr>
+            <tr><td>프로그램 종료</td><td><span class="kbd">Ctrl+Q</span></td><td>패키저를 종료합니다. 저장하지 않은 편집이 있으면 확인 창이 먼저 뜹니다(창의 <span class="kbd">X</span> 버튼·<span class="kbd">Alt+F4</span>도 동일).</td></tr>
           </table>
         </div>
         <h3>편집</h3>
@@ -1099,6 +1099,31 @@
           <figcaption>단원(Lesson) → 차시(첫째시간·둘째시간) → 활동(warm up·Word Rap 등) 순으로 계층을 만든 예. 각 항목 오른쪽의 페이지 번호는 시작 페이지 설정이 반영된 실제 페이지입니다.</figcaption>
         </figure>
         <p>항목을 드래그하면 순서와 계층(들여쓰기)을 함께 조정할 수 있습니다.</p>
+        <div class="info-box">
+          <span class="box-label">TIP</span><strong>목차 파일을 직접 작성하기</strong><br />
+          XML 편집이 익숙하다면, 단원 하나 분량만 화면에서 만들어 <code>목차 파일 내보내기</code>로 저장한 뒤
+          그 파일을 직접 편집해 나머지를 채우고 <code>목차 파일 불러오기</code>로 되돌리는 편이 빠릅니다.
+          <ul>
+            <li>내보낸 파일 이름은 <code>cdbook-toc.xml</code>입니다 (ZIP에 담길 때 <code>toc.xml</code>이 됩니다).</li>
+            <li>항목 하나는 <code>&lt;item&gt;</code> 안의 <code>&lt;label&gt;</code>(제목)과
+              <code>&lt;content pageNumber="12"/&gt;</code>(페이지)로 이뤄지고, 하위 항목은 <code>&lt;item&gt;</code>을 중첩해 표현합니다.
+              구조는 아래 <strong>ZIP 구조 &gt; toc.xml</strong>의 예시와 같습니다.</li>
+            <li>불러올 때 읽는 값은 <code>label</code>과 <code>pageNumber</code>뿐입니다.
+              <code>section</code>·<code>href</code>는 저장할 때 다시 계산되므로 신경 쓰지 않아도 됩니다.</li>
+            <li>불러오면 현재 목차에 <strong>추가</strong>할지 <strong>덮어쓰기</strong>할지 묻습니다.
+              단원별 파일을 차례로 추가하는 방식으로도 쓸 수 있습니다.</li>
+          </ul>
+        </div>
+        <div class="notice">
+          <span class="box-label">주의</span>
+          <ul>
+            <li><strong>덮어쓰기</strong>를 고르면 편집 중인 목차가 전부 교체되고 되돌릴 수 없습니다.
+              필요한 목차는 먼저 내보내 두십시오.</li>
+            <li><code>pageNumber</code>를 빠뜨리면 오류 없이 1페이지로 들어가고, 숫자가 아닌 값이면 페이지 번호가 깨집니다.
+              불러온 뒤 페이지 번호를 확인하십시오.</li>
+            <li>파일 구문 자체가 잘못된 경우에는 실패 메시지가 뜨고 편집 중인 목차는 그대로 유지됩니다.</li>
+          </ul>
+        </div>
 
         <h3>기타 설정</h3>
         <div class="params">
