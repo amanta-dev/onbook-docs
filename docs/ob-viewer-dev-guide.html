@@ -705,11 +705,28 @@
               <tr>
                 <td><code>draggableMenu</code></td>
                 <td>
-                  퀵 메뉴 UI 설정. 퀵 메뉴바에 표시할 항목은
+                  퀵 메뉴 설정. 퀵 메뉴바에 표시할 항목은
                   <code>quickMenu.items</code>로 정합니다.
                   <span class="tag tag-ebook">ebook 전용</span>
-                  <br /><code>enabled</code> — 퀵 메뉴 UI를 보이거나 숨깁니다
+                  <br /><code>enabled</code> — 퀵 메뉴 기능 사용 여부
                   (<code>true</code> | <code>false</code>).
+                  <code>false</code>면 뷰어의 설정 창에서도 항목이 숨겨져
+                  사용자가 켤 수 없습니다.
+                  <br /><code>defaultOn</code> — 사용자가 설정을 바꾼 적 없을
+                  때의 초기 상태 (<code>true</code> | <code>false</code>).
+                </td>
+              </tr>
+              <tr>
+                <td><code>swipePage</code></td>
+                <td>
+                  스와이프 페이지 넘김 설정.
+                  <span class="tag tag-ebook">ebook 전용</span>
+                  <br /><code>enabled</code> — 스와이프 넘김 기능 사용 여부
+                  (<code>true</code> | <code>false</code>).
+                  <code>false</code>면 뷰어의 설정 창에서도 항목이 숨겨져
+                  사용자가 켤 수 없습니다.
+                  <br /><code>defaultOn</code> — 사용자가 설정을 바꾼 적 없을
+                  때의 초기 상태 (<code>true</code> | <code>false</code>).
                 </td>
               </tr>
               <tr>
