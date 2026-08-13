@@ -1,6 +1,18 @@
-# 기본적으로 모든 파일/폴더 제외
-/*
+# onbook-docs — GitHub Pages 게시용 저장소 (public)
+#
+# 이 저장소는 amanta-dev/onbook-docs 로 push되며 저장소가 public이다.
+# Pages는 /docs 만 서빙하지만, 저장소 파일은 누구나 열람할 수 있다.
+# 따라서 내부 문서는 절대 커밋하지 말 것.
 
-# 아래 항목만 git에 포함
-!/.gitignore
-!/docs/
+# 내부 전용 문서 — 공개 금지
+docs-internal/
+
+# SVN 메타데이터 (이 폴더는 SVN 작업본 안에 있음)
+.svn/
+
+# OS·에디터
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
