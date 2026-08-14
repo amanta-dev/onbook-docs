@@ -1,0 +1,15 @@
+# onbook-docs — 줄바꿈은 LF 로 통일한다.
+#
+#  · text=auto : 저장소에 LF 로 보관 (올릴 때)
+#  · eol=lf    : 체크아웃할 때도 LF 유지 (내릴 때, core.autocrlf 무시)
+#
+# 이 폴더는 SVN 작업본 안에 있다. SVN 은 줄바꿈을 변환하지 않으므로
+# git 이 LF 로 내려주면 SVN 쪽도 LF 가 되어 양쪽이 어긋나지 않는다.
+#
+# 이 설정이 없으면 Windows 에서 clone 할 때 CRLF 로 받는다. 그러면
+# SVN 이 내려준 LF 파일과 크기가 어긋나, 내용이 같은데도
+# git status 에 전 파일이 modified 로 뜬다.
+* text=auto eol=lf
+
+# 이미지는 변환 금지 (변환되면 파일이 깨진다).
+*.png binary
