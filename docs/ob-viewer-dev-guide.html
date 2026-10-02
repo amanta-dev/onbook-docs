@@ -58,7 +58,7 @@
         </p>
       </div>
       <div class="meta">
-        문서 v1.0.002 (뷰어 v1.0.0) &nbsp;·&nbsp; 콘텐츠 개발사용
+        문서 v1.1.001 (뷰어 v1.1.0) &nbsp;·&nbsp; 콘텐츠 개발사용
       </div>
     </div>
     <div class="backdrop"></div>
@@ -127,9 +127,23 @@
         <!-- 변경 이력 -->
         <details class="changelog">
           <summary>
-            변경 이력<span class="changelog-latest">최신 문서 v1.0.002</span>
+            변경 이력<span class="changelog-latest">최신 문서 v1.1.001</span>
           </summary>
           <div class="changelog-body">
+            <div class="changelog-item">
+              <div class="changelog-ver">
+                v1.1.001<span class="changelog-date">2026-10-02</span
+                ><span class="changelog-prod">뷰어 v1.1.0</span>
+              </div>
+              <ul>
+                <li>
+                  <a href="#vw-install">설치본 만들기</a> — 같은 책은 한 번만 설치되는 동작 안내 추가
+                </li>
+                <li>
+                  <a href="#vw-booktab">책 탭 설정</a> — 세로형 탭 예시로 스크린샷·크기 예시 갱신
+                </li>
+              </ul>
+            </div>
             <div class="changelog-item">
               <div class="changelog-ver">
                 v1.0.002<span class="changelog-date">2026-08-10</span
@@ -1060,11 +1074,11 @@
               />
               <span
                 class="spot"
-                style="left: 0.9%; top: 11.8%; width: 4.9%; height: 15%"
+                style="left: 2.08%; top: 12.26%; width: 3.31%; height: 21.74%"
               ></span>
             </span>
             <figcaption>
-              ebook 뷰어 왼쪽 상단의 책 탭 (E-book 1 · E-book 2)
+              ebook 뷰어 왼쪽 상단의 책 탭 (예: 수학 · 수학익힘)
             </figcaption>
           </figure>
           <h3>작성 방법</h3>
@@ -1076,7 +1090,7 @@
             <span class="s">"hoverImage"</span><span class="p">:</span> <span class="s">"./tab01_0002.png"</span><span class="p">,</span>     <span class="c">← 기본 마우스 오버</span>
             <span class="s">"activeImage"</span><span class="p">:</span> <span class="s">"./tab01_0003.png"</span><span class="p">,</span>    <span class="c">← 현재 보는 책</span>
             <span class="s">"activeHoverImage"</span><span class="p">:</span> <span class="s">"./tab01_0004.png"</span><span class="p">,</span> <span class="c">← 현재 보는 책 마우스 오버</span>
-            <span class="s">"width"</span><span class="p">:</span> <span class="s">"50px"</span><span class="p">,</span> <span class="s">"height"</span><span class="p">:</span> <span class="s">"50px"</span>
+            <span class="s">"width"</span><span class="p">:</span> <span class="s">"35px"</span><span class="p">,</span> <span class="s">"height"</span><span class="p">:</span> <span class="s">"80px"</span>
         <span class="p">},</span>
         <span class="p">{</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"ebook_unit02"</span><span class="p">,</span> <span class="n">…</span> <span class="p">}</span>
     <span class="p">],</span>
@@ -1720,6 +1734,11 @@
           </div>
           <p>설치 시 다음 경로로 복사됩니다.</p>
           <pre><span class="n">{INSTALL_DIR}</span><span class="p">\</span><span class="f">{P_CODE}_{SUBJECT_CODE}_{EDITION}</span><span class="p">\</span><span class="f">{TITLE}</span><span class="p">\</span>   <span class="c">예: C:\OnBook\AMT1_EEN5A_2022개정\초등학교 영어 지도서 5 전자책등\</span></pre>
+          <p>
+            같은 책(<code>P_CODE</code>·<code>SUBJECT_CODE</code>·<code>EDITION</code>·<code>TITLE</code>)은
+            설치 위치와 상관없이 <strong>한 번만 설치</strong>됩니다. 이미 설치되어 있으면 설치 위치를 알리고 설치된 책을 실행합니다.
+            다시 설치해 보려면 OnBookManager의 <span class="kbd">데이터 삭제</span>로 먼저 지워 주세요.
+          </p>
           <div class="callout warn">
             <code>start.ini</code>와 <code>autorun.inf</code>는 반드시
             <strong>EUC-KR 인코딩</strong>으로 저장해 주세요. UTF-8로 저장하면
@@ -2114,8 +2133,8 @@
 
     <div class="footer">
       <span
-        >OnBook 뷰어 개발자 가이드 · 콘텐츠 개발사용 · 문서 v1.0.002 (뷰어
-        v1.0.0)</span
+        >OnBook 뷰어 개발자 가이드 · 콘텐츠 개발사용 · 문서 v1.1.001 (뷰어
+        v1.1.0)</span
       >
       <span>&copy; 2026 Amanta</span>
     </div>
