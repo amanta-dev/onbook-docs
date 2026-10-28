@@ -1843,7 +1843,7 @@
 <span class="p">├─</span> <span class="f">onbook/</span>   <span class="c">← 교과서·콘텐츠 포함</span>
 <span class="p">└─</span> <span class="f">scene/</span></pre>
           <p>브라우저 진입 주소는 다음과 같습니다.</p>
-          <pre><span class="n">https://(웹 루트)/</span><span class="f">onbook/main/index.html</span></pre>
+          <pre><span class="n">http://(웹 루트)/</span><span class="f">onbook/main/index.html</span></pre>
           <p>
             접속하면 PC 버전과 동일한 메인 화면이 표시됩니다. 교과서·콘텐츠
             표시를 같은 방법으로 확인하세요.
@@ -1930,7 +1930,7 @@
             기입합니다.
           </p>
           <pre><span class="p">&lt;</span><span class="k">update-check</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="k">server</span> <span class="n">url=</span><span class="s">"https://(업데이트 서버 주소)"</span> <span class="n">edition=</span><span class="s">"2022book"</span> <span class="n">id=</span><span class="s">"EEN5A"</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="k">server</span> <span class="n">url=</span><span class="s">"http://(업데이트 서버 주소)"</span> <span class="n">edition=</span><span class="s">"2022book"</span> <span class="n">id=</span><span class="s">"EEN5A"</span> <span class="p">/&gt;</span>
     <span class="p">&lt;</span><span class="k">enabled</span><span class="p">&gt;</span><span class="n">true</span><span class="p">&lt;/</span><span class="k">enabled</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="k">update-check</span><span class="p">&gt;</span></pre>
           <div class="params">
@@ -2022,7 +2022,7 @@
           <h3>update-lesson.json 작성</h3>
           <pre><span class="p">{</span>
     <span class="s">"enabled"</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
-    <span class="s">"downloadUrl"</span><span class="p">:</span> <span class="s">"https://(다운로드 서버 주소)"</span><span class="p">,</span>
+    <span class="s">"downloadUrl"</span><span class="p">:</span> <span class="s">"http://(다운로드 서버 주소)"</span><span class="p">,</span>
     <span class="s">"lessons"</span><span class="p">: [</span>
         <span class="p">{</span> <span class="s">"id"</span><span class="p">:</span> <span class="s">"lesson01"</span><span class="p">,</span> <span class="s">"index"</span><span class="p">:</span> <span class="n">0</span><span class="p">,</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"1단원"</span><span class="p">,</span> <span class="s">"downloaded"</span><span class="p">:</span> <span class="k">false</span> <span class="p">},</span>
         <span class="p">{</span> <span class="s">"id"</span><span class="p">:</span> <span class="s">"lesson02"</span><span class="p">,</span> <span class="s">"index"</span><span class="p">:</span> <span class="n">1</span><span class="p">,</span> <span class="s">"name"</span><span class="p">:</span> <span class="s">"2단원"</span><span class="p">,</span> <span class="s">"downloaded"</span><span class="p">:</span> <span class="k">false</span> <span class="p">}</span>
